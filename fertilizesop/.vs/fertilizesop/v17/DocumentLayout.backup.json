@@ -1,0 +1,1247 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|c:\\users\\user\\desktop\\fertilizer\\fertilizesop\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\dashboardform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\dashboardform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\supplierform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\supplierform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\supplierbillsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\supplierbillsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\sbilldetailform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\sbilldetailform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\productsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\productsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\placingorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\placingorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\ordersmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\ordersmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\inventorylogform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\inventorylogform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\homecontentform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\homecontentform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customerform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customerform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customerform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customerform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customerbill_specificproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customerbill_specificproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customer_bills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customer_bills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\batchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\batchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\batchdetailsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\batchdetailsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addsupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addsupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addsupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addsupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\bl\\customerbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\bl\\customerbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\uihelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\uihelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addbatchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addbatchform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addbatchdetailsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\addbatchdetailsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\customersaledl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\customersaledl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\supplierform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\supplierform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customer_bills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customer_bills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\customerbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\customerbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\bl\\customerbillbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\bl\\customerbillbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customerbill_specificproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customerbill_specificproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customerbill_specificproducts.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customerbill_specificproducts.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\customerrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\customerrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\sbilldetailsdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\sbilldetailsdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\sbilldetailform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\sbilldetailform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\supplierbillsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\supplierbillsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\supplierbillsform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\supplierbillsform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\supplierdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\supplierdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\supplierbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\supplierbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\blinterfaces\\isupplierbillbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\blinterfaces\\isupplierbillbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\blinterfaces\\icustomerbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\blinterfaces\\icustomerbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\dlinterfaces\\isupplierbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\dlinterfaces\\isupplierbilldl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\temporarycustomersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\temporarycustomersale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\customersale.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\customersale.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\orderdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\orderdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\ordersmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\ordersmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\dlinterfaces\\isupplierdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\dlinterfaces\\isupplierdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\customerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\customerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\custumerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:DL\\custumerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\products.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\products.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\bl\\supplierbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\bl\\supplierbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\blinterfaces\\isupplierbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\blinterfaces\\isupplierbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\suppliers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\suppliers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\isupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\isupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\interfaces\\dlinterfaces\\icustomerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:interfaces\\dlinterfaces\\icustomerdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\homecontentform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\homecontentform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\dashboardform.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\dashboardform.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\dashboardform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:ui\\dashboardform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:BL\\Models\\persons\\Customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Supplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:BL\\Models\\persons\\Supplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Ipersons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:BL\\Models\\Ipersons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\bl\\customerbill_specificproductsbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\bl\\customerbill_specificproductsbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\customerbill_specificproductsdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\customerbill_specificproductsdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\dl\\billingrecordsoverviewdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:dl\\billingrecordsoverviewdl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\bl\\models\\customerbill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:bl\\models\\customerbill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customerbilldetaildl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:DL\\Customerbilldetaildl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbilldetailbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:BL\\bl\\Customerbilldetailbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Bl\\BillingRecordsOverviewBL.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B74AC28B-E643-42D8-BBF7-C15D665A196B}|fertilizesop.csproj|solutionrelative:BL\\Bl\\BillingRecordsOverviewBL.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\user\\desktop\\fertilizer\\fertilizesop\\ui\\transactionview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ui\\transactionview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\ui\\addtransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ui\\addtransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\AddTransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UI\\AddTransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "customer_bills.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\customer_bills.cs",
+              "RelativeDocumentMoniker": "UI\\customer_bills.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\customer_bills.cs",
+              "RelativeToolTip": "UI\\customer_bills.cs",
+              "ViewState": "AgIAAIcBAAAAAAAAAIAwwI8BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-23T11:59:10.06Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Addproductform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addproductform.cs",
+              "RelativeDocumentMoniker": "UI\\Addproductform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addproductform.cs [Design]",
+              "RelativeToolTip": "UI\\Addproductform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T05:57:43.004Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAmwCQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:47:33.802Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "dashboardform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.cs",
+              "RelativeDocumentMoniker": "UI\\dashboardform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.cs [Design]",
+              "RelativeToolTip": "UI\\dashboardform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:05:17.718Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\App.config",
+              "RelativeDocumentMoniker": "App.config",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\App.config",
+              "RelativeToolTip": "App.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-07-19T10:36:14.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Sbilldetailform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Sbilldetailform.cs",
+              "RelativeDocumentMoniker": "UI\\Sbilldetailform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Sbilldetailform.cs [Design]",
+              "RelativeToolTip": "UI\\Sbilldetailform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-23T07:58:15.319Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "transactionView.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\transactionView.cs",
+              "RelativeDocumentMoniker": "UI\\transactionView.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\transactionView.cs [Design]",
+              "RelativeToolTip": "UI\\transactionView.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:20:33.794Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Supplierbillsform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.cs",
+              "RelativeDocumentMoniker": "UI\\Supplierbillsform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.cs [Design]",
+              "RelativeToolTip": "UI\\Supplierbillsform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T06:13:31.138Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "supplierform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\supplierform.cs",
+              "RelativeDocumentMoniker": "UI\\supplierform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\supplierform.cs [Design]",
+              "RelativeToolTip": "UI\\supplierform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:06:42.233Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Productsform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Productsform.cs",
+              "RelativeDocumentMoniker": "UI\\Productsform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Productsform.cs [Design]",
+              "RelativeToolTip": "UI\\Productsform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T04:48:47.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PlacingOrder.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\PlacingOrder.cs",
+              "RelativeDocumentMoniker": "UI\\PlacingOrder.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\PlacingOrder.cs [Design]",
+              "RelativeToolTip": "UI\\PlacingOrder.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:19:09.412Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "OrderStatus.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrderStatus.cs",
+              "RelativeDocumentMoniker": "UI\\OrderStatus.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrderStatus.cs [Design]",
+              "RelativeToolTip": "UI\\OrderStatus.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:19:02.757Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrdersMain.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrdersMain.cs",
+              "RelativeDocumentMoniker": "UI\\OrdersMain.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrdersMain.cs [Design]",
+              "RelativeToolTip": "UI\\OrdersMain.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:19:01.087Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Inventorylogform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Inventorylogform.cs",
+              "RelativeDocumentMoniker": "UI\\Inventorylogform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Inventorylogform.cs [Design]",
+              "RelativeToolTip": "UI\\Inventorylogform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:17:00.442Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Customersale.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.cs",
+              "RelativeDocumentMoniker": "UI\\Customersale.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.cs [Design]",
+              "RelativeToolTip": "UI\\Customersale.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T04:45:29.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CustomerForm.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerForm.cs",
+              "RelativeDocumentMoniker": "UI\\CustomerForm.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerForm.cs",
+              "RelativeToolTip": "UI\\CustomerForm.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwDIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T00:48:51.256Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "HomeContentform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\HomeContentform.cs",
+              "RelativeDocumentMoniker": "UI\\HomeContentform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\HomeContentform.cs [Design]",
+              "RelativeToolTip": "UI\\HomeContentform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:05:34.096Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CustomerForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerForm.cs",
+              "RelativeDocumentMoniker": "UI\\CustomerForm.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerForm.cs [Design]",
+              "RelativeToolTip": "UI\\CustomerForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T00:49:11.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CustomerBill_SpecificProducts.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.cs",
+              "RelativeDocumentMoniker": "UI\\CustomerBill_SpecificProducts.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.cs [Design]",
+              "RelativeToolTip": "UI\\CustomerBill_SpecificProducts.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:50:30.851Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "customer_bills.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\customer_bills.cs",
+              "RelativeDocumentMoniker": "UI\\customer_bills.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\customer_bills.cs [Design]",
+              "RelativeToolTip": "UI\\customer_bills.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:44:36.975Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Batchform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Batchform.cs",
+              "RelativeDocumentMoniker": "UI\\Batchform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Batchform.cs [Design]",
+              "RelativeToolTip": "UI\\Batchform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T07:21:15.115Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "BatchDetailsform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\BatchDetailsform.cs",
+              "RelativeDocumentMoniker": "UI\\BatchDetailsform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\BatchDetailsform.cs [Design]",
+              "RelativeToolTip": "UI\\BatchDetailsform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T06:05:02.341Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "AddTransaction.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\AddTransaction.cs",
+              "RelativeDocumentMoniker": "UI\\AddTransaction.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\AddTransaction.cs [Design]",
+              "RelativeToolTip": "UI\\AddTransaction.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T05:35:54.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "AddTransaction.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\AddTransaction.cs",
+              "RelativeDocumentMoniker": "UI\\AddTransaction.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\AddTransaction.cs",
+              "RelativeToolTip": "UI\\AddTransaction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T05:36:21.811Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "CustomerBl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbl.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\Customerbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbl.cs",
+              "RelativeToolTip": "BL\\bl\\Customerbl.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAawFUAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:12:20.695Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Addsupplier.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addsupplier.cs",
+              "RelativeDocumentMoniker": "UI\\Addsupplier.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addsupplier.cs [Design]",
+              "RelativeToolTip": "UI\\Addsupplier.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T09:12:59.341Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Addsupplier.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addsupplier.cs",
+              "RelativeDocumentMoniker": "UI\\Addsupplier.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addsupplier.cs",
+              "RelativeToolTip": "UI\\Addsupplier.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAxwCYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T09:14:04.446Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "AddCustomer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addcustomer.cs",
+              "RelativeDocumentMoniker": "UI\\Addcustomer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addcustomer.cs",
+              "RelativeToolTip": "UI\\Addcustomer.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwDIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T06:22:06.968Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Addproductform.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addproductform.cs",
+              "RelativeDocumentMoniker": "UI\\Addproductform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addproductform.cs",
+              "RelativeToolTip": "UI\\Addproductform.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAA+wCMAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T05:31:41.421Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "AddCustomer.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addcustomer.cs",
+              "RelativeDocumentMoniker": "UI\\Addcustomer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addcustomer.cs [Design]",
+              "RelativeToolTip": "UI\\Addcustomer.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T06:14:06.509Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Customersale.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.cs",
+              "RelativeDocumentMoniker": "UI\\Customersale.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.cs",
+              "RelativeToolTip": "UI\\Customersale.cs",
+              "ViewState": "AgIAAKsBAAAAAAAAAAAswIMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T05:26:18.761Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "UIHelper.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\UIHelper.cs",
+              "RelativeDocumentMoniker": "UI\\UIHelper.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\UIHelper.cs",
+              "RelativeToolTip": "UI\\UIHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T06:48:14.899Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Addbatchform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addbatchform.cs",
+              "RelativeDocumentMoniker": "UI\\Addbatchform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addbatchform.cs [Design]",
+              "RelativeToolTip": "UI\\Addbatchform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T15:25:09.439Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Addbatchdetailsform.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addbatchdetailsform.cs",
+              "RelativeDocumentMoniker": "UI\\Addbatchdetailsform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Addbatchdetailsform.cs [Design]",
+              "RelativeToolTip": "UI\\Addbatchdetailsform.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T15:25:06.009Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Customersaledl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customersaledl.cs",
+              "RelativeDocumentMoniker": "DL\\Customersaledl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customersaledl.cs",
+              "RelativeToolTip": "DL\\Customersaledl.cs",
+              "ViewState": "AgIAALYAAAAAAAAAAAAgwFYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T07:19:07.122Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "supplierform.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\supplierform.cs",
+              "RelativeDocumentMoniker": "UI\\supplierform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\supplierform.cs",
+              "RelativeToolTip": "UI\\supplierform.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAawJcAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T04:43:12.219Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "DL\\Customerbilldl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customerbilldl.cs",
+              "RelativeDocumentMoniker": "DL\\Customerbilldl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customerbilldl.cs",
+              "RelativeToolTip": "DL\\Customerbilldl.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAtwEcAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T01:07:06.56Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "BL\\Bl\\Customerbillbl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbillbl.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\Customerbillbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbillbl.cs",
+              "RelativeToolTip": "BL\\bl\\Customerbillbl.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAMwDEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T01:03:31.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "CustomerBill_SpecificProducts.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.cs",
+              "RelativeDocumentMoniker": "UI\\CustomerBill_SpecificProducts.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.cs",
+              "RelativeToolTip": "UI\\CustomerBill_SpecificProducts.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T07:30:07.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "CustomerBill_SpecificProducts.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.Designer.cs",
+              "RelativeDocumentMoniker": "UI\\CustomerBill_SpecificProducts.Designer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\CustomerBill_SpecificProducts.Designer.cs",
+              "RelativeToolTip": "UI\\CustomerBill_SpecificProducts.Designer.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T07:21:56.254Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Customerrecord.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Customerrecord.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Customerrecord.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Customerrecord.cs",
+              "RelativeToolTip": "BL\\Models\\Customerrecord.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:49:56.611Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "CustomerBill_SpecificProductsBL.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\CustomerBill_SpecificProductsBL.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\CustomerBill_SpecificProductsBL.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\CustomerBill_SpecificProductsBL.cs",
+              "RelativeToolTip": "BL\\bl\\CustomerBill_SpecificProductsBL.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAwBgAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T09:39:49.087Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "CustomerBill_SpecificProductsDL.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\CustomerBill_SpecificProductsDL.cs",
+              "RelativeDocumentMoniker": "DL\\CustomerBill_SpecificProductsDL.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\CustomerBill_SpecificProductsDL.cs",
+              "RelativeToolTip": "DL\\CustomerBill_SpecificProductsDL.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAQwCgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T09:40:49.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "Customerbilldetaildl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customerbilldetaildl.cs",
+              "RelativeDocumentMoniker": "DL\\Customerbilldetaildl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Customerbilldetaildl.cs",
+              "RelativeToolTip": "DL\\Customerbilldetaildl.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T07:33:12.096Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "Customerbilldetailbl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbilldetailbl.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\Customerbilldetailbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Customerbilldetailbl.cs",
+              "RelativeToolTip": "BL\\bl\\Customerbilldetailbl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T08:03:11.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "BillingRecordsOverviewDL.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\BillingRecordsOverviewDL.cs",
+              "RelativeDocumentMoniker": "DL\\BillingRecordsOverviewDL.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\BillingRecordsOverviewDL.cs",
+              "RelativeToolTip": "DL\\BillingRecordsOverviewDL.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAuwB8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T09:02:47.705Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "BillingRecordsOverviewBL.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\BillingRecordsOverviewBL.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\BillingRecordsOverviewBL.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\BillingRecordsOverviewBL.cs",
+              "RelativeToolTip": "BL\\bl\\BillingRecordsOverviewBL.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAwwCcAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T09:01:37.786Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Sbilldetailform.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Sbilldetailform.cs",
+              "RelativeDocumentMoniker": "UI\\Sbilldetailform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Sbilldetailform.cs",
+              "RelativeToolTip": "UI\\Sbilldetailform.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAB0AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-23T16:54:59.237Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "SbilldetailsDl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\SbilldetailsDl.cs",
+              "RelativeDocumentMoniker": "DL\\SbilldetailsDl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\SbilldetailsDl.cs",
+              "RelativeToolTip": "DL\\SbilldetailsDl.cs",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAUwHkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-23T17:11:19.638Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "Supplierbillsform.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.cs",
+              "RelativeDocumentMoniker": "UI\\Supplierbillsform.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.cs",
+              "RelativeToolTip": "UI\\Supplierbillsform.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAuwJ8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-23T11:59:23.579Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "Supplierbillsform.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.Designer.cs",
+              "RelativeDocumentMoniker": "UI\\Supplierbillsform.Designer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Supplierbillsform.Designer.cs",
+              "RelativeToolTip": "UI\\Supplierbillsform.Designer.cs",
+              "ViewState": "AgIAAGkBAAAAAAAAAAAjwIUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T06:37:12.767Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "Supplierdl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Supplierdl.cs",
+              "RelativeDocumentMoniker": "DL\\Supplierdl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\Supplierdl.cs",
+              "RelativeToolTip": "DL\\Supplierdl.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwCcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:05:51.301Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "SupplierbillDl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\SupplierbillDl.cs",
+              "RelativeDocumentMoniker": "DL\\SupplierbillDl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\SupplierbillDl.cs",
+              "RelativeToolTip": "DL\\SupplierbillDl.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAcwCcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T01:48:34.849Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "Customerbill.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Customerbill.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Customerbill.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Customerbill.cs",
+              "RelativeToolTip": "BL\\Models\\Customerbill.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T05:07:55.91Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "ISupplierBillBl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\ISupplierBillBl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\BLinterfaces\\ISupplierBillBl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\ISupplierBillBl.cs",
+              "RelativeToolTip": "Interfaces\\BLinterfaces\\ISupplierBillBl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T00:56:16.91Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "DatabaseHelper.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\DatabaseHelper.cs",
+              "RelativeDocumentMoniker": "DL\\DatabaseHelper.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\DatabaseHelper.cs",
+              "RelativeToolTip": "DL\\DatabaseHelper.cs",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAUwLYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:44:42.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "ICustomerBl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\Icustomerbl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\BLinterfaces\\Icustomerbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\Icustomerbl.cs",
+              "RelativeToolTip": "Interfaces\\BLinterfaces\\Icustomerbl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:11:32.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "ISupplierbillDl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\ISupplierbillDl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\DLInterfaces\\ISupplierbillDl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\ISupplierbillDl.cs",
+              "RelativeToolTip": "Interfaces\\DLInterfaces\\ISupplierbillDl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T00:58:06.623Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "Customersale.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.Designer.cs",
+              "RelativeDocumentMoniker": "UI\\Customersale.Designer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\Customersale.Designer.cs",
+              "RelativeToolTip": "UI\\Customersale.Designer.cs",
+              "ViewState": "AgIAADoBAAAAAAAAAAAYwFQBAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T05:38:03.7Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "Temporarycustomersale.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Temporarycustomersale.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Temporarycustomersale.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Temporarycustomersale.cs",
+              "RelativeToolTip": "BL\\Models\\Temporarycustomersale.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T05:17:19.498Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "OrderDAL.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\OrderDAL.cs",
+              "RelativeDocumentMoniker": "DL\\OrderDAL.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\OrderDAL.cs",
+              "RelativeToolTip": "DL\\OrderDAL.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAswAUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T07:19:32.473Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "OrdersMain.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrdersMain.cs",
+              "RelativeDocumentMoniker": "UI\\OrdersMain.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\OrdersMain.cs",
+              "RelativeToolTip": "UI\\OrdersMain.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAiwBYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T07:45:15.941Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "Isupplierdl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\Isupplierdl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\DLInterfaces\\Isupplierdl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\Isupplierdl.cs",
+              "RelativeToolTip": "Interfaces\\DLInterfaces\\Isupplierdl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:04:44.56Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "CustomerDl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\CustomerDl.cs",
+              "RelativeDocumentMoniker": "DL\\CustomerDl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\CustomerDl.cs",
+              "RelativeToolTip": "DL\\CustomerDl.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAYwGAAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T00:53:49.475Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "Products.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Products.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Products.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Products.cs",
+              "RelativeToolTip": "BL\\Models\\Products.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwBsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T05:57:54.862Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "custumerdl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\custumerdl.cs",
+              "RelativeDocumentMoniker": "DL\\custumerdl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\DL\\custumerdl.cs",
+              "RelativeToolTip": "DL\\custumerdl.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAUwD4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:45:53.393Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "Isupplierbl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\Isupplierbl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\BLinterfaces\\Isupplierbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\BLinterfaces\\Isupplierbl.cs",
+              "RelativeToolTip": "Interfaces\\BLinterfaces\\Isupplierbl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAwAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:02:03.429Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "Suppliers.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Suppliers.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Suppliers.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Suppliers.cs",
+              "RelativeToolTip": "BL\\Models\\Suppliers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:00:41.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "Supplierbl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Supplierbl.cs",
+              "RelativeDocumentMoniker": "BL\\bl\\Supplierbl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\bl\\Supplierbl.cs",
+              "RelativeToolTip": "BL\\bl\\Supplierbl.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAcwCAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T01:05:14.231Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "Isupplier.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Isupplier.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Isupplier.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Isupplier.cs",
+              "RelativeToolTip": "BL\\Models\\Isupplier.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T00:59:36.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "ICustomerDl.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\Icustomerdl.cs",
+              "RelativeDocumentMoniker": "Interfaces\\DLInterfaces\\Icustomerdl.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\Interfaces\\DLInterfaces\\Icustomerdl.cs",
+              "RelativeToolTip": "Interfaces\\DLInterfaces\\Icustomerdl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:11:53.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Customer.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\persons\\Customer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Customer.cs",
+              "RelativeToolTip": "BL\\Models\\persons\\Customer.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAxwC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:19:39.342Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "Supplier.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Supplier.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\persons\\Supplier.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\persons\\Supplier.cs",
+              "RelativeToolTip": "BL\\Models\\persons\\Supplier.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:19:50.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "Ipersons.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Ipersons.cs",
+              "RelativeDocumentMoniker": "BL\\Models\\Ipersons.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\BL\\Models\\Ipersons.cs",
+              "RelativeToolTip": "BL\\Models\\Ipersons.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T05:20:09.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "HomeContentform.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\HomeContentform.Designer.cs",
+              "RelativeDocumentMoniker": "UI\\HomeContentform.Designer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\HomeContentform.Designer.cs",
+              "RelativeToolTip": "UI\\HomeContentform.Designer.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAmwEsAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T00:44:52.619Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "dashboardform.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.Designer.cs",
+              "RelativeDocumentMoniker": "UI\\dashboardform.Designer.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.Designer.cs",
+              "RelativeToolTip": "UI\\dashboardform.Designer.cs",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAAqwCYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T00:44:23.822Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "dashboardform.resx",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.resx",
+              "RelativeDocumentMoniker": "UI\\dashboardform.resx",
+              "ToolTip": "C:\\Users\\User\\Desktop\\fertilizer\\fertilizesop\\UI\\dashboardform.resx",
+              "RelativeToolTip": "UI\\dashboardform.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-07-19T00:44:43.613Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
