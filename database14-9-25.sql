@@ -25,16 +25,16 @@ DROP TABLE IF EXISTS `batch_items`;
 CREATE TABLE `batch_items` (
   `batch_item_id` int NOT NULL AUTO_INCREMENT,
   `purchase_batch_id` int NOT NULL,
-  `batch_number` varchar(50) DEFAULT NULL,
-  `expiry_date` date NOT NULL,
+  `product_id` int NOT NULL,
   `purchase_price` decimal(10,2) NOT NULL,
-  `sale_price` decimal(10,2) NOT NULL,
   `quantity_received` int NOT NULL,
-  `quantity_remaining` int NOT NULL,
+  `expiry_date` date NOT NULL,
   PRIMARY KEY (`batch_item_id`),
   KEY `purchase_batch_id` (`purchase_batch_id`),
   KEY `idx_expiry` (`expiry_date`),
-  CONSTRAINT `batch_items_ibfk_1` FOREIGN KEY (`purchase_batch_id`) REFERENCES `purchase_batches` (`purchase_batch_id`)
+  KEY `product_id_idx` (`product_id`),
+  CONSTRAINT `batch_items_ibfk_1` FOREIGN KEY (`purchase_batch_id`) REFERENCES `purchase_batches` (`purchase_batch_id`),
+  CONSTRAINT `product_id` FOREIGN KEY (`product_id`) REFERENCES `medicines` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,6 +96,33 @@ LOCK TABLES `company` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `inventory`
+--
+
+DROP TABLE IF EXISTS `inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inventory` (
+  `inventory_id` int NOT NULL AUTO_INCREMENT,
+  `medic_id` int NOT NULL,
+  `stock` int NOT NULL,
+  `expiry_date` date DEFAULT NULL,
+  PRIMARY KEY (`inventory_id`),
+  KEY `medic_id_idx` (`medic_id`),
+  CONSTRAINT `medic_id` FOREIGN KEY (`medic_id`) REFERENCES `medicines` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inventory`
+--
+
+LOCK TABLES `inventory` WRITE;
+/*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `medicines`
 --
 
@@ -107,10 +134,9 @@ CREATE TABLE `medicines` (
   `name` varchar(100) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `company_id` int NOT NULL,
-  `unit` varchar(50) DEFAULT NULL,
-  `Expirydate` date DEFAULT NULL,
   `Packing` varchar(45) DEFAULT NULL,
   `Category_id` int NOT NULL,
+  `sale_price` int NOT NULL,
   PRIMARY KEY (`product_id`),
   UNIQUE KEY `uq_name_company` (`name`,`company_id`),
   KEY `idx_name` (`name`),
@@ -166,12 +192,15 @@ DROP TABLE IF EXISTS `sale_items`;
 CREATE TABLE `sale_items` (
   `sale_item_id` int NOT NULL AUTO_INCREMENT,
   `sale_id` int NOT NULL,
+  `product_id` int NOT NULL,
   `quantity` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `Discount` int DEFAULT NULL,
   PRIMARY KEY (`sale_item_id`),
   KEY `idx_sale` (`sale_id`),
-  CONSTRAINT `sale_items_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`)
+  KEY `product_id_idx` (`product_id`),
+  CONSTRAINT `sale_items_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`),
+  CONSTRAINT `sale_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `medicines` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -282,4 +311,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-13 21:59:36
+-- Dump completed on 2025-09-15  0:09:41
