@@ -55,14 +55,16 @@
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.IconSize = 35;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(597, 251);
+            this.iconButton1.Location = new System.Drawing.Point(672, 314);
+            this.iconButton1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Size = new System.Drawing.Size(207, 51);
+            this.iconButton1.Size = new System.Drawing.Size(233, 64);
             this.iconButton1.TabIndex = 196;
             this.iconButton1.Text = "Add Button";
             this.iconButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.iconButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.iconButton1.UseVisualStyleBackColor = false;
+            this.iconButton1.Click += new System.EventHandler(this.iconButton1_Click);
             // 
             // iconButton2
             // 
@@ -80,9 +82,10 @@
             this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton2.IconSize = 35;
             this.iconButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton2.Location = new System.Drawing.Point(291, 238);
+            this.iconButton2.Location = new System.Drawing.Point(327, 298);
+            this.iconButton2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton2.Name = "iconButton2";
-            this.iconButton2.Size = new System.Drawing.Size(207, 51);
+            this.iconButton2.Size = new System.Drawing.Size(233, 64);
             this.iconButton2.TabIndex = 197;
             this.iconButton2.Text = "Edit Button";
             this.iconButton2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -105,9 +108,10 @@
             this.iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton3.IconSize = 35;
             this.iconButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton3.Location = new System.Drawing.Point(23, 221);
+            this.iconButton3.Location = new System.Drawing.Point(26, 276);
+            this.iconButton3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton3.Name = "iconButton3";
-            this.iconButton3.Size = new System.Drawing.Size(207, 51);
+            this.iconButton3.Size = new System.Drawing.Size(233, 64);
             this.iconButton3.TabIndex = 198;
             this.iconButton3.Text = "Delete Button";
             this.iconButton3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -130,13 +134,13 @@
             this.dataGridView2.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dataGridView2.Location = new System.Drawing.Point(81, 326);
-            this.dataGridView2.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView2.Location = new System.Drawing.Point(91, 408);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersWidth = 51;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(1267, 440);
+            this.dataGridView2.Size = new System.Drawing.Size(1425, 550);
             this.dataGridView2.TabIndex = 199;
             // 
             // panel1
@@ -145,8 +149,9 @@
             this.panel1.Controls.Add(this.toplbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1439, 84);
+            this.panel1.Size = new System.Drawing.Size(1619, 105);
             this.panel1.TabIndex = 200;
             // 
             // toplbl
@@ -155,25 +160,27 @@
             this.toplbl.AutoSize = true;
             this.toplbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toplbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.toplbl.Location = new System.Drawing.Point(601, 26);
+            this.toplbl.Location = new System.Drawing.Point(676, 32);
             this.toplbl.Name = "toplbl";
-            this.toplbl.Size = new System.Drawing.Size(223, 38);
+            this.toplbl.Size = new System.Drawing.Size(269, 46);
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = "Batch Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Sample
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1439, 809);
+            this.ClientSize = new System.Drawing.Size(1619, 1011);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.iconButton3);
             this.Controls.Add(this.iconButton2);
             this.Controls.Add(this.iconButton1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Sample";
             this.Text = "Sample";
+            this.Load += new System.EventHandler(this.Sample_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

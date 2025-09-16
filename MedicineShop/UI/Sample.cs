@@ -16,5 +16,15 @@ namespace MedicineShop.UI
         {
             InitializeComponent();
         }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Sample_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
