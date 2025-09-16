@@ -393,7 +393,8 @@ namespace fertilizesop.UI
             dgvcustomersearch.Visible = false ;
             if (string.IsNullOrWhiteSpace(txtproductsearch.Text))
             {
-                txtproductsearch.Text = string.Empty; txtproductsearch.Focus(); button2.Visible = false;
+                txtproductsearch.Text = string.Empty;
+                txtproductsearch.Focus(); button2.Visible = false;
                 return;
             }
             if (dgvproductsearch.Columns.Contains("product_id"))
@@ -403,7 +404,7 @@ namespace fertilizesop.UI
             button2.Visible = true;
             dgvproductsearch.Visible = true;
             DataTable dt = new DataTable();
-            dt = _customersaledl.getproductthings(txtproductsearch.Text);
+            dt = _customersaledl.GetProductThings(txtproductsearch.Text);
             dgvproductsearch.DataSource = dt;
         }
         private void clearfields()

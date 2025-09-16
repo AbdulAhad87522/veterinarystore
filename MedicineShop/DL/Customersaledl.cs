@@ -15,25 +15,41 @@ namespace MedicineShop.DL
 {
     internal class Customersaledl
     {
-        public DataTable getproductthings(string text)
+        public DataTable GetProductThings(string text)
         {
             DataTable dt = new DataTable();
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
                 con.Open();
-                string query = "Select * from products where name like @text";
+                string query = @"SELECT 
+                                    m.name, 
+                                    c.company_name, 
+                                    m.sale_price,
+                                    b.stock,
+                                    m.Packing, 
+                                    ca.category_name, 
+                                    b.expiry_date
+                                FROM batch_items b
+                                JOIN medicines m ON m.product_id = b.product_id
+                                JOIN company c ON c.company_id = m.company_id
+                                JOIN categories ca ON ca.category_id = m.Category_id
+                                WHERE m.name LIKE @text and b.stock != 0
+                                ORDER BY m.name, b.expiry_date;
+                                ";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                     {
-
                         adapter.Fill(dt);
                     }
                 }
             }
             return dt;
         }
+
 
         public DataTable getallcustomer(string text)
         {
