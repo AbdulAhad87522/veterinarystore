@@ -163,20 +163,28 @@ namespace MedicineShop
             }
             return suppliers;
         }
-      
-        internal int getsaleprice(int product_id)
+        public int GetLastInsertId(MySqlTransaction transaction, MySqlConnection conn)
+        {
+            using (var cmd = new MySql.Data.MySqlClient.MySqlCommand("SELECT LAST_INSERT_ID();", conn, transaction))
+            {
+                object result = cmd.ExecuteScalar();
+                return Convert.ToInt32(result);
+            }
+        }
+
+        internal decimal getsaleprice(int product_id)
         {
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT sale_price FROM products WHERE product_id = @name;";
+                    string query = "SELECT sale_price FROM medicines WHERE product_id = @name;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@name", product_id);
                         object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : -1;
+                        return result != null ? Convert.ToDecimal(result) : -1;
                     }
                 }
             }

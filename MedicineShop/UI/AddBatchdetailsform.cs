@@ -10,11 +10,19 @@ using System.Windows.Forms;
 
 namespace MedicineShop.UI
 {
-    public partial class Batchform : Form
+    public partial class AddBatchdetailsform : Form
     {
-        public Batchform()
+        private int SelectedProductId;
+        private int SellerProductName;
+        public AddBatchdetailsform()
         {
             InitializeComponent();
         }
+
+        private void AddBatchdetailsform_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

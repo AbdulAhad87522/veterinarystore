@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using fertilizesop.UI;
+using MedicineShop.UI;
 
 namespace MedicineShop
 {
@@ -17,7 +17,7 @@ namespace MedicineShop
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Customersale());
+            Application.Run(new CompanyMain());
         }
     }
 }

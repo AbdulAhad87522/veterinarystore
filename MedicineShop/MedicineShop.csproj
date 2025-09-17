@@ -12,8 +12,6 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,14 +63,8 @@
     <Reference Include="MySql.Data, Version=9.4.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>packages\MySql.Data.9.4.0\lib\net462\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuestPDF, Version=2025.7.1.0, Culture=neutral, PublicKeyToken=0f3c2b2315ff52c8, processorArchitecture=MSIL">
-      <HintPath>packages\QuestPDF.2025.7.1\lib\netstandard2.0\QuestPDF.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
@@ -119,22 +111,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BL\Models\Temporarycustomersale.cs" />
-    <Compile Include="DL\Customersaledl.cs" />
+    <Compile Include="BL\Bl\CompanyBL.cs" />
+    <Compile Include="BL\Models\Company.cs" />
+    <Compile Include="DL\CompanyDL.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
-    <Compile Include="UI\Form1.cs">
+    <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Customersale.cs">
+    <Compile Include="UI\AddBatchdetailsform.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Customersale.Designer.cs">
-      <DependentUpon>Customersale.cs</DependentUpon>
+    <Compile Include="UI\AddBatchdetailsform.Designer.cs">
+      <DependentUpon>AddBatchdetailsform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddCompany.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddCompany.Designer.cs">
+      <DependentUpon>AddCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Batchform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Batchform.Designer.cs">
+      <DependentUpon>Batchform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CompanyMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CompanyMain.Designer.cs">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Sample.cs">
       <SubType>Form</SubType>
@@ -142,8 +153,8 @@
     <Compile Include="UI\Sample.Designer.cs">
       <DependentUpon>Sample.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Dashboard.resx">
+      <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -153,10 +164,15 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UI\Customersale.resx">
-      <DependentUpon>Customersale.cs</DependentUpon>
+    <EmbeddedResource Include="UI\AddCompany.resx">
+      <DependentUpon>AddCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Batchform.resx">
+      <DependentUpon>Batchform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CompanyMain.resx">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Sample.resx">
       <DependentUpon>Sample.cs</DependentUpon>
@@ -175,18 +191,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BL\Bl\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\logo.jpg" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets" Condition="Exists('packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets'))" />
-  </Target>
 </Project>
