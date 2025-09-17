@@ -8,18 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MedicineShop
+namespace MedicineShop.UI
 {
-    public partial class Form1 : Form
+    public partial class AddBatchdetailsform : Form
     {
-        public Form1()
+        private int SelectedProductId;
+        private int SellerProductName;
+        public AddBatchdetailsform()
         {
             InitializeComponent();
         }
 
-        private void btninventory_Click(object sender, EventArgs e)
+        private void AddBatchdetailsform_Load(object sender, EventArgs e)
         {
 
         }
+
     }
 }

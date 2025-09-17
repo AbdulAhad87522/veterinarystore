@@ -1,6 +1,6 @@
 ﻿namespace MedicineShop
 {
-    partial class Form1
+    partial class Dashboard
     {
         /// <summary>
         /// Required designer variable.
@@ -48,6 +48,7 @@
             this.btnSbills = new FontAwesome.Sharp.IconButton();
             this.btnsuppliers = new FontAwesome.Sharp.IconButton();
             this.iconButton2 = new FontAwesome.Sharp.IconButton();
+            this.panel10 = new System.Windows.Forms.Panel();
             this.panelmenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelinventory.SuspendLayout();
@@ -447,14 +448,25 @@
             this.iconButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.iconButton2.UseVisualStyleBackColor = false;
             // 
-            // Form1
+            // panel10
+            // 
+            this.panel10.BackColor = System.Drawing.Color.Linen;
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(270, 0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1042, 1010);
+            this.panel10.TabIndex = 15;
+            // 
+            // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1312, 1010);
+            this.Controls.Add(this.panel10);
             this.Controls.Add(this.panelmenu);
-            this.Name = "Form1";
+            this.Name = "Dashboard";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.panelmenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelinventory.ResumeLayout(false);
@@ -490,6 +502,7 @@
         private FontAwesome.Sharp.IconButton btnSbills;
         private FontAwesome.Sharp.IconButton btnsuppliers;
         private FontAwesome.Sharp.IconButton iconButton2;
+        private System.Windows.Forms.Panel panel10;
     }
 }
 
