@@ -32,6 +32,13 @@ namespace fertilizesop.UI
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.expiry_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtproductsearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -50,13 +57,11 @@ namespace fertilizesop.UI
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.expiry_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.regular = new System.Windows.Forms.RadioButton();
+            this.walking_in = new System.Windows.Forms.RadioButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -86,6 +91,64 @@ namespace fertilizesop.UI
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // name
+            // 
+            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.name.DataPropertyName = "name";
+            this.name.HeaderText = "Product";
+            this.name.MinimumWidth = 8;
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            // 
+            // sale_price
+            // 
+            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sale_price.DataPropertyName = "sale_price";
+            this.sale_price.HeaderText = "Unit Price";
+            this.sale_price.MinimumWidth = 8;
+            this.sale_price.Name = "sale_price";
+            // 
+            // expiry_date
+            // 
+            this.expiry_date.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.expiry_date.DataPropertyName = "expiry_date";
+            this.expiry_date.HeaderText = "expiry_date";
+            this.expiry_date.MinimumWidth = 8;
+            this.expiry_date.Name = "expiry_date";
+            this.expiry_date.ReadOnly = true;
+            // 
+            // quantity
+            // 
+            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quantity.DataPropertyName = "quantity";
+            this.quantity.HeaderText = "quantity";
+            this.quantity.MinimumWidth = 8;
+            this.quantity.Name = "quantity";
+            // 
+            // discount
+            // 
+            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.discount.DataPropertyName = "discount";
+            this.discount.HeaderText = "discount";
+            this.discount.MinimumWidth = 8;
+            this.discount.Name = "discount";
+            // 
+            // final
+            // 
+            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.final.DataPropertyName = "final";
+            this.final.HeaderText = "total";
+            this.final.MinimumWidth = 8;
+            this.final.Name = "final";
+            // 
+            // total
+            // 
+            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.total.DataPropertyName = "total";
+            this.total.HeaderText = "final";
+            this.total.MinimumWidth = 8;
+            this.total.Name = "total";
+            // 
             // txtproductsearch
             // 
             this.txtproductsearch.Location = new System.Drawing.Point(34, 134);
@@ -110,6 +173,10 @@ namespace fertilizesop.UI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(255)))), ((int)(((byte)(228)))));
+            this.panel1.Controls.Add(this.linkLabel1);
+            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.walking_in);
+            this.panel1.Controls.Add(this.regular);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.txtpaidamount);
@@ -298,69 +365,67 @@ namespace fertilizesop.UI
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // name
+            // radioButton1
             // 
-            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.name.DataPropertyName = "name";
-            this.name.HeaderText = "Product";
-            this.name.MinimumWidth = 8;
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(0, 0);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(126, 24);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "radioButton1";
+            this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // sale_price
+            // regular
             // 
-            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.sale_price.DataPropertyName = "sale_price";
-            this.sale_price.HeaderText = "Unit Price";
-            this.sale_price.MinimumWidth = 8;
-            this.sale_price.Name = "sale_price";
+            this.regular.AutoSize = true;
+            this.regular.Location = new System.Drawing.Point(475, 134);
+            this.regular.Name = "regular";
+            this.regular.Size = new System.Drawing.Size(83, 24);
+            this.regular.TabIndex = 19;
+            this.regular.TabStop = true;
+            this.regular.Text = "regular";
+            this.regular.UseVisualStyleBackColor = true;
             // 
-            // expiry_date
+            // walking_in
             // 
-            this.expiry_date.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.expiry_date.DataPropertyName = "expiry_date";
-            this.expiry_date.HeaderText = "expiry_date";
-            this.expiry_date.MinimumWidth = 8;
-            this.expiry_date.Name = "expiry_date";
-            this.expiry_date.ReadOnly = true;
+            this.walking_in.AutoSize = true;
+            this.walking_in.Location = new System.Drawing.Point(475, 170);
+            this.walking_in.Name = "walking_in";
+            this.walking_in.Size = new System.Drawing.Size(107, 24);
+            this.walking_in.TabIndex = 20;
+            this.walking_in.TabStop = true;
+            this.walking_in.Text = "walking_in";
+            this.walking_in.UseVisualStyleBackColor = true;
             // 
-            // quantity
+            // textBox1
             // 
-            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.quantity.DataPropertyName = "quantity";
-            this.quantity.HeaderText = "quantity";
-            this.quantity.MinimumWidth = 8;
-            this.quantity.Name = "quantity";
+            this.textBox1.Location = new System.Drawing.Point(604, 136);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(272, 45);
+            this.textBox1.TabIndex = 21;
             // 
-            // discount
+            // linkLabel1
             // 
-            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.discount.DataPropertyName = "discount";
-            this.discount.HeaderText = "discount";
-            this.discount.MinimumWidth = 8;
-            this.discount.Name = "discount";
-            // 
-            // final
-            // 
-            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.final.DataPropertyName = "final";
-            this.final.HeaderText = "total";
-            this.final.MinimumWidth = 8;
-            this.final.Name = "final";
-            // 
-            // total
-            // 
-            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total.DataPropertyName = "total";
-            this.total.HeaderText = "final";
-            this.total.MinimumWidth = 8;
-            this.total.Name = "total";
+            this.linkLabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.linkLabel1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkLabel1.LinkColor = System.Drawing.Color.Black;
+            this.linkLabel1.Location = new System.Drawing.Point(882, 136);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(41, 43);
+            this.linkLabel1.TabIndex = 22;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "+";
             // 
             // Customersale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1583, 904);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Customersale";
@@ -373,6 +438,7 @@ namespace fertilizesop.UI
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -406,5 +472,10 @@ namespace fertilizesop.UI
         private DataGridViewTextBoxColumn discount;
         private DataGridViewTextBoxColumn final;
         private DataGridViewTextBoxColumn total;
+        private TextBox textBox1;
+        private RadioButton walking_in;
+        private RadioButton regular;
+        private RadioButton radioButton1;
+        private LinkLabel linkLabel1;
     }
 }
