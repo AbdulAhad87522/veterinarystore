@@ -19,7 +19,6 @@ namespace fertilizesop.UI
     public partial class Customersale : Form
     {
         private DataGridView dgvproductsearch = new DataGridView();
-        private DataGridView dgvcustomersearch = new DataGridView();
         Customersaledl _customersaledl = new Customersaledl();
         private DataGridViewRow row;
         private int selectedRowIndex = -1;
@@ -35,14 +34,13 @@ namespace fertilizesop.UI
             this.VisibleChanged += Customersale_VisibleChanged;
             buttonshow();
             setupproductsearch();
-            setupcustomersearch();
             txtproductsearch.TextChanged += txtproductsearch_TextChanged;
             dateTimePicker1.Value = DateTime.Now;
         }
 
         private void buttonshow()
         {
-            if(txtcustsearch.Focused || txtproductsearch.Focused)
+            if( txtproductsearch.Focused)
             {
                 button2.Visible=true;
             }
@@ -105,36 +103,15 @@ namespace fertilizesop.UI
 
                             // Get values from the row
                             string name = selectedRow.Cells["name"].Value.ToString();
-                            string description = selectedRow.Cells["description"].Value.ToString();
+                            //string description = selectedRow.Cells["description"].Value.ToString();
                             int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
-
-                            dataGridView1.Rows.Add(name, description, saleprice);
+                            DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
+                            expiry = expiry.Date;
+                            dataGridView1.Rows.Add(name, saleprice , expiry);
                             dgvproductsearch.Visible = false;
                             button2.Visible = false;
                             clearfields();                        
                         return true;
-                    }
-
-                    else if (txtcustsearch.Focused && dgvcustomersearch.Visible)
-                    {
-                        if (string.IsNullOrEmpty(txtcustsearch.Text))
-                        {
-                            MessageBox.Show("Please select atleast one product.", "Product not selected", (MessageBoxButtons)MessageBoxIcon.Warning);
-                            dgvcustomersearch.Visible = false;
-                            return false;
-                        }
-                        if (dgvcustomersearch.SelectedRows.Count == 0)
-                        {
-                            MessageBox.Show("Please select a customer from the list.", "No customer selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return false;
-                        }
-
-                        DataGridViewRow selectedrow = dgvcustomersearch.SelectedRows[0];
-                            string name = selectedrow.Cells["name"].Value.ToString();
-                            txtcustsearch.Text = name;
-                            dgvcustomersearch.Visible = false;
-                            button2.Visible = false;
-                            return true;                   
                     }
                 }
 
@@ -175,12 +152,6 @@ namespace fertilizesop.UI
                         dataGridView1.ClearSelection();
                         dataGridView1.Rows[selectedRowIndex].Selected = true;
                     }
-                    else if (txtcustsearch.Focused && selectedRowIndex > 0 && dgvcustomersearch.Visible)
-                    {
-                        selectedRowIndex--;
-                        dgvcustomersearch.ClearSelection();
-                        dgvcustomersearch.Rows[selectedRowIndex].Selected = true;
-                    }
                 }
 
                 else if (keyData == Keys.Down)
@@ -197,12 +168,7 @@ namespace fertilizesop.UI
                         dataGridView1.ClearSelection();
                         dataGridView1.Rows[selectedRowIndex].Selected = true;
                     }
-                    else if (dgvcustomersearch.Visible && txtcustsearch.Visible && selectedRowIndex < dgvcustomersearch.Rows.Count - 1)
-                    {
-                        selectedRowIndex++;
-                        dgvcustomersearch.ClearSelection();
-                        dgvcustomersearch.Rows[selectedRowIndex].Selected = true;
-                    }
+                   
                 }
 
                 else if (keyData == Keys.Left)
@@ -250,40 +216,12 @@ namespace fertilizesop.UI
 
                 // Get values from the row
                 string name = selectedRow.Cells["name"].Value.ToString();
-                string description = selectedRow.Cells["description"].Value.ToString();
                 int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
 
 
-                dataGridView1.Rows.Add(name, description, saleprice);
+                dataGridView1.Rows.Add(name, saleprice);
                 dgvproductsearch.Visible = false;
                 clearfields();
-            }
-        }
-
-        private void setupcustomersearch()
-        {
-            dgvcustomersearch.Visible = false;
-            dgvcustomersearch.ReadOnly = true;
-            dgvcustomersearch.AutoGenerateColumns = true;
-            dgvcustomersearch.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvcustomersearch.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvcustomersearch.BackgroundColor = SystemColors.Control;
-            this.Controls.Add(dgvcustomersearch);
-            dgvcustomersearch.Size = new System.Drawing.Size(dataGridView1.Width, dataGridView1.Height/2);
-            dgvcustomersearch.Location = new System.Drawing.Point(90, 400);
-            dgvcustomersearch.BringToFront();
-            dgvcustomersearch.CellClick += Dgvcustomersearch_CellClick;
-        }
-
-        private void Dgvcustomersearch_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if(e.RowIndex >= 0)
-            {
-                DataGridViewRow selectedrow = dgvcustomersearch.Rows[e.RowIndex];
-
-                string name = selectedrow.Cells["name"].Value.ToString();
-                txtcustsearch.Text = name;
-                dgvcustomersearch.Visible = false;
             }
         }
 
@@ -298,8 +236,9 @@ namespace fertilizesop.UI
                 string name = selectedRow.Cells["name"].Value.ToString();
                 string description = selectedRow.Cells["description"].Value.ToString();
                 int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
-
-                dataGridView1.Rows.Add(name, description, saleprice);
+                DateTime expiryDate = DateTime.Parse(selectedRow.Cells["expiry_date"].Value.ToString());
+                expiryDate = expiryDate.Date;
+                dataGridView1.Rows.Add(name, description, saleprice, expiryDate);
                 dgvproductsearch.Visible = false;
                 button2.Visible = false;
                 clearfields();
@@ -390,7 +329,6 @@ namespace fertilizesop.UI
 
         private void txtproductsearch_TextChanged(object sender, EventArgs e)
         {
-            dgvcustomersearch.Visible = false ;
             if (string.IsNullOrWhiteSpace(txtproductsearch.Text))
             {
                 txtproductsearch.Text = string.Empty;
@@ -409,7 +347,6 @@ namespace fertilizesop.UI
         }
         private void clearfields()
         {
-            txtcustsearch.Text = string.Empty;
             txtproductsearch.Text = string.Empty; txtproductsearch.Focus();
         }
 
@@ -468,23 +405,7 @@ namespace fertilizesop.UI
 
         }
 
-        private void txtcustsearch_TextChanged(object sender, EventArgs e)
-        {
-            if(string.IsNullOrEmpty(txtcustsearch.Text))
-            {
-                dgvcustomersearch.Visible = false;
-                button2.Visible = false;
-                return;                  
-            }
-            buttonshow();
-            dgvcustomersearch.Visible = true;
-            if(dgvcustomersearch.Columns.Contains("customer_id"))
-            {
-                dgvcustomersearch.Columns["customer_id"].Visible = false;
-            }
-            DataTable dt = _customersaledl.getallcustomer(txtcustsearch.Text);
-            dgvcustomersearch.DataSource = dt;
-        }
+      
 
         private void savetempsale()
         {
@@ -492,7 +413,6 @@ namespace fertilizesop.UI
             {
                 var data = new Temporarycustomersale
                 {
-                    customername = txtcustsearch.Text ?? "",
                     productname = txtproductsearch.Text ?? "",
                     totaldiscount = int.TryParse(txtfinaldiscount.Text, out var discount) ? discount : 0,
                     finalpriceafterdisc = decimal.TryParse(txtfinalprice.Text, out var finalprice) ? finalprice : 0,
@@ -504,8 +424,9 @@ namespace fertilizesop.UI
                         .Select(r => new saleitems
                         {
                             productname = r.Cells["name"]?.Value?.ToString() ?? "",
-                            description = r.Cells["description"]?.Value?.ToString() ?? "",
+
                             unitprice = ConvertToIntSafe(r.Cells["sale_price"]?.Value),
+                            expiry_date = Convert.ToDateTime(r.Cells["expiry_date"]?.Value),
                             quantity = ConvertToIntSafe(r.Cells["quantity"]?.Value),
                             discount = ConvertToIntSafe(r.Cells["discount"]?.Value),
                             total = ConvertToIntSafe(r.Cells["total"]?.Value),
@@ -541,7 +462,6 @@ namespace fertilizesop.UI
 
                 if (data == null) return;
 
-                txtcustsearch.Text = data.customername;
                 txtproductsearch.Text = data.productname;
                 txtfinaldiscount.Text = data.totaldiscount.ToString();
                 txtfinalprice.Text = data.finalpriceafterdisc.ToString();
@@ -551,7 +471,7 @@ namespace fertilizesop.UI
                 dataGridView1.Rows.Clear();
                 foreach (var item in data.items)
                 {
-                    dataGridView1.Rows.Add(item.productname, item.description, item.unitprice, item.quantity, item.discount, item.total, item.finalprice);
+                    dataGridView1.Rows.Add(item.productname, item.unitprice, item.expiry_date, item.quantity, item.discount, item.total, item.finalprice);
                 }
             }
             catch (Exception ex)
@@ -582,7 +502,6 @@ namespace fertilizesop.UI
 
         private void clearallfields()
         {
-            txtcustsearch.Clear();
             txtproductsearch.Clear();
             txtfinaldiscount.Clear();
             txtfinalprice.Clear();
@@ -595,11 +514,7 @@ namespace fertilizesop.UI
         {
             try
             {
-                if (string.IsNullOrEmpty(txtcustsearch.Text))
-                {
-                    MessageBox.Show("Please enter the name of customer");
-                    return;
-                }
+                
 
                 if (dataGridView1.Rows.Count == 0)
                 {
@@ -622,8 +537,7 @@ namespace fertilizesop.UI
                     }
                 }
 
-                int id = _customersaledl.getcustomerid(txtcustsearch.Text);
-                bool result = _customersaledl.SaveDataToDatabase(id, dateTimePicker1.Value,
+                bool result = _customersaledl.SaveDataToDatabase( dateTimePicker1.Value,
                     Convert.ToInt32(txtfinalprice.Text), Convert.ToInt32(txtpaidamount.Text), dataGridView1);
 
                 SavehthermalPdfInvoice();
@@ -650,12 +564,7 @@ namespace fertilizesop.UI
 
 
         private void button2_Click(object sender, EventArgs e)
-        {
-            if (dgvcustomersearch.Visible)
-            {
-                dgvcustomersearch.Visible = false;
-            }
-            
+        {            
             if(dgvproductsearch.Visible)
             {
                 dgvproductsearch.Visible = false;
@@ -675,7 +584,7 @@ namespace fertilizesop.UI
                 {
                     try
                     {
-                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
+                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
 
                         MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -691,7 +600,7 @@ namespace fertilizesop.UI
             // Store inside: %AppData%\Fertilizer\TempData
             string folder = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Fertilizer",
+                "MedicineShop",
                 "TempData"
             );
 
@@ -713,6 +622,11 @@ namespace fertilizesop.UI
         {
             //var f = Program.ServiceProvider.GetRequiredService<AddCustomer>();
             //f.ShowDialog(this);
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

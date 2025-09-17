@@ -51,49 +51,8 @@ namespace MedicineShop.DL
         }
 
 
-        public DataTable getallcustomer(string text)
-        {
-            DataTable dt = new DataTable();
-            using (var con = DatabaseHelper.Instance.GetConnection())
-            {
-                con.Open();
-                string query = "SELECT CONCAT(first_name, ' ', last_name) as name, address, phone FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE @text";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@text", "%" + text + "%");
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                    {
-                        adapter.Fill(dt);
-                    }
-                }
-            }
-            return dt;
-        }
-
-        public int getcustomerid(string text)
-        {
-            try
-            {
-                using (var con = DatabaseHelper.Instance.GetConnection())
-                {
-                    con.Open();
-                    string query = "select customer_id from customers where concat(first_name,' ',last_name) LIKE @text";
-                    using (MySqlCommand cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.AddWithValue("@text", text);
-                        object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : -1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to recieve customer_id " + ex);
-            }
-        }
-
-        public bool SaveDataToDatabase(int? id, DateTime? date, int? total_amount, int? paid_amount, DataGridView d)
+      
+        public bool SaveDataToDatabase( DateTime? date, int? total_amount, int? paid_amount, DataGridView d)
         {
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
@@ -102,13 +61,12 @@ namespace MedicineShop.DL
                 {
                     try
                     {
-                        string query = @"INSERT INTO customerbills (CustomerID, SaleDate, total_price, paid_amount) 
-                        VALUES (@id, @date, @total_amount, @paid_amount);
+                        string query = @"INSERT INTO sales ( SaleDate, total_price, paid_amount) 
+                        VALUES (@date, @total_amount, @paid_amount);
                         SELECT LAST_INSERT_ID();";
                         int billid;
                         using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
                         {
-                            cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
@@ -119,7 +77,6 @@ namespace MedicineShop.DL
                         string query2 = "insert into customerpricerecord (customer_id ,BillID , date, payment) values (@c_id , @b_id, @date, @payment)";
                         using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
                         {
-                            cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
                             cmd2.Parameters.AddWithValue("@b_id", billid);
                             cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
                             cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
@@ -214,7 +171,7 @@ namespace MedicineShop.DL
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
 
-        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid)
+        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, decimal total, decimal paid)
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
@@ -238,7 +195,6 @@ namespace MedicineShop.DL
                         // --- Invoice Info ---
                         column.Item().Row(row =>
                         {
-                            row.RelativeItem().Text($"Customer: {customerName}");
                             row.RelativeItem().AlignRight().Text($"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
                         });
 

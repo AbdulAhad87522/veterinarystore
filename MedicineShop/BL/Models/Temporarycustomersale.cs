@@ -8,7 +8,6 @@ namespace MedicineShop.BL.Models
 {
     public class Temporarycustomersale
     {
-        public string customername { get; set; }
         public string productname { get; set; }
         public int totaldiscount { get; set; }
         public decimal finalpriceafterdisc { get; set; }
@@ -20,8 +19,8 @@ namespace MedicineShop.BL.Models
     public class saleitems
     {
         public string productname { get; set; }
-        public string description { get; set; }
         public int unitprice { get; set; }
+        public DateTime expiry_date { get; set; }
         public int quantity { get; set; }
         public int discount { get; set; }
         public int total { get; set; }
