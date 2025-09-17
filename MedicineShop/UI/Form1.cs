@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace MedicineShop.UI
 {
-    public partial class Sample : Form
+    public partial class Batchform : Form
     {
-        public Sample()
+        public Batchform()
         {
             InitializeComponent();
-        }
-
-        private void iconButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Sample_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
