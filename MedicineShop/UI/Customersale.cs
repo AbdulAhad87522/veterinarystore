@@ -19,6 +19,7 @@ namespace fertilizesop.UI
     public partial class Customersale : Form
     {
         private DataGridView dgvproductsearch = new DataGridView();
+        private DataGridView dgvcustomersearch = new DataGridView();
         Customersaledl _customersaledl = new Customersaledl();
         private DataGridViewRow row;
         private int selectedRowIndex = -1;
@@ -34,13 +35,15 @@ namespace fertilizesop.UI
             this.VisibleChanged += Customersale_VisibleChanged;
             buttonshow();
             setupproductsearch();
+            setupcustomersearch();
+            radiobuttons();
             txtproductsearch.TextChanged += txtproductsearch_TextChanged;
             dateTimePicker1.Value = DateTime.Now;
         }
 
         private void buttonshow()
         {
-            if( txtproductsearch.Focused)
+            if(txtcustsearch.Focused || txtproductsearch.Focused)
             {
                 button2.Visible=true;
             }
@@ -103,7 +106,6 @@ namespace fertilizesop.UI
 
                             // Get values from the row
                             string name = selectedRow.Cells["name"].Value.ToString();
-                            //string description = selectedRow.Cells["description"].Value.ToString();
                             int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
                             DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
                             expiry = expiry.Date;
@@ -111,6 +113,28 @@ namespace fertilizesop.UI
                             dgvproductsearch.Visible = false;
                             button2.Visible = false;
                             clearfields();                        
+                        return true;
+                    }
+
+                    else if (txtcustsearch.Focused && dgvcustomersearch.Visible)
+                    {
+                        if (string.IsNullOrEmpty(txtcustsearch.Text))
+                        {
+                            MessageBox.Show("Please select atleast one product.", "Product not selected", (MessageBoxButtons)MessageBoxIcon.Warning);
+                            dgvcustomersearch.Visible = false;
+                            return false;
+                        }
+                        if (dgvcustomersearch.SelectedRows.Count == 0)
+                        {
+                            MessageBox.Show("Please select a customer from the list.", "No customer selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return false;
+                        }
+
+                        DataGridViewRow selectedrow = dgvcustomersearch.SelectedRows[0];
+                        string name = selectedrow.Cells["name"].Value.ToString();
+                        txtcustsearch.Text = name;
+                        dgvcustomersearch.Visible = false;
+                        button2.Visible = false;
                         return true;
                     }
                 }
@@ -152,6 +176,13 @@ namespace fertilizesop.UI
                         dataGridView1.ClearSelection();
                         dataGridView1.Rows[selectedRowIndex].Selected = true;
                     }
+
+                    else if (txtcustsearch.Focused && selectedRowIndex > 0 && dgvcustomersearch.Visible)
+                    {
+                        selectedRowIndex--;
+                        dgvcustomersearch.ClearSelection();
+                        dgvcustomersearch.Rows[selectedRowIndex].Selected = true;
+                    }
                 }
 
                 else if (keyData == Keys.Down)
@@ -162,13 +193,21 @@ namespace fertilizesop.UI
                         dgvproductsearch.ClearSelection();
                         dgvproductsearch.Rows[selectedRowIndex].Selected = true;
                     }
+
                     else if (dataGridView1.Focused && selectedRowIndex < dataGridView1.Rows.Count - 1)
                     {
                         selectedRowIndex++;
                         dataGridView1.ClearSelection();
                         dataGridView1.Rows[selectedRowIndex].Selected = true;
                     }
-                   
+
+                    else if (dgvcustomersearch.Visible && txtcustsearch.Visible && selectedRowIndex < dgvcustomersearch.Rows.Count - 1)
+                    {
+                        selectedRowIndex++;
+                        dgvcustomersearch.ClearSelection();
+                        dgvcustomersearch.Rows[selectedRowIndex].Selected = true;
+                    }
+
                 }
 
                 else if (keyData == Keys.Left)
@@ -222,6 +261,33 @@ namespace fertilizesop.UI
                 dataGridView1.Rows.Add(name, saleprice);
                 dgvproductsearch.Visible = false;
                 clearfields();
+            }
+        }
+
+        private void setupcustomersearch()
+        {
+            dgvcustomersearch.Visible = false;
+            dgvcustomersearch.ReadOnly = true;
+            dgvcustomersearch.AutoGenerateColumns = true;
+            dgvcustomersearch.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvcustomersearch.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvcustomersearch.BackgroundColor = SystemColors.Control;
+            this.Controls.Add(dgvcustomersearch);
+            dgvcustomersearch.Size = new System.Drawing.Size(dataGridView1.Width, dataGridView1.Height / 2);
+            dgvcustomersearch.Location = new System.Drawing.Point(90, 400);
+            dgvcustomersearch.BringToFront();
+            dgvcustomersearch.CellClick += Dgvcustomersearch_CellClick;
+        }
+
+        private void Dgvcustomersearch_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow selectedrow = dgvcustomersearch.Rows[e.RowIndex];
+
+                string name = selectedrow.Cells["name"].Value.ToString();
+                txtcustsearch.Text = name;
+                dgvcustomersearch.Visible = false;
             }
         }
 
@@ -405,14 +471,13 @@ namespace fertilizesop.UI
 
         }
 
-      
-
         private void savetempsale()
         {
             try
             {
                 var data = new Temporarycustomersale
                 {
+                    customername = txtcustsearch.Text ?? "",
                     productname = txtproductsearch.Text ?? "",
                     totaldiscount = int.TryParse(txtfinaldiscount.Text, out var discount) ? discount : 0,
                     finalpriceafterdisc = decimal.TryParse(txtfinalprice.Text, out var finalprice) ? finalprice : 0,
@@ -424,7 +489,6 @@ namespace fertilizesop.UI
                         .Select(r => new saleitems
                         {
                             productname = r.Cells["name"]?.Value?.ToString() ?? "",
-
                             unitprice = ConvertToIntSafe(r.Cells["sale_price"]?.Value),
                             expiry_date = Convert.ToDateTime(r.Cells["expiry_date"]?.Value),
                             quantity = ConvertToIntSafe(r.Cells["quantity"]?.Value),
@@ -462,6 +526,7 @@ namespace fertilizesop.UI
 
                 if (data == null) return;
 
+                txtcustsearch.Text = data.customername;
                 txtproductsearch.Text = data.productname;
                 txtfinaldiscount.Text = data.totaldiscount.ToString();
                 txtfinalprice.Text = data.finalpriceafterdisc.ToString();
@@ -502,6 +567,7 @@ namespace fertilizesop.UI
 
         private void clearallfields()
         {
+            txtcustsearch.Clear();
             txtproductsearch.Clear();
             txtfinaldiscount.Clear();
             txtfinalprice.Clear();
@@ -510,11 +576,29 @@ namespace fertilizesop.UI
             txtpaidamount.Clear();
         }
 
+        private void radiobuttons()
+        {
+            if(walking_in.Checked)
+            {
+                txtcustsearch.Visible = false;
+                addcustomer.Visible = false;
+            }
+            else
+            {
+                txtcustsearch.Visible = true;
+                addcustomer.Visible = true;
+            }
+        }
+
         private void iconButton1_Click(object sender, EventArgs e)
         {
             try
             {
-                
+                if (string.IsNullOrEmpty(txtcustsearch.Text) && !(walking_in.Checked))
+                {
+                    MessageBox.Show("Please enter the name of customer");
+                    return;
+                }
 
                 if (dataGridView1.Rows.Count == 0)
                 {
@@ -537,10 +621,11 @@ namespace fertilizesop.UI
                     }
                 }
 
-                bool result = _customersaledl.SaveDataToDatabase( dateTimePicker1.Value,
+                int id = _customersaledl.getcustomerid(txtcustsearch.Text);
+                bool result = _customersaledl.SaveDataToDatabase(id, dateTimePicker1.Value,
                     Convert.ToInt32(txtfinalprice.Text), Convert.ToInt32(txtpaidamount.Text), dataGridView1);
 
-                SavehthermalPdfInvoice();
+                //SavehthermalPdfInvoice();
 
                 if (result)
                 {
@@ -564,8 +649,13 @@ namespace fertilizesop.UI
 
 
         private void button2_Click(object sender, EventArgs e)
-        {            
-            if(dgvproductsearch.Visible)
+        {
+            if (dgvcustomersearch.Visible)
+            {
+                dgvcustomersearch.Visible = false;
+            }
+
+            if (dgvproductsearch.Visible)
             {
                 dgvproductsearch.Visible = false;
             }
@@ -627,6 +717,34 @@ namespace fertilizesop.UI
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void txtcustsearch_TextChanged_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtcustsearch.Text))
+            {
+                dgvcustomersearch.Visible = false;
+                button2.Visible = false;
+                return;
+            }
+            buttonshow();
+            dgvcustomersearch.Visible = true;
+            if (dgvcustomersearch.Columns.Contains("customer_id"))
+            {
+                dgvcustomersearch.Columns["customer_id"].Visible = false;
+            }
+            DataTable dt = _customersaledl.getallcustomer(txtcustsearch.Text);
+            dgvcustomersearch.DataSource = dt;
+        }
+
+        private void regular_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void walking_in_CheckedChanged(object sender, EventArgs e)
+        {
+            radiobuttons();
         }
     }
 }

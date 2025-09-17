@@ -42,6 +42,10 @@ namespace fertilizesop.UI
             this.txtproductsearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.addcustomer = new System.Windows.Forms.LinkLabel();
+            this.txtcustsearch = new System.Windows.Forms.TextBox();
+            this.walking_in = new System.Windows.Forms.RadioButton();
+            this.regular = new System.Windows.Forms.RadioButton();
             this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtpaidamount = new System.Windows.Forms.TextBox();
@@ -57,11 +61,6 @@ namespace fertilizesop.UI
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.regular = new System.Windows.Forms.RadioButton();
-            this.walking_in = new System.Windows.Forms.RadioButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -173,8 +172,8 @@ namespace fertilizesop.UI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(255)))), ((int)(((byte)(228)))));
-            this.panel1.Controls.Add(this.linkLabel1);
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.addcustomer);
+            this.panel1.Controls.Add(this.txtcustsearch);
             this.panel1.Controls.Add(this.walking_in);
             this.panel1.Controls.Add(this.regular);
             this.panel1.Controls.Add(this.button2);
@@ -201,6 +200,53 @@ namespace fertilizesop.UI
             this.panel1.Size = new System.Drawing.Size(1583, 904);
             this.panel1.TabIndex = 3;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // addcustomer
+            // 
+            this.addcustomer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.addcustomer.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addcustomer.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.addcustomer.LinkColor = System.Drawing.Color.Black;
+            this.addcustomer.Location = new System.Drawing.Point(882, 136);
+            this.addcustomer.Name = "addcustomer";
+            this.addcustomer.Size = new System.Drawing.Size(41, 43);
+            this.addcustomer.TabIndex = 22;
+            this.addcustomer.TabStop = true;
+            this.addcustomer.Text = "+";
+            // 
+            // txtcustsearch
+            // 
+            this.txtcustsearch.Location = new System.Drawing.Point(604, 136);
+            this.txtcustsearch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtcustsearch.Multiline = true;
+            this.txtcustsearch.Name = "txtcustsearch";
+            this.txtcustsearch.Size = new System.Drawing.Size(272, 45);
+            this.txtcustsearch.TabIndex = 21;
+            this.txtcustsearch.TextChanged += new System.EventHandler(this.txtcustsearch_TextChanged_1);
+            // 
+            // walking_in
+            // 
+            this.walking_in.AutoSize = true;
+            this.walking_in.Location = new System.Drawing.Point(475, 170);
+            this.walking_in.Name = "walking_in";
+            this.walking_in.Size = new System.Drawing.Size(107, 24);
+            this.walking_in.TabIndex = 20;
+            this.walking_in.TabStop = true;
+            this.walking_in.Text = "walking_in";
+            this.walking_in.UseVisualStyleBackColor = true;
+            this.walking_in.CheckedChanged += new System.EventHandler(this.walking_in_CheckedChanged);
+            // 
+            // regular
+            // 
+            this.regular.AutoSize = true;
+            this.regular.Location = new System.Drawing.Point(475, 134);
+            this.regular.Name = "regular";
+            this.regular.Size = new System.Drawing.Size(83, 24);
+            this.regular.TabIndex = 19;
+            this.regular.TabStop = true;
+            this.regular.Text = "regular";
+            this.regular.UseVisualStyleBackColor = true;
+            this.regular.CheckedChanged += new System.EventHandler(this.regular_CheckedChanged);
             // 
             // button2
             // 
@@ -365,67 +411,11 @@ namespace fertilizesop.UI
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(0, 0);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(126, 24);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // regular
-            // 
-            this.regular.AutoSize = true;
-            this.regular.Location = new System.Drawing.Point(475, 134);
-            this.regular.Name = "regular";
-            this.regular.Size = new System.Drawing.Size(83, 24);
-            this.regular.TabIndex = 19;
-            this.regular.TabStop = true;
-            this.regular.Text = "regular";
-            this.regular.UseVisualStyleBackColor = true;
-            // 
-            // walking_in
-            // 
-            this.walking_in.AutoSize = true;
-            this.walking_in.Location = new System.Drawing.Point(475, 170);
-            this.walking_in.Name = "walking_in";
-            this.walking_in.Size = new System.Drawing.Size(107, 24);
-            this.walking_in.TabIndex = 20;
-            this.walking_in.TabStop = true;
-            this.walking_in.Text = "walking_in";
-            this.walking_in.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(604, 136);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(272, 45);
-            this.textBox1.TabIndex = 21;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.linkLabel1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.linkLabel1.LinkColor = System.Drawing.Color.Black;
-            this.linkLabel1.Location = new System.Drawing.Point(882, 136);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(41, 43);
-            this.linkLabel1.TabIndex = 22;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "+";
-            // 
             // Customersale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1583, 904);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Customersale";
@@ -438,7 +428,6 @@ namespace fertilizesop.UI
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -472,10 +461,9 @@ namespace fertilizesop.UI
         private DataGridViewTextBoxColumn discount;
         private DataGridViewTextBoxColumn final;
         private DataGridViewTextBoxColumn total;
-        private TextBox textBox1;
+        private TextBox txtcustsearch;
         private RadioButton walking_in;
         private RadioButton regular;
-        private RadioButton radioButton1;
-        private LinkLabel linkLabel1;
+        private LinkLabel addcustomer;
     }
 }

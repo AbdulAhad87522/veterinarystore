@@ -50,9 +50,49 @@ namespace MedicineShop.DL
             return dt;
         }
 
+        public int getcustomerid(string text)
+        {
+            try
+            {
+                using (var con = DatabaseHelper.Instance.GetConnection())
+                {
+                    con.Open();
+                    string query = "select customer_id from customers where concat(first_name,' ',last_name) = @text";
+                    using (MySqlCommand cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@text", text);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) : -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to recieve customer_id " + ex);
+            }
+        }
 
-      
-        public bool SaveDataToDatabase( DateTime? date, int? total_amount, int? paid_amount, DataGridView d)
+        public DataTable getallcustomer(string text)
+        {
+            DataTable dt = new DataTable();
+            using (var con = DatabaseHelper.Instance.GetConnection())
+            {
+                con.Open();
+                string query = "SELECT CONCAT(first_name, ' ', last_name) as name, address, phone FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE @text";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                }
+            }
+            return dt;
+        }
+
+        public bool SaveDataToDatabase(int? id, DateTime? date, int? total_amount, int? paid_amount, DataGridView d)
         {
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
@@ -61,23 +101,25 @@ namespace MedicineShop.DL
                 {
                     try
                     {
-                        string query = @"INSERT INTO sales ( SaleDate, total_price, paid_amount) 
-                        VALUES (@date, @total_amount, @paid_amount);
+                        string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
+                        VALUES (@id, @total_amount, @paid_amount, @date);
                         SELECT LAST_INSERT_ID();";
                         int billid;
                         using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
                         {
-                            cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
                             object result = cmd.ExecuteScalar();
                             billid = result != null && int.TryParse(result.ToString(), out int tempBillId) ? tempBillId : -1;
                         }
 
-                        string query2 = "insert into customerpricerecord (customer_id ,BillID , date, payment) values (@c_id , @b_id, @date, @payment)";
+                        string query2 = "insert into customerpricerecord (customer_id ,sale_id , date, payment) values (@c_id , @s_id, @date, @payment)";
                         using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
                         {
-                            cmd2.Parameters.AddWithValue("@b_id", billid);
+                            cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
+                            cmd2.Parameters.AddWithValue("@s_id", billid);
                             cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
                             cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
                             cmd2.ExecuteNonQuery();
@@ -87,13 +129,13 @@ namespace MedicineShop.DL
                         {
                             int productid;
                             string name = row.Cells["name"]?.Value?.ToString()?.Trim();
-                            string description = row.Cells["description"]?.Value?.ToString()?.Trim();
+                            //string description = row.Cells["description"]?.Value?.ToString()?.Trim();
 
-                            string productidquery = "select product_id from products where name = @name and description = @description";
+                            string productidquery = "select product_id from medicines where name = @name";
                             using (MySqlCommand command2 = new MySqlCommand(productidquery, con, tran))
                             {
                                 command2.Parameters.AddWithValue("@name", name ?? (object)DBNull.Value);
-                                command2.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
+                                //command2.Parameters.AddWithValue("@description", description ?? (object)DBNull.Value);
                                 object result = command2.ExecuteScalar();
                                 productid = result != null && int.TryParse(result.ToString(), out int tempBillId) ? tempBillId : -1;
                             }
@@ -102,7 +144,7 @@ namespace MedicineShop.DL
                             {
                                 throw new Exception("product id not found");
                             }
-                            string detailquery = "insert into customer_bill_details (Bill_id, product_id, quantity, discount) values (@bill_iid, @product_id, @quantity, @discount)";
+                            string detailquery = "insert into sale_items (sale_id, product_id, quantity, Discount) values (@bill_iid, @product_id, @quantity, @discount)";
                             int billdetailid;
                             using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
                             {
@@ -117,27 +159,30 @@ namespace MedicineShop.DL
                                 billdetailid = result != null && int.TryParse(result.ToString(), out int tempId) ? tempId : -1;
                             }
 
-                            string queryupdatequantity = "UPDATE products SET quantity = quantity - @quantitysold WHERE product_id = @product_id AND quantity >= @quantitysold";
+                            DateTime expiry = Convert.ToDateTime(row.Cells["expiry_date"]?.Value);
+                            expiry = expiry.Date;
+
+                            string queryupdatequantity = "UPDATE batch_items SET stock = stock - @quantitysold WHERE product_id = @product_id AND expiry_date = @expiry";
                             using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
                             {
                                 comma.Parameters.AddWithValue("@product_id", productid);
                                 int quantity = Convert.ToInt32(row.Cells["quantity"]?.Value?.ToString());
-                                comma.Parameters.AddWithValue("@quantitysold", quantity);
+                                comma.Parameters.AddWithValue("@expiry", expiry);
                                 comma.ExecuteNonQuery();
                             }
 
-                            string q = "insert into inventory_log (product_id, change_type, quantity_change, log_date ) values (@p_id, @type, @quantity_changed, @date)";
-                            using (MySqlCommand com = new MySqlCommand(q, con, tran))
-                            {
-                                com.Parameters.AddWithValue("@p_id", productid);
-                                com.Parameters.AddWithValue("@type", "sale");
-                                if (!int.TryParse(row.Cells["quantity"].Value?.ToString(), out int qty))
-                                    throw new Exception("Invalid quantity for product.");
-                                com.Parameters.AddWithValue("@quantity_changed", qty);
-                                com.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
-                                com.ExecuteNonQuery();
+                            //string q = "insert into inventory_log (product_id, change_type, quantity_change, log_date ) values (@p_id, @type, @quantity_changed, @date)";
+                            //using (MySqlCommand com = new MySqlCommand(q, con, tran))
+                            //{
+                            //    com.Parameters.AddWithValue("@p_id", productid);
+                            //    com.Parameters.AddWithValue("@type", "sale");
+                            //    if (!int.TryParse(row.Cells["quantity"].Value?.ToString(), out int qty))
+                            //        throw new Exception("Invalid quantity for product.");
+                            //    com.Parameters.AddWithValue("@quantity_changed", qty);
+                            //    com.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+                            //    com.ExecuteNonQuery();
 
-                            }
+                            //}
                         }
                         tran.Commit();
                         return true;
@@ -151,6 +196,7 @@ namespace MedicineShop.DL
                 }
             }
         }
+
 
         public static Stream GetLogoImageStream()
         {

@@ -8,6 +8,7 @@ namespace MedicineShop.BL.Models
 {
     public class Temporarycustomersale
     {
+        public string customername { get; set; }
         public string productname { get; set; }
         public int totaldiscount { get; set; }
         public decimal finalpriceafterdisc { get; set; }
