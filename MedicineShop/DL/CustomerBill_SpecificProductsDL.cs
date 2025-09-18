@@ -26,24 +26,24 @@ namespace fertilizesop.DL
             try
             {
                 string query = @"
-                        SELECT 
-                    m.name AS ProductName,
-                    m.company as Company
-                    cbd.quantity,
-                    m.sale_price AS UnitPrice,
-                    (p.sale_price * cbd.quantity) AS TotalPrice,
-                    cbd.discount,
-                    cbd.status
-                    from sale_items cbd
-                JOIN 
-                    batch_items bi ON cbd.batch_item_id = p.batch_item_id
-                JOIN
-                    medicines m on p.product_id = bi.product_id
-                JOIN 
-                    company c on c.company_id = m.company_id
-                WHERE 
-                    cbd.sale_id = @billId;";
-
+            SELECT 
+                m.name AS ProductName,
+                c.company_name as Company,
+                si.quantity,
+                si.price AS UnitPrice,
+                (si.price * si.quantity) AS TotalPrice,
+                si.Discount as discount,
+                bi.expiry_date as ExpiryDate
+            FROM 
+                sale_items si
+            JOIN 
+                batch_items bi ON si.batch_item_id = bi.batch_item_id
+            JOIN
+                medicines m ON bi.product_id = m.product_id
+            JOIN 
+                company c ON m.company_id = c.company_id
+            WHERE 
+                si.sale_id = @billId;";
 
                 using (var conn = _dbHelper.GetConnection())
                 {
@@ -80,7 +80,7 @@ namespace fertilizesop.DL
                         cb.sale_date,
                         cb.total_amount AS TotalAmount,
                         cb.paid_amount AS PaidAmount,
-                        (cb.total_amount - IFNULL(cb.paid_amount, 0)) AS PendingAmount,
+                        (cb.total_amount - IFNULL(cb.paid_amount, 0)) AS PendingAmount
                     FROM 
                         sales cb    
                     JOIN 

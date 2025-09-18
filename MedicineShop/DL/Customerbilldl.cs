@@ -31,7 +31,7 @@ namespace fertilizesop.DL
                 DATE_FORMAT(cb.sale_date, '%d-%m-%Y %h:%i %p') AS SaleDate,
                 CAST(cb.total_amount AS DECIMAL(12,2)) AS TotalAmount,
                 CAST(IFNULL(cb.paid_amount, 0) AS DECIMAL(12,2)) AS PaidAmount,
-                CAST((cb.total_amount - IFNULL(cb.paid_amount, 0)) AS DECIMAL(12,2)) AS DueAmount,
+                CAST((cb.total_amount - IFNULL(cb.paid_amount, 0)) AS DECIMAL(12,2)) AS DueAmount
                
             FROM 
                 sales cb
@@ -76,7 +76,7 @@ namespace fertilizesop.DL
                     conn.Open();
                     string query = "SELECT    sb.sale_id, sb.paid_amount, sb.customer_id,   " +
                         "sb.total_amount,    (sb.total_amount-sb.paid_amount) as pending,  " +
-                        " sb.sale_date,    concat(s.first_name,' ',s.last_name) as name," +
+                        " sb.sale_date,    concat(s.first_name,' ',s.last_name) as name" +
                         "FROM   sales sb  " +
                         "    JOIN  " +
                         " customers s ON s.customer_id = sb.customer_id ";
@@ -171,21 +171,16 @@ namespace fertilizesop.DL
                     SELECT 
                         p.name AS ProductName,
                         cbd.quantity,
-                        p.description AS ProductDescription,
-                        (i.sale_price * cbd.quantity) AS TotalPrice,
-                        cbd.discount,
-                        cbd.status,
-                        cbd.warranty,
-                        cbd.warranty_from,
-                        cbd.warranty_till
+                        (p.sale_price * cbd.quantity) AS TotalPrice,
+                        cbd.discount
                     FROM 
                         sale_items cbd
                     JOIN 
-                        products p ON cbd.product_id = p.product_id
-                    //JOIN 
-                    //    inventory i ON p.product_id = i.product_id
+                        batch_items bt on bt.batch_item_id = cbd.batch_item_id
+                    JOIN 
+                        medicines p ON bt.product_id = p.product_id
                     WHERE 
-                        cbd.bill_id = @billId";
+                        cbd.sale_id = @billId";
 
                 using (var conn = _dbHelper.GetConnection())
                 {
@@ -219,11 +214,11 @@ namespace fertilizesop.DL
                     SELECT 
                         date AS PaymentDate,
                         payment AS Amount,
-                        BillID
+                        sale_id
                     FROM 
                         customerpricerecord
                     WHERE 
-                        BillID = @billId
+                        sale_id = @billId
                     ORDER BY 
                         date DESC";
 
@@ -262,7 +257,7 @@ namespace fertilizesop.DL
                         // Insert into customerpricerecord
                         string insertQuery = @"
                     INSERT INTO customerpricerecord
-                    (customer_id, billid, date, payment, remarks)
+                    (customer_id, sale_id, date, payment, remarks)
                     VALUES (@cust_id, @billid, @date, @payment, @remarks);";
 
                         using (var insertCmd = new MySqlCommand(insertQuery, conn, transaction))
@@ -278,9 +273,9 @@ namespace fertilizesop.DL
 
                         // Update paid_amount in customerbills
                         string updateQuery = @"
-                    UPDATE customerbills
+                    UPDATE sales
                     SET paid_amount = paid_amount + @payment
-                    WHERE billid = @billid;";
+                    WHERE sale_id = @billid;";
 
                         using (var updateCmd = new MySqlCommand(updateQuery, conn, transaction))
                         {
@@ -310,7 +305,7 @@ namespace fertilizesop.DL
                 {
                     var listt = new List<Customerrecord>();
                     conn.Open();
-                    string query = "select * from customerpricerecord where BillID=@billid;";
+                    string query = "select * from customerpricerecord where sale_id=@billid;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@billid", billid);
@@ -319,13 +314,13 @@ namespace fertilizesop.DL
                             while (reader.Read())
                             {
                                 int id = reader.GetInt32("record_id");
-                                int billsid = reader.GetInt32("BillID");
+                                int billsid = reader.GetInt32("sale_id");
                                 int custid = reader.GetInt32("customer_id");
                                 DateTime date = reader.GetDateTime("date");
                                 decimal payments = reader.GetDecimal("payment");
-                                string remarks = reader["remarks"] == DBNull.Value ? "" : reader.GetString("remarks");
+                                //string remarks = reader["remarks"] == DBNull.Value ? "" : reader.GetString("remarks");
 
-                                var record = new Customerrecord(id, custid, payments, date, billsid, remarks);
+                                var record = new Customerrecord(id, custid, payments, date, billsid);
 
                                 listt.Add(record);
                             }

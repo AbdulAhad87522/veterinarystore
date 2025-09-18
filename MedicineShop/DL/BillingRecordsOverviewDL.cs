@@ -231,7 +231,7 @@ namespace fertilizesop.DL
                             while (reader.Read())
                             {
                                 int id = reader.GetInt32("record_id");
-                                int billsid = reader.GetInt32("BillID");
+                                int billsid = reader.GetInt32("sale_id");
                                 int custid = reader.GetInt32("customer_id");
                                 DateTime date = reader.GetDateTime("date");
                                 decimal payments = reader.GetDecimal("payment");

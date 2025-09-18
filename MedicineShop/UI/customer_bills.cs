@@ -57,7 +57,7 @@ namespace fertilizesop.UI
 
                     if (clickedColumn.Name == "btnDetails")
                     {
-                        var billIdCell = dataGridView2.Rows[e.RowIndex].Cells["BillID"];
+                        var billIdCell = dataGridView2.Rows[e.RowIndex].Cells["sale_id"];
                         if (billIdCell.Value != null && int.TryParse(billIdCell.Value.ToString(), out int billId))
                             OpenBillDetailsForm(billId);
                     }
@@ -67,7 +67,7 @@ namespace fertilizesop.UI
 
                         // Fetch values
                         txtname1.Text = row.Cells["CustomerName"].Value?.ToString();
-                        txtbill.Text = row.Cells["BillID"].Value?.ToString();
+                        txtbill.Text = row.Cells["sale_id"].Value?.ToString();
                         txtamount.Text = row.Cells["DueAmount"].Value?.ToString();
                         txtpayment.Clear();
                         txtremarks.Clear();
@@ -435,6 +435,11 @@ namespace fertilizesop.UI
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint_1(object sender, PaintEventArgs e)
         {
 
         }

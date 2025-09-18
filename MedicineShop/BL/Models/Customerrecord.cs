@@ -8,6 +8,10 @@ namespace fertilizesop.BL.Models
 {
     public class Customerrecord
     {
+        private int custid;
+        private decimal payments;
+        private int billsid;
+
         public int id { get; set; }
         public string name { get; set; }
         public decimal payement { get; set; }
@@ -32,6 +36,15 @@ namespace fertilizesop.BL.Models
             this.bill_id = bill_id;
             this.remarks = remarks;
             this.suppid = suppid;
+        }
+
+        public Customerrecord(int id, int custid, decimal payments, DateTime date, int billsid)
+        {
+            this.id = id;
+            this.custid = custid;
+            this.payments = payments;
+            this.date = date;
+            this.billsid = billsid;
         }
     }
 

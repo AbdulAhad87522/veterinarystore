@@ -76,7 +76,6 @@
             // 
             // pictureBox10
             // 
-            //this.pictureBox10.Image = global::fertilizesop.Properties.Resources.refresh;
             this.pictureBox10.Location = new System.Drawing.Point(28, 44);
             this.pictureBox10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox10.Name = "pictureBox10";
@@ -205,6 +204,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1783, 864);
             this.panel2.TabIndex = 17;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint_1);
             // 
             // paneledit
             // 
