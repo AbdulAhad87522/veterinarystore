@@ -1,5 +1,4 @@
 ﻿using MedicineShop.BL;
-using MedicineShop.BL.Models;
 using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
@@ -8,97 +7,230 @@ namespace MedicineShop.DL
 {
     public class BatchesDl
     {
-        public bool AddBatches(Batches b, List<BatchItems> itemsList)
+        // ✅ Add
+        public bool AddBatch(Batches batch)
         {
             try
             {
+                string query = @"INSERT INTO purchase_batches 
+                                (BatchName, total_price, paid, Purchase_date, company_id) 
+                                VALUES (@BatchName, @TotalPrice, @Paid, @PurchaseDate, @CompanyID)";
+
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    using (var transaction = conn.BeginTransaction())
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        try
-                        {
-                            // Insert into purchase_batches
-                            string insertBatchQuery = @"
-                                INSERT INTO purchase_batches 
-                                (purchase_date, BatchName, TotalPrice, PaidAmount, company_id) 
-                                VALUES (@date, @BatchName, @TotalPrice, @PaidAmount, @CompanyID);";
+                        cmd.Parameters.AddWithValue("@BatchName", batch.BatchName);
+                        cmd.Parameters.AddWithValue("@TotalPrice", batch.TotalPrice);
+                        cmd.Parameters.AddWithValue("@Paid", batch.Paid);
+                        cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
+                        cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
 
-                            var batchParams = new MySqlParameter[]
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AddBatch: {ex.Message}");
+                return false;
+            }
+        }
+
+        // ✅ Get All
+        public List<Batches> GetAllBatches()
+        {
+            List<Batches> batches = new List<Batches>();
+            try
+            {
+                string query = @"SELECT p.purchase_batch_id, p.BatchName, p.total_price, 
+                                        p.paid, p.Purchase_date, p.status,
+                                        p.company_id, c.company_name
+                                 FROM purchase_batches p
+                                 JOIN company c ON c.company_id = p.company_id";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Batches batch = new Batches
                             {
-                                new MySqlParameter("@date", DateTime.Now),
-                                new MySqlParameter("@BatchName", b.BatchName),
-                                new MySqlParameter("@TotalPrice", b.TotalPrice),
-                                new MySqlParameter("@PaidAmount", b.PaidAmount),
-                                new MySqlParameter("@CompanyID", b.company_id)
+                                PurchaseBatchID = reader.GetInt32("purchase_batch_id"),
+                                BatchName = reader.GetString("BatchName"),
+                                TotalPrice = reader.GetDecimal("total_price"),
+                                Paid = reader.GetDecimal("paid"),
+                                PurchaseDate = reader.GetDateTime("Purchase_date"),
+                                CompanyID = reader.GetInt32("company_id"),
+                                CompanyName = reader.GetString("company_name"),
+                                Status = reader.GetString("status")
                             };
-
-                            DatabaseHelper.Instance.ExecuteNonQueryTransaction(insertBatchQuery, batchParams, transaction);
-
-                            int batchId = DatabaseHelper.Instance.GetLastInsertId(transaction,conn);
-
-                            // Insert all batch items
-                            string insertBatchItemQuery = @"
-                                INSERT INTO batch_items 
-                                (purchase_batch_id, product_id, quantity_received, purchase_price, expiry_date) 
-                                VALUES (@BatchID, @MedicineID, @Quantity, @PurchasePrice, @ExpiryDate);";
-
-                            foreach (var item in itemsList)
-                            {
-                                var batchItemParams = new MySqlParameter[]
-                                {
-                                    new MySqlParameter("@BatchID", batchId),
-                                    new MySqlParameter("@MedicineID", item.MedicineID),
-                                    new MySqlParameter("@Quantity", item.Quantity),
-                                    new MySqlParameter("@PurchasePrice", item.Purcahseprice),
-                                    new MySqlParameter("@ExpiryDate", item.ExpiryDate)
-                                };
-
-                                DatabaseHelper.Instance.ExecuteNonQueryTransaction(insertBatchItemQuery, batchItemParams, transaction);
-
-                                // Update sale price per product (if needed)
-                                string updateSalePriceQuery = "UPDATE medicines SET sale_price = @saleprice WHERE product_id = @prodid;";
-                                var updateParams = new MySqlParameter[]
-                                {
-                                    new MySqlParameter("@saleprice", item.SalePrice),
-                                    new MySqlParameter("@prodid", item.MedicineID)
-                                };
-                                DatabaseHelper.Instance.ExecuteNonQueryTransaction(updateSalePriceQuery, updateParams, transaction);
-
-                                // Optional: insert into stock_log for tracking
-                                string insertStockLogQuery = @"
-                                    INSERT INTO stock_log (batch_id, change_type, quantity_change, remarks) 
-                                    VALUES (@BatchID, 'PURCHASE', @Quantity, 'New stock added');";
-                                var logParams = new MySqlParameter[]
-                                {
-                                    new MySqlParameter("@BatchID", batchId),
-                                    new MySqlParameter("@Quantity", item.Quantity)
-                                };
-                                DatabaseHelper.Instance.ExecuteNonQueryTransaction(insertStockLogQuery, logParams, transaction);
-                            }
-
-                            transaction.Commit();
-                            return true;
-                        }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-                            Console.WriteLine("Transaction failed: " + ex.ToString());
-                            return false;
+                            batches.Add(batch);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Connection error: " + ex.ToString());
+                Console.WriteLine($"Error in GetAllBatches: {ex.Message}");
+            }
+            return batches;
+        }
+
+        // ✅ Get By ID
+        public Batches GetBatchById(int id)
+        {
+            Batches batch = null;
+            try
+            {
+                string query = @"SELECT p.purchase_batch_id, p.BatchName, p.total_price, 
+                                        p.paid, p.Purchase_date, p.status,
+                                        p.company_id, c.company_name
+                                 FROM purchase_batches p
+                                 JOIN company c ON c.company_id = p.company_id
+                                 WHERE p.purchase_batch_id = @id";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                batch = new Batches
+                                {
+                                    PurchaseBatchID = reader.GetInt32("purchase_batch_id"),
+                                    BatchName = reader.GetString("BatchName"),
+                                    TotalPrice = reader.GetDecimal("total_price"),
+                                    Paid = reader.GetDecimal("paid"),
+                                    PurchaseDate = reader.GetDateTime("Purchase_date"),
+                                    CompanyID = reader.GetInt32("company_id"),
+                                    CompanyName = reader.GetString("company_name"),
+                                    Status = reader.GetString("status")
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetBatchById: {ex.Message}");
+            }
+            return batch;
+        }
+
+        // ✅ Update
+        public bool UpdateBatch(Batches batch)
+        {
+            try
+            {
+                string query = @"UPDATE purchase_batches 
+                                 SET BatchName=@BatchName, total_price=@TotalPrice, 
+                                     paid=@Paid, Purchase_date=@PurchaseDate, 
+                                     company_id=@CompanyID, status=@Status
+                                 WHERE purchase_batch_id=@BatchID";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BatchName", batch.BatchName);
+                        cmd.Parameters.AddWithValue("@TotalPrice", batch.TotalPrice);
+                        cmd.Parameters.AddWithValue("@Paid", batch.Paid);
+                        cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
+                        cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
+                        cmd.Parameters.AddWithValue("@Status", batch.Status);
+                        cmd.Parameters.AddWithValue("@BatchID", batch.PurchaseBatchID);
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateBatch: {ex.Message}");
                 return false;
             }
         }
-        public decimal SalePrice(int product_id)
+
+        // ✅ Delete
+        public bool DeleteBatch(int id)
         {
-            return DatabaseHelper.Instance.getsaleprice(product_id);
-        }   
+            try
+            {
+                string query = "DELETE FROM purchase_batches WHERE purchase_batch_id=@id";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in DeleteBatch: {ex.Message}");
+                return false;
+            }
+        }
+
+        // ✅ Search (LIKE)
+        public List<Batches> SearchBatches(string searchTerm)
+        {
+            List<Batches> batches = new List<Batches>();
+            try
+            {
+                string query = @"SELECT p.purchase_batch_id, p.BatchName, p.total_price, 
+                                        p.paid, p.Purchase_date, p.status,
+                                        p.company_id, c.company_name
+                                 FROM purchase_batches p
+                                 JOIN company c ON c.company_id = p.company_id
+                                 WHERE p.BatchName LIKE @search";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@search", $"%{searchTerm}%");
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Batches batch = new Batches
+                                {
+                                    PurchaseBatchID = reader.GetInt32("purchase_batch_id"),
+                                    BatchName = reader.GetString("BatchName"),
+                                    TotalPrice = reader.GetDecimal("total_price"),
+                                    Paid = reader.GetDecimal("paid"),
+                                    PurchaseDate = reader.GetDateTime("Purchase_date"),
+                                    CompanyID = reader.GetInt32("company_id"),
+                                    CompanyName = reader.GetString("company_name"),
+                                    Status = reader.GetString("status")
+                                };
+                                batches.Add(batch);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in SearchBatches: {ex.Message}");
+            }
+            return batches;
+        }
     }
 }
