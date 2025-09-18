@@ -1,34 +1,66 @@
-﻿using System;
+﻿using MedicineShop.BL;
+using MedicineShop.DL;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MedicineShop.BL.Bl
+namespace MedicineShop.BL
 {
     public class BatchesBl
     {
-        public bool AddBatches(Batches b, List<Models.BatchItems> itemsList)
+        private readonly BatchesDl _batchesDl;
+
+        public BatchesBl()
         {
-            try
-            {
-                return new DL.BatchesDl().AddBatches(b, itemsList);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error in BatchesBl->AddBatches: " + ex.Message);
-            }
+            _batchesDl = new BatchesDl();
         }
-        public decimal getsaleprice(int product_id)
+
+        // ✅ Add
+        public bool AddBatch(Batches batch)
         {
-            try
-            {
-                return new DL.BatchesDl().SalePrice(product_id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error in BatchesBl->getsaleprice: " + ex.Message);
-            }
+            if (string.IsNullOrWhiteSpace(batch.BatchName))
+                throw new ArgumentException("Batch name cannot be empty.");
+            if (batch.TotalPrice < 0 || batch.Paid < 0)
+                throw new ArgumentException("Price values cannot be negative.");
+
+            return _batchesDl.AddBatch(batch);
+        }
+
+        // ✅ Get All
+        public List<Batches> GetAllBatches()
+        {
+            return _batchesDl.GetAllBatches();
+        }
+
+        // ✅ Get By ID
+        public Batches GetBatchById(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid batch ID.");
+            return _batchesDl.GetBatchById(id);
+        }
+
+        // ✅ Update
+        public bool UpdateBatch(Batches batch)
+        {
+            if (batch.PurchaseBatchID <= 0)
+                throw new ArgumentException("Invalid batch ID.");
+            return _batchesDl.UpdateBatch(batch);
+        }
+
+        // ✅ Delete
+        public bool DeleteBatch(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid batch ID.");
+            return _batchesDl.DeleteBatch(id);
+        }
+
+        // ✅ Search
+        public List<Batches> SearchBatches(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return new List<Batches>(); // return empty list if no search term
+            return _batchesDl.SearchBatches(searchTerm);
         }
     }
 }
