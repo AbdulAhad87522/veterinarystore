@@ -120,17 +120,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BL\Bl\CompanyBL.cs" />
+    <Compile Include="BL\Bl\Customerbillbl.cs" />
+    <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Models\Company.cs" />
+    <Compile Include="BL\Models\Customerbill.cs" />
+    <Compile Include="BL\Models\Customerrecord.cs" />
     <Compile Include="BL\Models\Temporarycustomersale.cs" />
+    <Compile Include="DL\BillingRecordsOverviewDL.cs" />
     <Compile Include="DL\CompanyDL.cs" />
+    <Compile Include="DL\Customerbilldl.cs" />
+    <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
-    <Compile Include="Dashboard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dashboard.Designer.cs">
-      <DependentUpon>Dashboard.cs</DependentUpon>
-    </Compile>
+    <Compile Include="DL\MySqlbackupHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\AddBatchdetailsform.cs">
@@ -157,11 +159,29 @@
     <Compile Include="UI\CompanyMain.Designer.cs">
       <DependentUpon>CompanyMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CustomerBill_SpecificProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CustomerBill_SpecificProducts.Designer.cs">
+      <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Customersale.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Customersale.Designer.cs">
       <DependentUpon>Customersale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customer_bills.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customer_bills.Designer.cs">
+      <DependentUpon>customer_bills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Sample.cs">
       <SubType>Form</SubType>
@@ -169,9 +189,6 @@
     <Compile Include="UI\Sample.Designer.cs">
       <DependentUpon>Sample.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Dashboard.resx">
-      <DependentUpon>Dashboard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -190,8 +207,17 @@
     <EmbeddedResource Include="UI\CompanyMain.resx">
       <DependentUpon>CompanyMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomerBill_SpecificProducts.resx">
+      <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Customersale.resx">
       <DependentUpon>Customersale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\customer_bills.resx">
+      <DependentUpon>customer_bills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Dashboard.resx">
+      <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Sample.resx">
       <DependentUpon>Sample.cs</DependentUpon>
