@@ -300,11 +300,11 @@ namespace fertilizesop.UI
 
                 // Get values from the row
                 string name = selectedRow.Cells["name"].Value.ToString();
-                string description = selectedRow.Cells["description"].Value.ToString();
+                //string description = selectedRow.Cells["description"].Value.ToString();
                 int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
                 DateTime expiryDate = DateTime.Parse(selectedRow.Cells["expiry_date"].Value.ToString());
                 expiryDate = expiryDate.Date;
-                dataGridView1.Rows.Add(name, description, saleprice, expiryDate);
+                dataGridView1.Rows.Add(name, saleprice, expiryDate);
                 dgvproductsearch.Visible = false;
                 button2.Visible = false;
                 clearfields();
@@ -590,11 +590,76 @@ namespace fertilizesop.UI
             }
         }
 
+        //private void iconButton1_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(txtcustsearch.Text) && !(walking_in.Checked))
+        //        {
+        //            MessageBox.Show("Please enter the name of customer");
+        //            return;
+        //        }
+
+        //        if (dataGridView1.Rows.Count == 0)
+        //        {
+        //            MessageBox.Show("Please select some product first");
+        //            return;
+        //        }
+
+        //        if (string.IsNullOrEmpty(txtpaidamount.Text))
+        //        {
+        //            DialogResult result1 = MessageBox.Show("Don't you want to enter the paid amount?",
+        //                "Payment not entered", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+        //            if (result1 == DialogResult.Yes)
+        //            {
+        //                txtpaidamount.Text = "0";
+        //            }
+        //            else
+        //            {
+        //                return;
+        //            }
+        //        }
+
+        //        int id;
+        //        if( walking_in.Checked && !(regular.Checked))
+        //        {
+        //            id = 0001;
+        //        }
+        //        else
+        //        {
+        //            id = _customersaledl.getcustomerid(txtcustsearch.Text);
+        //        }
+        //            bool result = _customersaledl.SaveDataToDatabase(id, dateTimePicker1.Value,
+        //                Convert.ToInt32(txtfinalprice.Text), Convert.ToInt32(txtpaidamount.Text), dataGridView1);
+
+        //        //SavehthermalPdfInvoice();
+
+        //        if (result)
+        //        {
+        //            MessageBox.Show("Data saved successfully");
+        //            clearallfields();
+
+        //            string tempFile = GetTempSaleFilePath();
+        //            if (File.Exists(tempFile))
+        //                File.Delete(tempFile);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Data not saved to the database");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error in saving the data to database: " + ex.Message);
+        //    }
+        //}
+
         private void iconButton1_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(txtcustsearch.Text) && !(walking_in.Checked))
+                if (!walking_in.Checked && string.IsNullOrEmpty(txtcustsearch.Text))
                 {
                     MessageBox.Show("Please enter the name of customer");
                     return;
@@ -608,24 +673,27 @@ namespace fertilizesop.UI
 
                 if (string.IsNullOrEmpty(txtpaidamount.Text))
                 {
-                    DialogResult result1 = MessageBox.Show("Don't you want to enter the paid amount?",
-                        "Payment not entered", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    txtpaidamount.Text = "0"; // Default if not entered
+                }
 
-                    if (result1 == DialogResult.Yes)
+                int id = 1; // default for walk-in
+                if (!walking_in.Checked)
+                {
+                    id = _customersaledl.getcustomerid(txtcustsearch.Text);
+                    if (id <= 0)
                     {
-                        txtpaidamount.Text = "0";
-                    }
-                    else
-                    {
+                        MessageBox.Show("Customer not found.");
                         return;
                     }
                 }
 
-                int id = _customersaledl.getcustomerid(txtcustsearch.Text);
-                bool result = _customersaledl.SaveDataToDatabase(id, dateTimePicker1.Value,
-                    Convert.ToInt32(txtfinalprice.Text), Convert.ToInt32(txtpaidamount.Text), dataGridView1);
-
-                //SavehthermalPdfInvoice();
+                bool result = _customersaledl.SaveDataToDatabase(
+                    id,
+                    dateTimePicker1.Value,
+                    ConvertToIntSafe(txtfinalprice.Text),
+                    ConvertToIntSafe(txtpaidamount.Text),
+                    dataGridView1
+                );
 
                 if (result)
                 {
