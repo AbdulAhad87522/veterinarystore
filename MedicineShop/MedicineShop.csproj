@@ -122,9 +122,11 @@
     <Compile Include="BL\Bl\CompanyBL.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
+    <Compile Include="BL\Bl\MedicineBL.cs" />
     <Compile Include="BL\Models\Company.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
+    <Compile Include="BL\Models\Medicine.cs" />
     <Compile Include="BL\Models\Temporarycustomersale.cs" />
     <Compile Include="DL\BillingRecordsOverviewDL.cs" />
     <Compile Include="DL\CompanyDL.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\MedicineDL.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,6 +149,12 @@
     </Compile>
     <Compile Include="UI\AddCompany.Designer.cs">
       <DependentUpon>AddCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddMedicine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddMedicine.Designer.cs">
+      <DependentUpon>AddMedicine.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Batchform.cs">
       <SubType>Form</SubType>
@@ -183,6 +192,12 @@
     <Compile Include="UI\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MedicineMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MedicineMain.Designer.cs">
+      <DependentUpon>MedicineMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Sample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -201,6 +216,9 @@
     <EmbeddedResource Include="UI\AddCompany.resx">
       <DependentUpon>AddCompany.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddMedicine.resx">
+      <DependentUpon>AddMedicine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Batchform.resx">
       <DependentUpon>Batchform.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MedicineMain.resx">
+      <DependentUpon>MedicineMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Sample.resx">
       <DependentUpon>Sample.cs</DependentUpon>
