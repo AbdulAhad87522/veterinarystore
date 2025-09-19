@@ -1,0 +1,47 @@
+﻿using MedicineShop.BL;
+using MedicineShop.Models;
+using System;
+using System.Windows.Forms;
+
+namespace MedicineShop.UI
+{
+    public partial class AddPacking : Form
+    {
+        private readonly PackingBL _packingBL = new PackingBL();
+
+        public AddPacking()
+        {
+            InitializeComponent();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Packing packing = new Packing
+                {
+                    PackingName = txtName.Text.Trim()
+                };
+
+                int result = _packingBL.AddPacking(packing);
+                if (result > 0)
+                {
+                    MessageBox.Show("Packing added successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Packing not added.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+    }
+}

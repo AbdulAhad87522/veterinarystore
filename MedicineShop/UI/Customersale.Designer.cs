@@ -71,7 +71,7 @@ namespace fertilizesop.UI
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(255)))), ((int)(((byte)(197)))));
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.name,
@@ -171,7 +171,7 @@ namespace fertilizesop.UI
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(255)))), ((int)(((byte)(228)))));
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
             this.panel1.Controls.Add(this.addcustomer);
             this.panel1.Controls.Add(this.txtcustsearch);
             this.panel1.Controls.Add(this.walking_in);
@@ -294,6 +294,7 @@ namespace fertilizesop.UI
             // iconButton1
             // 
             this.iconButton1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.iconButton1.BackColor = System.Drawing.SystemColors.Control;
             this.iconButton1.IconChar = FontAwesome.Sharp.IconChar.Print;
             this.iconButton1.IconColor = System.Drawing.Color.Green;
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
@@ -304,7 +305,7 @@ namespace fertilizesop.UI
             this.iconButton1.Size = new System.Drawing.Size(150, 64);
             this.iconButton1.TabIndex = 14;
             this.iconButton1.Text = "print";
-            this.iconButton1.UseVisualStyleBackColor = true;
+            this.iconButton1.UseVisualStyleBackColor = false;
             this.iconButton1.Click += new System.EventHandler(this.iconButton1_Click);
             // 
             // label5
@@ -401,7 +402,7 @@ namespace fertilizesop.UI
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);

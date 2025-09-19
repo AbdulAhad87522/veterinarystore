@@ -37,6 +37,32 @@ namespace MedicineShop
             return cmd.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
+        public int getcustid(string fullName)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT customer_id 
+                FROM customers 
+                WHERE CONCAT(first_name, ' ', last_name) = @fullName;";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@fullName", fullName.Trim());
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) : -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving customer ID: " + ex.Message);
+            }
+        }
+
         public int GetLastInsertId()
         {
             string query = "SELECT LAST_INSERT_ID();";
