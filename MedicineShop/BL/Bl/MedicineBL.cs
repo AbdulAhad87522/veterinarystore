@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using MedicineShop.DL;
@@ -98,6 +99,17 @@ namespace MedicineShop.BL
                 MessageBox.Show("Error searching medicines: " + ex.Message);
                 return null;
             }
+        }
+
+
+        public List<ComboItem> GetCompanyList(string keyword)
+        {
+            return _medicineDL.GetCompanyList(keyword);
+        }
+
+        public List<ComboItem> GetCategoryList(string keyword)
+        {
+            return _medicineDL.GetCategoryList(keyword);
         }
 
     }
