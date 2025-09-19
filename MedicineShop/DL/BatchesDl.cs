@@ -1,7 +1,8 @@
 ﻿using MedicineShop.BL;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace MedicineShop.DL
 {
@@ -79,6 +80,39 @@ namespace MedicineShop.DL
                 Console.WriteLine($"Error in GetAllBatches: {ex.Message}");
             }
             return batches;
+        }
+        public DataTable GetMedicines()
+        {
+            DataTable dt = new DataTable();
+
+            using (var conn = DatabaseHelper.Instance.GetConnection())
+            {
+                try
+                {
+                    string query = @"SELECT 
+                                    m.product_id,
+                                    m.company_id,
+                                    m.category_id,
+                                    m.packing_id,
+                                    c.company_name,
+                                    cat.category_name,
+                                    p.packing_name,
+                                    m.sale_price
+                                 FROM medicines m
+                                 INNER JOIN company c ON m.company_id = c.company_id
+                                 INNER JOIN categories cat ON m.category_id = cat.category_id
+                                 INNER JOIN packing p ON m.packing_id = p.packing_id;";
+
+                    MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
+                    da.Fill(dt);
+                }
+                catch
+                {
+                    throw; // let calling code handle exception
+                }
+            }
+
+            return dt;
         }
 
         // ✅ Get By ID

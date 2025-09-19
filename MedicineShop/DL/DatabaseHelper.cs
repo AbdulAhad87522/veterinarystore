@@ -112,25 +112,32 @@ namespace MedicineShop
             }
         }
      
-        internal int getbatchid(string text)
+        public int getbatchid(string batchName)
         {
+            if (string.IsNullOrWhiteSpace(batchName))
+                throw new ArgumentException("Batch name cannot be null or empty", nameof(batchName));
+
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT batch_id FROM batches WHERE batch_name = @name;";
+                    string query = "SELECT purchase_batch_id FROM purchase_batches WHERE BatchName = @name LIMIT 1;";
+
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", text);
+                        cmd.Parameters.Add("@name", MySqlDbType.VarChar).Value = batchName;
+
                         object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : -1;
+                        return (result != null && int.TryParse(result.ToString(), out int batchId))
+                            ? batchId
+                            : -1; // not found
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving batch ID: " + ex.Message);
+                throw new Exception("Error retrieving batch ID: " + ex.Message, ex);
             }
         }
       
@@ -172,6 +179,59 @@ namespace MedicineShop
             }
         }
 
+        public DataTable GetCompany(string name)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT * FROM company WHERE company_name LIKE @name";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        // Use wildcard search
+                        cmd.Parameters.AddWithValue("@name", "%" + name + "%");
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting company: " + ex.Message);
+            }
+
+            return dt;
+        }
+
+
+
+        public int getcompany_id(string comapnyname)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "Select  comapny_id from company where company_name=@name";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", comapnyname);
+                        object result = cmd.ExecuteScalar();
+                        return Convert.ToInt32(result);
+
+
+                    }
+                }
+            }
+            catch (Exception ex) { throw new Exception("error ftechign company_id"+ex.Message); }
+        }
         internal decimal getsaleprice(int product_id)
         {
             try
