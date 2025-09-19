@@ -232,6 +232,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\AddBatchdetailsform.resx">
+      <DependentUpon>AddBatchdetailsform.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\AddCategory.resx">
       <DependentUpon>AddCategory.cs</DependentUpon>
     </EmbeddedResource>
