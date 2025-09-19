@@ -120,5 +120,16 @@ namespace MedicineShop
                 dataGridView1.DataSource = _medicineBL.SearchMedicines(keyword);
         }
 
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            AddCategory addCategory = new AddCategory();
+            addCategory.ShowDialog();
+        }
+
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            AddPacking addPacking = new AddPacking();
+            addPacking.ShowDialog();
+        }
     } 
 }

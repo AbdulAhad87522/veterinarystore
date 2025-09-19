@@ -127,8 +127,7 @@ namespace MedicineShop.UI
             cmbCategory.ValueMember = "category_id";
             cmbCategory.SelectedIndex = -1;
 
-            cmbCompany.KeyUp += cmbCompany_KeyUp;
-            cmbCategory.KeyUp += cmbCategory_KeyUp;
+            
 
         }
     }

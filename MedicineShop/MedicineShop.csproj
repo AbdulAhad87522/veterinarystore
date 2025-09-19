@@ -119,16 +119,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\Bl\CategoryBL.cs" />
     <Compile Include="BL\Bl\CompanyBL.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Bl\MedicineBL.cs" />
+    <Compile Include="BL\Bl\PackingBL.cs" />
+    <Compile Include="BL\Models\Category.cs" />
     <Compile Include="BL\Models\Company.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
     <Compile Include="BL\Models\Medicine.cs" />
+    <Compile Include="BL\Models\Packing.cs" />
     <Compile Include="BL\Models\Temporarycustomersale.cs" />
     <Compile Include="DL\BillingRecordsOverviewDL.cs" />
+    <Compile Include="DL\CategoryDL.cs" />
     <Compile Include="DL\CompanyDL.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
@@ -136,6 +141,7 @@
     <Compile Include="DL\DatabaseHelper.cs" />
     <Compile Include="DL\MedicineDL.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
+    <Compile Include="DL\PackingDL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\AddBatchdetailsform.cs">
@@ -143,6 +149,12 @@
     </Compile>
     <Compile Include="UI\AddBatchdetailsform.Designer.cs">
       <DependentUpon>AddBatchdetailsform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddCategory.Designer.cs">
+      <DependentUpon>AddCategory.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\AddCompany.cs">
       <SubType>Form</SubType>
@@ -155,6 +167,12 @@
     </Compile>
     <Compile Include="UI\AddMedicine.Designer.cs">
       <DependentUpon>AddMedicine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddPacking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddPacking.Designer.cs">
+      <DependentUpon>AddPacking.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Batchform.cs">
       <SubType>Form</SubType>
@@ -213,11 +231,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\AddCategory.resx">
+      <DependentUpon>AddCategory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\AddCompany.resx">
       <DependentUpon>AddCompany.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\AddMedicine.resx">
       <DependentUpon>AddMedicine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddPacking.resx">
+      <DependentUpon>AddPacking.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Batchform.resx">
       <DependentUpon>Batchform.cs</DependentUpon>
