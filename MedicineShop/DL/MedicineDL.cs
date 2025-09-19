@@ -98,5 +98,52 @@ namespace MedicineShop.DL
             MySqlParameter[] parameters = { new MySqlParameter("@keyword", "%" + keyword + "%") };
             return DatabaseHelper.Instance.ExecuteDataTable(query, parameters);
         }
+
+        //next
+
+        public List<ComboItem> GetCompanyList(string keyword)
+        {
+            string query = "SELECT company_id, company_name FROM company WHERE company_name LIKE @keyword LIMIT 20";
+            MySqlParameter[] parameters = {
+        new MySqlParameter("@keyword", "%" + keyword + "%")
+    };
+
+            List<ComboItem> companies = new List<ComboItem>();
+            using (var reader = DatabaseHelper.Instance.ExecuteReader(query, parameters))
+            {
+                while (reader.Read())
+                {
+                    companies.Add(new ComboItem
+                    {
+                        Id = Convert.ToInt32(reader["company_id"]),
+                        Name = reader["company_name"].ToString()
+                    });
+                }
+            }
+            return companies;
+        }
+
+        public List<ComboItem> GetCategoryList(string keyword)
+        {
+            string query = "SELECT category_id, category_name FROM categories WHERE category_name LIKE @keyword LIMIT 20";
+            MySqlParameter[] parameters = {
+        new MySqlParameter("@keyword", "%" + keyword + "%")
+    };
+
+            List<ComboItem> categories = new List<ComboItem>();
+            using (var reader = DatabaseHelper.Instance.ExecuteReader(query, parameters))
+            {
+                while (reader.Read())
+                {
+                    categories.Add(new ComboItem
+                    {
+                        Id = Convert.ToInt32(reader["category_id"]),
+                        Name = reader["category_name"].ToString()
+                    });
+                }
+            }
+            return categories;
+        }
+
     }
 }

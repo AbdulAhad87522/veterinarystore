@@ -83,20 +83,49 @@ namespace MedicineShop.UI
             _medicine.Description = txtDesc.Text.Trim();
             _medicine.Packing = txtPacking.Text.Trim();
             _medicine.SalePrice = decimal.TryParse(txtPrice.Text, out decimal price) ? price : 0;
-            _medicine.CompanyId = Convert.ToInt32(cmbCompany.SelectedValue);
-            _medicine.CategoryId = Convert.ToInt32(cmbCategory.SelectedValue);
+            if (cmbCompany.SelectedItem is ComboItem selectedCompany)
+                _medicine.CompanyId = selectedCompany.Id;
+
+            if (cmbCategory.SelectedItem is ComboItem selectedCategory)
+                _medicine.CategoryId = selectedCategory.Id;
         }
 
         // For searchable combobox (optional)
         private void cmbCompany_TextChanged(object sender, EventArgs e)
         {
-           
+            string searchText = cmbCompany.Text.Trim();
+
+            var companies = _medicineBL.GetCompanyList(searchText);
+
+            if (companies != null && companies.Count > 0)
+            {
+                cmbCompany.Items.Clear();
+                foreach (var c in companies)
+                    cmbCompany.Items.Add(c);
+
+                cmbCompany.SelectionStart = cmbCompany.Text.Length;
+                cmbCompany.DroppedDown = true;
+                Cursor.Current = Cursors.Default;
+            }
         }
 
 
         private void comboCategory_TextChanged(object sender, EventArgs e)
         {
-            
+            string searchText = cmbCategory.Text.Trim();
+
+            var categories = _medicineBL.GetCategoryList(searchText);
+
+            if (categories != null && categories.Count > 0)
+            {
+                cmbCategory.Items.Clear();
+                foreach (var c in categories)
+                    cmbCategory.Items.Add(c);
+
+                cmbCategory.SelectionStart = cmbCategory.Text.Length;
+                cmbCategory.DroppedDown = true;
+                Cursor.Current = Cursors.Default;
+            }
         }
     
 
@@ -107,28 +136,7 @@ namespace MedicineShop.UI
 
         private void AddMedicine_Load(object sender, EventArgs e)
         {
-            _allCompanies = _medicineBL.GetCompanies("");
-            _allCategories = _medicineBL.GetCategories("");
-
-            cmbCompany.DropDownStyle = ComboBoxStyle.DropDown;
-            cmbCompany.AutoCompleteMode = AutoCompleteMode.None;
-
-            cmbCategory.DropDownStyle = ComboBoxStyle.DropDown;
-            cmbCategory.AutoCompleteMode = AutoCompleteMode.None;
-
-            // Start with full list
-            cmbCompany.DataSource = _allCompanies.Copy();
-            cmbCompany.DisplayMember = "company_name";
-            cmbCompany.ValueMember = "company_id";
-            cmbCompany.SelectedIndex = -1;
-
-            cmbCategory.DataSource = _allCategories.Copy();
-            cmbCategory.DisplayMember = "category_name";
-            cmbCategory.ValueMember = "category_id";
-            cmbCategory.SelectedIndex = -1;
-
-            
-
+          
         }
     }
 }

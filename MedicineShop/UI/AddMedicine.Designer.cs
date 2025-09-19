@@ -84,7 +84,7 @@
             this.btnUpdate.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnUpdate.IconSize = 35;
             this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdate.Location = new System.Drawing.Point(214, 606);
+            this.btnUpdate.Location = new System.Drawing.Point(196, 646);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(140, 53);
             this.btnUpdate.TabIndex = 212;
@@ -139,15 +139,14 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 84);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(566, 692);
+            this.panel2.Size = new System.Drawing.Size(566, 711);
             this.panel2.TabIndex = 207;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(133, 394);
+            this.label6.Location = new System.Drawing.Point(133, 418);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(157, 25);
             this.label6.TabIndex = 220;
@@ -167,7 +166,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(133, 463);
+            this.label1.Location = new System.Drawing.Point(133, 512);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 25);
             this.label1.TabIndex = 218;
@@ -177,24 +176,26 @@
             // 
             this.cmbCompany.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbCompany.FormattingEnabled = true;
-            this.cmbCompany.Location = new System.Drawing.Point(138, 422);
+            this.cmbCompany.Location = new System.Drawing.Point(138, 460);
             this.cmbCompany.Name = "cmbCompany";
             this.cmbCompany.Size = new System.Drawing.Size(286, 37);
             this.cmbCompany.TabIndex = 217;
+            this.cmbCompany.TextChanged += new System.EventHandler(this.cmbCompany_TextChanged);
             // 
             // cmbCategory
             // 
             this.cmbCategory.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbCategory.FormattingEnabled = true;
-            this.cmbCategory.Location = new System.Drawing.Point(138, 343);
+            this.cmbCategory.Location = new System.Drawing.Point(138, 364);
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(286, 37);
             this.cmbCategory.TabIndex = 216;
+            this.cmbCategory.TextChanged += new System.EventHandler(this.comboCategory_TextChanged);
             // 
             // txtDesc
             // 
             this.txtDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDesc.Location = new System.Drawing.Point(138, 491);
+            this.txtDesc.Location = new System.Drawing.Point(138, 540);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.Size = new System.Drawing.Size(286, 87);
@@ -290,7 +291,7 @@
             this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnAdd.IconSize = 35;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(214, 606);
+            this.btnAdd.Location = new System.Drawing.Point(196, 646);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(140, 53);
             this.btnAdd.TabIndex = 199;
@@ -303,7 +304,7 @@
             // txtPacking
             // 
             this.txtPacking.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPacking.Location = new System.Drawing.Point(138, 162);
+            this.txtPacking.Location = new System.Drawing.Point(138, 177);
             this.txtPacking.Multiline = true;
             this.txtPacking.Name = "txtPacking";
             this.txtPacking.Size = new System.Drawing.Size(286, 46);
@@ -353,7 +354,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 776);
+            this.ClientSize = new System.Drawing.Size(566, 795);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "AddMedicine";

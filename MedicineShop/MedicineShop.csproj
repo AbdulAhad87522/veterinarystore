@@ -126,6 +126,7 @@
     <Compile Include="BL\Bl\MedicineBL.cs" />
     <Compile Include="BL\Bl\PackingBL.cs" />
     <Compile Include="BL\Models\Category.cs" />
+    <Compile Include="BL\Models\ComboItem.cs" />
     <Compile Include="BL\Models\Company.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
