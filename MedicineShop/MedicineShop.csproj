@@ -173,6 +173,12 @@
     <Compile Include="UI\AddCompany.Designer.cs">
       <DependentUpon>AddCompany.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Addcustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Addcustomer.Designer.cs">
+      <DependentUpon>Addcustomer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\AddMedicine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,6 +214,12 @@
     </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.Designer.cs">
       <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Customermain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Customermain.Designer.cs">
+      <DependentUpon>Customermain.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\customer_bills.cs">
       <SubType>Form</SubType>
@@ -266,6 +278,9 @@
     <EmbeddedResource Include="UI\AddCompany.resx">
       <DependentUpon>AddCompany.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Addcustomer.resx">
+      <DependentUpon>Addcustomer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\AddMedicine.resx">
       <DependentUpon>AddMedicine.cs</DependentUpon>
     </EmbeddedResource>
@@ -283,6 +298,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomerBill_SpecificProducts.resx">
       <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Customermain.resx">
+      <DependentUpon>Customermain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\customer_bills.resx">
       <DependentUpon>customer_bills.cs</DependentUpon>
