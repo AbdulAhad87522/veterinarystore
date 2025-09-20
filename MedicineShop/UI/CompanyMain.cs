@@ -6,13 +6,13 @@ using MedicineShop.BL;
 using MedicineShop.DL;
 using MedicineShop.Models;
 using MySql.Data.MySqlClient;
+using TechStore.UI;
 
 namespace MedicineShop.UI
 {
     public partial class CompanyMain : Form
     {
         private readonly CompanyBL companyBL = new CompanyBL();
-
         public CompanyMain()
         {
             InitializeComponent();
@@ -55,6 +55,7 @@ namespace MedicineShop.UI
             try
             {
                 dataGridView1.DataSource = companyBL.GetAllCompanies(search);
+                UIHelper.AddButtonColumn(dataGridView1, "Details", "Details", "Details");
             }
             catch (Exception ex)
             {
@@ -65,6 +66,7 @@ namespace MedicineShop.UI
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             LoadCompanies(txtSearch.Text);
+
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -147,7 +149,7 @@ namespace MedicineShop.UI
 
         private void s(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void CompanyMain_Load(object sender, EventArgs e)

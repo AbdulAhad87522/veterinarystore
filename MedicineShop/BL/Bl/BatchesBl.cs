@@ -58,8 +58,7 @@ namespace MedicineShop.BL
         // ✅ Search
         public List<Batches> SearchBatches(string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return new List<Batches>(); // return empty list if no search term
+         
             return _batchesDl.SearchBatches(searchTerm);
         }
     }
