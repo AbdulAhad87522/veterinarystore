@@ -174,6 +174,7 @@
             this.Controls.Add(this.iconButton1);
             this.Name = "Sample";
             this.Text = "Sample";
+            this.Load += new System.EventHandler(this.Sample_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
