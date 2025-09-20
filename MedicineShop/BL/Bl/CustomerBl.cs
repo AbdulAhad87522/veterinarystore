@@ -22,7 +22,7 @@ namespace MedicineShop.BL.Bl
         //    return Regex.IsMatch(contact, @"^\d{4}-\d{7}$");
         //}
 
-        public DataTable GetAllCompanies(string search = "")
+        public DataTable GetAllCustomers(string search = "")
         {
             return companyDL.GetAllCustomers(search);
         }
@@ -39,9 +39,9 @@ namespace MedicineShop.BL.Bl
             companyDL.AddCustomer(cust);
         }
 
-        public void UpdateCompany(Customer cust)
+        public void UpdateCustomer(Customer cust)
         {
-            if (cust.CompanyId <= 0)
+            if (cust.CustomerId <= 0)
                 throw new Exception("Invalid customer ID.");
             if (string.IsNullOrWhiteSpace(cust.full_name))
                 throw new Exception("Company name is required.");
@@ -53,7 +53,7 @@ namespace MedicineShop.BL.Bl
             companyDL.UpdateCustomer(cust);
         }
 
-        public int DeleteCompany(int id)
+        public int DeleteCustomer(int id)
         {
             if (id <= 0)
             {

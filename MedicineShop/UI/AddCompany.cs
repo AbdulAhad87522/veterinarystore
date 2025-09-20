@@ -72,5 +72,80 @@ namespace MedicineShop.UI
         {
 
         }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txttotalprice_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnsave_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtContact_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblBatch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblProducts_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblQuantity_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void toplbl_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

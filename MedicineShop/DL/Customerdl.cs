@@ -41,7 +41,7 @@ namespace MedicineShop.DL
             string query = "UPDATE customers SET full_name=@name, phone=@contact, address=@address WHERE company_id=@id";
             var parameters = new[]
             {
-                new MySqlParameter("@id", cust.CompanyId),
+                new MySqlParameter("@id", cust.CustomerId),
                 new MySqlParameter("@name", cust.full_name),
                 new MySqlParameter("@contact", cust.Contact),
                 new MySqlParameter("@address", cust.Address)
