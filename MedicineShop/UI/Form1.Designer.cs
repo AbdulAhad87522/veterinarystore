@@ -1,6 +1,6 @@
-﻿namespace MedicineShop
+﻿namespace MedicineShop.UI
 {
-    partial class Dashboard
+    partial class Batchform
     {
         /// <summary>
         /// Required designer variable.
@@ -185,7 +185,7 @@
             this.btninventory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btninventory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btninventory.UseVisualStyleBackColor = false;
-            this.btninventory.Click += new System.EventHandler(this.btninventory_Click);
+            //this.btninventory.Click += new System.EventHandler(this.btninventory_Click);
             // 
             // panelbatch
             // 
@@ -466,7 +466,7 @@
             this.Controls.Add(this.panelmenu);
             this.Name = "Dashboard";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            //this.Load += new System.EventHandler(this.Form1_Load);
             this.panelmenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelinventory.ResumeLayout(false);

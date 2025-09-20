@@ -130,27 +130,34 @@
   <ItemGroup>
     <Compile Include="BL\Bl\BatchesBl.cs" />
     <Compile Include="BL\Bl\BatchSessionData.cs" />
+    <Compile Include="BL\Bl\CategoryBL.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
-    <Compile Include="BL\Bl\CustomerBl.cs" />
+    <Compile Include="BL\Bl\MedicineBL.cs" />
+    <Compile Include="BL\Bl\PackingBL.cs" />
+    <Compile Include="BL\Models\Category.cs" />
+    <Compile Include="BL\Models\ComboItem.cs" />
     <Compile Include="BL\Models\Company.cs" />
     <Compile Include="BL\Bl\CompanyBL.cs" />
     <Compile Include="BL\Models\Batches.cs" />
     <Compile Include="BL\Models\BatchItems.cs" />
-    <Compile Include="BL\Models\Customer.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
+    <Compile Include="BL\Models\Medicine.cs" />
+    <Compile Include="BL\Models\Packing.cs" />
     <Compile Include="BL\Models\Temporarycustomersale.cs" />
     <Compile Include="DL\BatchesDl.cs" />
     <Compile Include="DL\BatchItemsDl.cs" />
     <Compile Include="DL\BillingRecordsOverviewDL.cs" />
+    <Compile Include="DL\CategoryDL.cs" />
     <Compile Include="DL\CompanyDL.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
-    <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\MedicineDL.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
+    <Compile Include="DL\PackingDL.cs" />
     <Compile Include="UI\AddCategory.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,10 +226,10 @@
     <Compile Include="UI\AddBatchdetailsform.Designer.cs">
       <DependentUpon>AddBatchdetailsform.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Batchform.cs">
+    <Compile Include="Batchform.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Batchform.Designer.cs">
+    <Compile Include="Batchform.Designer.cs">
       <DependentUpon>Batchform.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Customersale.cs">
@@ -293,7 +300,7 @@
     <EmbeddedResource Include="UI\AddBatchdetailsform.resx">
       <DependentUpon>AddBatchdetailsform.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Batchform.resx">
+    <EmbeddedResource Include="Batchform.resx">
       <DependentUpon>Batchform.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Customersale.resx">
