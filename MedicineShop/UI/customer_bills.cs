@@ -54,6 +54,7 @@ namespace fertilizesop.UI
                 if (e.RowIndex >= 0)
                 {
                     var clickedColumn = dataGridView2.Columns[e.ColumnIndex];
+                    txttotaldue.Text = dataGridView2.Rows[e.RowIndex].Cells["CustomerName"].ToString();
 
                     if (clickedColumn.Name == "btnDetails")
                     {
