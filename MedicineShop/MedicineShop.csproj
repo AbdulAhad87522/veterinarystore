@@ -132,10 +132,12 @@
     <Compile Include="BL\Bl\BatchSessionData.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
+    <Compile Include="BL\Bl\CustomerBl.cs" />
     <Compile Include="BL\Models\Company.cs" />
     <Compile Include="BL\Bl\CompanyBL.cs" />
     <Compile Include="BL\Models\Batches.cs" />
     <Compile Include="BL\Models\BatchItems.cs" />
+    <Compile Include="BL\Models\Customer.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
     <Compile Include="BL\Models\Temporarycustomersale.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="DL\CompanyDL.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
+    <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />

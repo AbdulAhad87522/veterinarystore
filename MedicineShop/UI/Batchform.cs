@@ -16,13 +16,12 @@ namespace MedicineShop.UI
     {
         BatchesBl bl;
         private int SelectedId;
+
         public Batchform()
         {
             InitializeComponent();
             bl = new BatchesBl();
-        panelbill.Visible=false;
-
-
+            panelbill.Visible = false;
         }
 
         private void Batchform_Load(object sender, EventArgs e)
@@ -62,7 +61,6 @@ namespace MedicineShop.UI
             dataGridView2.DataSource = filteredList;
             dataGridView2.Columns["CompanyID"].Visible = false;
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
-
 
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
