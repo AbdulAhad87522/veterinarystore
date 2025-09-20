@@ -148,11 +148,29 @@
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
+    <Compile Include="UI\AddCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddCategory.Designer.cs">
+      <DependentUpon>AddCategory.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\AddCompany.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\AddCompany.Designer.cs">
       <DependentUpon>AddCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddMedicine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddMedicine.Designer.cs">
+      <DependentUpon>AddMedicine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AddPacking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddPacking.Designer.cs">
+      <DependentUpon>AddPacking.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\CompanyMain.cs">
       <SubType>Form</SubType>
@@ -198,6 +216,18 @@
     <Compile Include="UI\Customersale.Designer.cs">
       <DependentUpon>Customersale.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MedicineMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MedicineMain.Designer.cs">
+      <DependentUpon>MedicineMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Sample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,8 +235,17 @@
       <DependentUpon>Sample.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UIHelper.cs" />
+    <EmbeddedResource Include="UI\AddCategory.resx">
+      <DependentUpon>AddCategory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\AddCompany.resx">
       <DependentUpon>AddCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddMedicine.resx">
+      <DependentUpon>AddMedicine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddPacking.resx">
+      <DependentUpon>AddPacking.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CompanyMain.resx">
       <DependentUpon>CompanyMain.cs</DependentUpon>
@@ -238,6 +277,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Customersale.resx">
       <DependentUpon>Customersale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MedicineMain.resx">
+      <DependentUpon>MedicineMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Sample.resx">
       <DependentUpon>Sample.cs</DependentUpon>
