@@ -443,5 +443,47 @@ namespace fertilizesop.UI
         {
 
         }
+
+        private void txttotaldue_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void paneledit_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button9_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView2.SelectedRows.Count > 0)
+                {
+                    DataGridViewRow selectedRow = dataGridView2.SelectedRows[0];
+
+                    // Get customer name from selected row
+                    string customerName = selectedRow.Cells["CustomerName"].Value?.ToString();
+
+                    if (!string.IsNullOrEmpty(customerName))
+                    {
+                        int totaldue = Customerbilldl.gettotaldueamount(customerName);
+                        txttotaldue.Text = totaldue.ToString("N2");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please select a customer first.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a customer from the list.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error calculating total due: " + ex.Message);
+            }
+        }
     }
 }

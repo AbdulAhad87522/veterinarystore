@@ -331,5 +331,60 @@ namespace fertilizesop.DL
             }
             catch (Exception ex) { throw new Exception("error" + ex.Message, ex); }
         }
+
+        public static int gettotaldueamount(string text)
+        {
+            try
+            {
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+
+                    // First, get the customer_id from the text (customer name)
+                    string customerIdQuery = "SELECT customer_id FROM customers WHERE CONCAT(first_name, ' ', last_name) = @text";
+                    int customerId = -1;
+
+                    using (var customerCmd = new MySqlCommand(customerIdQuery, conn))
+                    {
+                        customerCmd.Parameters.AddWithValue("@text", text);
+                        object result = customerCmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            customerId = Convert.ToInt32(result);
+                        }
+                        else
+                        {
+                            // Customer not found
+                            return 0;
+                        }
+                    }
+
+                    // Now get the total due amount for this customer
+                    string query = @"SELECT COALESCE(SUM(total_amount - IFNULL(paid_amount, 0)), 0) 
+                         FROM sales 
+                         WHERE customer_id = @customerId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@customerId", customerId);
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            return Convert.ToInt32(result);
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching total due amount: " + ex.Message, ex);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace MedicineShop
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MedicineMain());
+            Application.Run(new customer_bills());
         }
     }
 }
