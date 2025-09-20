@@ -10,27 +10,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TechStore.UI;
 
-namespace MedicineShop.UI
+namespace MedicineShop
 {
     public partial class Batchform : Form
     {
         BatchesBl bl;
         private int SelectedId;
+
+        // Constructor with no parameters
         public Batchform()
         {
             InitializeComponent();
             bl = new BatchesBl();
-        panelbill.Visible=false;
-
-
+            panelbill.Visible = false;
         }
+
+        // Remove duplicate constructor definition
+        // The second constructor `Batchform_Load_1` was likely intended to be an event handler
+        // and not a constructor. It has been renamed to avoid conflict.
 
         private void Batchform_Load(object sender, EventArgs e)
         {
+            load();
         }
+
         private void load()
         {
-            var list=bl.GetAllBatches();
+            var list = bl.GetAllBatches();
             dataGridView2.DataSource = list;
             dataGridView2.Columns["CompanyID"].Visible = false;
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
@@ -43,17 +49,10 @@ namespace MedicineShop.UI
         private void iconButton1_Click(object sender, EventArgs e)
         {
             this.Hide();
-            var f = new AddBatchdetailsform();
+            var f = new UI.AddBatchdetailsform();
             f.ShowDialog();
             this.Close();
-
-        }
-
-        private void Batchform_Load_1(object sender, EventArgs e)
-        {
-
-            load();
-        }
+                }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -63,10 +62,9 @@ namespace MedicineShop.UI
             dataGridView2.Columns["CompanyID"].Visible = false;
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
 
-
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
-            if(string.IsNullOrWhiteSpace(searchTerm))
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 load();
             }
@@ -76,24 +74,21 @@ namespace MedicineShop.UI
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0)
                 return;
-            var row = dataGridView2.Rows[e.RowIndex];   
+            var row = dataGridView2.Rows[e.RowIndex];
             SelectedId = Convert.ToInt32(row.Cells["PurchaseBatchID"].Value);
             string columnName = dataGridView2.Columns[e.ColumnIndex].Name;
             if (columnName == "Edit")
             {
-             txtSupplierName.Text = row.Cells["CompanyName"].Value.ToString();
+                txtSupplierName.Text = row.Cells["CompanyName"].Value.ToString();
                 txtbatch.Text = row.Cells["BatchName"].Value.ToString();
                 txtTotal.Text = row.Cells["TotalPrice"].Value.ToString();
                 txtpayment.Text = row.Cells["Paid"].Value.ToString();
                 txtDate.Text = row.Cells["PurchaseDate"].Value.ToString();
                 panelbill.Visible = true;
                 UIHelper.RoundPanelCorners(panelbill, 20);
-
-
             }
             else if (columnName == "Details")
             {
-            
             }
         }
 
@@ -149,5 +144,7 @@ namespace MedicineShop.UI
         {
             panelbill.Visible = false;
         }
+
+     
     }
 }
