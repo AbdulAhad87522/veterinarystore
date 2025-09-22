@@ -261,6 +261,7 @@
             this.btnbatches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnbatches.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnbatches.UseVisualStyleBackColor = false;
+            this.btnbatches.Click += new System.EventHandler(this.btnbatches_Click);
             // 
             // panel4
             // 

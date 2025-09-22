@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -131,7 +132,15 @@ namespace MedicineShop
 
         private void Form1_Load(object sender, EventArgs e)
         {
+           
 
+        }
+
+        private void btnbatches_Click(object sender, EventArgs e)
+        {
+            var f = Program.ServiceProvider.GetRequiredService<Batchform>();
+            LoadFormIntoPanel(f);
+            activebutton(sender, Color.FromArgb(253, 138, 114));
         }
     }
 }

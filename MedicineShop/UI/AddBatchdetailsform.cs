@@ -12,8 +12,8 @@ namespace MedicineShop.UI
 {
     public partial class AddBatchdetailsform : Form
     {
-        private BatchesBl batchesBl;
-        private BatchItemsBl batchItemsBl;
+        private IBatchesBl batchesBl;
+        private IBatchItemsBl batchItemsBl;
         private DatabaseHelper dbHelper;
         private BatchSessionManager sessionManager;
         private int selectedCompanyId = 0;
@@ -22,11 +22,11 @@ namespace MedicineShop.UI
         private int editingBatchItemId = 0;
         private bool isEditing = false;
 
-        public AddBatchdetailsform()
+        public AddBatchdetailsform(IBatchItemsBl batchItemsBl,IBatchesBl batchesBl)
         {
             InitializeComponent();
-            batchesBl = new BatchesBl();
-            batchItemsBl = new BatchItemsBl();
+            this.batchesBl = batchesBl;
+            this.batchItemsBl = batchItemsBl;
             dbHelper = DatabaseHelper.Instance;
 
             // Initialize session manager with error handling

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MedicineShop.DL
 {
-    public class BatchItemsDl
+    public class BatchItemsDl : IBatchItemsDl
     {
         // ✅ Add Batch Item
         public bool AddBatchItem(BatchItems b)
@@ -27,7 +27,7 @@ namespace MedicineShop.DL
 
                             using (var cmd = new MySqlCommand(insertQuery, conn, transaction))
                             {
-                                cmd.Parameters.AddWithValue("@BatchID",b.BatchID);
+                                cmd.Parameters.AddWithValue("@BatchID", b.BatchID);
                                 cmd.Parameters.AddWithValue("@MedicineID", b.MedicineID);
                                 cmd.Parameters.AddWithValue("@Quantity", b.Quantity);
                                 cmd.Parameters.AddWithValue("@PurchasePrice", b.PurchasePrice);
@@ -102,7 +102,7 @@ namespace MedicineShop.DL
                                 PurchasePrice = reader.GetDecimal("PurchasePrice"),
                                 SalePrice = reader.GetDecimal("SalePrice"),
                                 ExpiryDate = reader.GetDateTime("ExpiryDate"),
-                          
+
                             });
 
 
@@ -120,7 +120,7 @@ namespace MedicineShop.DL
         // ✅ Get batch item by ID
         public List<BatchItems> GetBatchItemById(int id)
         {
-            List<BatchItems> list= new List<BatchItems>();
+            List<BatchItems> list = new List<BatchItems>();
             try
             {
                 string query = @"SELECT bi.batch_item_id, bi.purchase_batch_id, bi.product_id, 

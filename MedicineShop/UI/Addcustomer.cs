@@ -36,7 +36,7 @@ namespace MedicineShop.UI
                 customer.Contact = txtContact.Text;
                 customer.Address = txtAddress.Text;
 
-                companyBL.UpdateCompany(customer);
+                companyBL.UpdateCustomer(customer);
                 MessageBox.Show("Company updated successfully.");
                 this.Close();
             }

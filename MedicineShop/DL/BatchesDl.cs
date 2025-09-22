@@ -6,7 +6,7 @@ using System.Data;
 
 namespace MedicineShop.DL
 {
-    public class BatchesDl
+    public class BatchesDl : IBatchesDl
     {
         // ✅ Add
         public bool AddBatch(Batches batch)

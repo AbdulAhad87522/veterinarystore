@@ -1,4 +1,6 @@
 ﻿using MedicineShop.BL;
+using MedicineShop.UI;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,14 +16,14 @@ namespace MedicineShop
 {
     public partial class Batchform : Form
     {
-        BatchesBl bl;
+        IBatchesBl bl;
         private int SelectedId;
 
         // Constructor with no parameters
-        public Batchform()
+        public Batchform(IBatchesBl bl)
         {
             InitializeComponent();
-            bl = new BatchesBl();
+            this.bl = bl;
             panelbill.Visible = false;
         }
 
@@ -48,11 +50,10 @@ namespace MedicineShop
 
         private void iconButton1_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            var f = new UI.AddBatchdetailsform();
-            f.ShowDialog();
-            this.Close();
-                }
+            var f = Program.ServiceProvider.GetRequiredService<AddBatchdetailsform>();
+            Dashboard.Instance.LoadFormIntoPanel(f);
+           
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {

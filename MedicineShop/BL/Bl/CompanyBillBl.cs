@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MedicineShop.BL.Bl
 {
-    public  class CompanyBillBl
+    public class CompanyBillBl : ICompanyBillBl
     {
-        private readonly CompanyBillsDl idl;
-        public CompanyBillBl(CompanyBillsDl idl)
+        private readonly ICompanyBillsDl idl;
+        public CompanyBillBl(ICompanyBillsDl idl)
 
         {
             this.idl = idl;

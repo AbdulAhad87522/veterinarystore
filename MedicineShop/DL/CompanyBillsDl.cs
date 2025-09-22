@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedicineShop.DL
 {
-    public class CompanyBillsDl
+    public class CompanyBillsDl : ICompanyBillsDl
     {
         public List<CompanyBill> GetCompanyBills(string text)
         {

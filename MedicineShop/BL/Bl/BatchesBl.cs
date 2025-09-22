@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace MedicineShop.BL
 {
-    public class BatchesBl
+    public class BatchesBl : IBatchesBl
     {
-        private readonly BatchesDl _batchesDl;
+        private readonly IBatchesDl _batchesDl;
 
-        public BatchesBl()
+        public BatchesBl(IBatchesDl _batchesDl)
         {
-            _batchesDl = new BatchesDl();
+            this._batchesDl = _batchesDl;
         }
 
         // ✅ Add
@@ -58,7 +58,7 @@ namespace MedicineShop.BL
         // ✅ Search
         public List<Batches> SearchBatches(string searchTerm)
         {
-         
+
             return _batchesDl.SearchBatches(searchTerm);
         }
     }
