@@ -16,7 +16,7 @@ namespace MedicineShop.UI
 {
     public partial class Addcustomer : Form
     {
-        private readonly CustomerBl companyBL = new CustomerBl();
+        private readonly CustomerBl customerbl = new CustomerBl();
         private Customer customer;
         public Addcustomer()
         {
@@ -36,7 +36,7 @@ namespace MedicineShop.UI
                 customer.Contact = txtContact.Text;
                 customer.Address = txtAddress.Text;
 
-                companyBL.UpdateCustomer(customer);
+                customerbl.UpdateCustomer(customer);
                 MessageBox.Show("Company updated successfully.");
                 this.Close();
             }
@@ -57,7 +57,7 @@ namespace MedicineShop.UI
                     Address = txtAddress.Text
                 };
 
-                companyBL.AddCompany(customer);
+                customerbl.AddCompany(customer);
                 MessageBox.Show("Company added successfully.");
                 this.Close();
             }

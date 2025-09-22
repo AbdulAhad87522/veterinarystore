@@ -14,19 +14,19 @@ namespace MedicineShop.DL
             try
             {
                 string query = @"INSERT INTO purchase_batches 
-                                (BatchName, total_price, paid, Purchase_date, company_id) 
-                                VALUES (@BatchName, @TotalPrice, @Paid, @PurchaseDate, @CompanyID)";
+                                (company_id, Purchase_date, total_price, paid, BatchName) 
+                                VALUES (@CompanyID, @PurchaseDate, @TotalPrice, @Paid, @BatchName)";
 
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
+                        cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
                         cmd.Parameters.AddWithValue("@BatchName", batch.BatchName);
                         cmd.Parameters.AddWithValue("@TotalPrice", batch.TotalPrice);
                         cmd.Parameters.AddWithValue("@Paid", batch.Paid);
-                        cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
-                        cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
 
                         return cmd.ExecuteNonQuery() > 0;
                     }

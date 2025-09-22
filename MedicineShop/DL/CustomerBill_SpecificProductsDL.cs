@@ -76,7 +76,7 @@ namespace fertilizesop.DL
                 string query = @"
                     SELECT 
                         cb.sale_id,
-                        CONCAT(c.first_name, ' ', c.last_name) AS CustomerName,
+                        c.full_name AS CustomerName,
                         cb.sale_date,
                         cb.total_amount AS TotalAmount,
                         cb.paid_amount AS PaidAmount,
