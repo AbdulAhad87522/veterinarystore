@@ -144,6 +144,7 @@
     <Compile Include="BL\Models\Batches.cs" />
     <Compile Include="BL\Models\BatchItems.cs" />
     <Compile Include="BL\Models\CompanyBill.cs" />
+    <Compile Include="BL\Models\custbill.cs" />
     <Compile Include="BL\Models\Customer.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="DL\CategoryDL.cs" />
     <Compile Include="DL\CompanyBillsDl.cs" />
     <Compile Include="DL\CompanyDL.cs" />
+    <Compile Include="DL\Custbilldl.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customerdl.cs" />
