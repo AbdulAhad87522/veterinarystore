@@ -134,6 +134,7 @@
     <Compile Include="BL\Bl\CompanyBillBl.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
+    <Compile Include="BL\Bl\CustomerBl.cs" />
     <Compile Include="BL\Bl\MedicineBL.cs" />
     <Compile Include="BL\Bl\PackingBL.cs" />
     <Compile Include="BL\Models\Category.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="BL\Models\Batches.cs" />
     <Compile Include="BL\Models\BatchItems.cs" />
     <Compile Include="BL\Models\CompanyBill.cs" />
+    <Compile Include="BL\Models\Customer.cs" />
     <Compile Include="BL\Models\Customerbill.cs" />
     <Compile Include="BL\Models\Customerrecord.cs" />
     <Compile Include="BL\Models\Medicine.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="DL\CompanyDL.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
+    <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
     <Compile Include="DL\MedicineDL.cs" />
