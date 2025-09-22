@@ -76,7 +76,7 @@ namespace fertilizesop.DL
                     conn.Open();
                     string query = "SELECT    sb.sale_id, sb.paid_amount, sb.customer_id,   " +
                         "sb.total_amount,    (sb.total_amount-sb.paid_amount) as pending,  " +
-                        " sb.sale_date,    concat(s.first_name,' ',s.last_name) as name" +
+                        " sb.sale_date,   full_name as name" +
                         "FROM   sales sb  " +
                         "    JOIN  " +
                         " customers s ON s.customer_id = sb.customer_id ";
@@ -88,7 +88,7 @@ namespace fertilizesop.DL
                             while (reader.Read())
                             {
                                 int billid = reader.GetInt32("sale_id");
-                                string customer_name = reader.GetString("name");
+                                string customer_name = reader.GetString("full_name");
                                 decimal totalamount = reader.IsDBNull(reader.GetOrdinal("total_amount")) ? 0 : reader.GetDecimal(reader.GetOrdinal("total_price"));
                                 decimal paidamount = reader.IsDBNull(reader.GetOrdinal("paid_amount")) ? 0 : reader.GetDecimal(reader.GetOrdinal("paid_amount"));
                                 decimal pending = reader.IsDBNull(reader.GetOrdinal("pending")) ? 0 : reader.GetDecimal(reader.GetOrdinal("pending"));
@@ -122,7 +122,7 @@ namespace fertilizesop.DL
                     conn.Open();
                     string query = "SELECT    sb.sale_id, sb.paid_amount, sb.customer_id, " +
                         "  sb.total_amount,    (sb.total_amount-sb.paid_amount) as pending,  " +
-                        " sb.sale_date,    concat(s.first_name,' ',s.last_name) as name" +
+                        " sb.sale_date,   full_name as name" +
                         " FROM   sales sb   " +
                         "   JOIN   customers s ON s.customer_id = sb.customer_id " +
                         " where concat(s.first_name,' ',s.last_name) like @text" +
@@ -136,7 +136,7 @@ namespace fertilizesop.DL
                             while (reader.Read())
                             {
                                 int billid = reader.GetInt32("sale_id");
-                                string customer_name = reader.GetString("name");
+                                string customer_name = reader.GetString("full_name");
                                 decimal totalamount = reader.IsDBNull(reader.GetOrdinal("total_amount")) ? 0 : reader.GetDecimal(reader.GetOrdinal("total_price"));
                                 decimal paidamount = reader.IsDBNull(reader.GetOrdinal("paid_amount")) ? 0 : reader.GetDecimal(reader.GetOrdinal("paid_amount"));
                                 decimal pending = reader.IsDBNull(reader.GetOrdinal("pending")) ? 0 : reader.GetDecimal(reader.GetOrdinal("pending"));
