@@ -15,8 +15,8 @@ namespace MedicineShop.UI
     public partial class CompanyBill : Form
     {
         private int SelectedId = -1;
-        private readonly CompanyBillBl ibl;
-        public CompanyBill(CompanyBillBl ibl)
+        private readonly ICompanyBillBl ibl;
+        public CompanyBill(ICompanyBillBl ibl)
         {
             InitializeComponent();
             this.ibl = ibl;

@@ -1,5 +1,6 @@
 ﻿using fertilizesop.UI;
 using MedicineShop.BL;
+using MedicineShop.BL.Bl;
 using MedicineShop.DL;
 using MedicineShop.UI;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<Batchform>();
+            var mainForm = ServiceProvider.GetRequiredService<Dashboard>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
@@ -47,17 +48,15 @@ namespace MedicineShop
             services.AddTransient<CompanyMain>();
             services.AddTransient<AddCompany>();
             services.AddTransient<CompanyBill>();
-            services.AddTransient<Customermain>();
-            services.AddTransient<customer_bills>();
-            services.AddTransient<CustomerBill_SpecificProducts>();
-
             services.AddTransient<Batchform>();
             services.AddTransient<AddBatchdetailsform>();
             // Register other dependencies like Bl classes, DbContext, etc.
-            services.AddTransient<CompanyBL>();
-            services.AddTransient<BL.Bl.CompanyBillBl>();
-            services.AddTransient<BatchesBl>();
-            services.AddTransient<CompanyBillsDl>();
+      services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
+            services.AddScoped<ICompanyBillBl, CompanyBillBl>();
+            services.AddScoped<IBatchesDl,BatchesDl>();
+            services.AddScoped<IBatchesBl,BatchesBl>();
+            services.AddScoped<IBatchItemsBl,BatchItemsBl>();
+            services.AddScoped<IBatchItemsDl,BatchItemsDl>();
             // Add DbContext registration here if needed
         }
     }

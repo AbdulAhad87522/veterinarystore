@@ -135,6 +135,9 @@
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Bl\CustomerBl.cs" />
+    <Compile Include="BL\Bl\IBatchesBl.cs" />
+    <Compile Include="BL\Bl\IBatchItemsBl.cs" />
+    <Compile Include="BL\Bl\ICompanyBillBl.cs" />
     <Compile Include="BL\Bl\MedicineBL.cs" />
     <Compile Include="BL\Bl\PackingBL.cs" />
     <Compile Include="BL\Models\Category.cs" />
@@ -163,6 +166,9 @@
     <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="Interfaces\DLInterfaces\IBatchesDl.cs" />
+    <Compile Include="Interfaces\DLInterfaces\IBatchItemsDl.cs" />
+    <Compile Include="Interfaces\DLInterfaces\ICompanyBillsDl.cs" />
     <Compile Include="DL\MedicineDL.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
     <Compile Include="DL\PackingDL.cs" />
@@ -364,7 +370,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\BlInterfeces\" />
-    <Folder Include="Interfaces\DLInterfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets" Condition="Exists('packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets')" />
