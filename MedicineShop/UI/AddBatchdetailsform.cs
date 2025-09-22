@@ -765,9 +765,15 @@ namespace MedicineShop.UI
 
         private void DgvCompany_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            try {
+                if (e.RowIndex >= 0)
+                {
+                    SelectCompanyFromGrid(dgvcompany.Rows[e.RowIndex]);
+                }
+            }
+            catch(Exception ex)
             {
-                SelectCompanyFromGrid(dgvcompany.Rows[e.RowIndex]);
+                MessageBox.Show(ex.Message);
             }
         }
 

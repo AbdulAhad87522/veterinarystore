@@ -26,7 +26,7 @@ namespace fertilizesop.DL
                 string query = @"
             SELECT 
                 cb.sale_id,
-                CONCAT(c.first_name, ' ', c.last_name) AS CustomerName,
+                c.full_name AS CustomerName,
                 c.phone AS CustomerPhone,
                 DATE_FORMAT(cb.sale_date, '%d-%m-%Y %h:%i %p') AS SaleDate,
                 CAST(cb.total_amount AS DECIMAL(12,2)) AS TotalAmount,
@@ -39,7 +39,7 @@ namespace fertilizesop.DL
                 customers c ON cb.customer_id = c.customer_id
             WHERE 
                 cb.sale_id LIKE @searchTerm OR
-                CONCAT(c.first_name, ' ', c.last_name) LIKE @searchTerm OR
+                c.full_name LIKE @searchTerm OR
                 c.phone LIKE @searchTerm OR
                 cb.sale_date LIKE @searchTerm
             ORDER BY 
@@ -125,7 +125,7 @@ namespace fertilizesop.DL
                         " sb.sale_date,   full_name as name" +
                         " FROM   sales sb   " +
                         "   JOIN   customers s ON s.customer_id = sb.customer_id " +
-                        " where concat(s.first_name,' ',s.last_name) like @text" +
+                        " where s.full_nmae like @text" +
                         " or sale_id like @text";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -341,7 +341,7 @@ namespace fertilizesop.DL
                     conn.Open();
 
                     // First, get the customer_id from the text (customer name)
-                    string customerIdQuery = "SELECT customer_id FROM customers WHERE CONCAT(first_name, ' ', last_name) = @text";
+                    string customerIdQuery = "SELECT customer_id FROM customers WHERE full_name = @text";
                     int customerId = -1;
 
                     using (var customerCmd = new MySqlCommand(customerIdQuery, conn))
