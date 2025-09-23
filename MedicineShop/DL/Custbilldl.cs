@@ -12,7 +12,7 @@ namespace MedicineShop.DL
 {
     internal class Custbilldl : Icustomerbilldl
     {
-        public List<custbill> AddCustomerPayment(string text)
+        public List<custbill> GetCustomerBills(string text)
         {
             List<custbill> companyBills = new List<custbill>();
 
@@ -55,10 +55,7 @@ namespace MedicineShop.DL
 
         }
 
-        public bool AddCustomerPayment(int companyId, decimal paymentAmount)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public List<custbill> GetCustomerBills(int companyid)
         {
@@ -72,7 +69,7 @@ namespace MedicineShop.DL
                     string query = @"SELECT b.customer_id, c.full_name, SUM(b.total_amount) AS total_price, SUM(b.paid_amount) AS paid, (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
                                      FROM sales b
                                      JOIN customers c ON b.customer_id = c.customer_id
-                                     WHERE c.full_name LIKE @search OR b.customer_id LIKE @search
+                                     WHERE b.customer_id LIKE @search
                                      GROUP BY b.customer_id, c.full_name";
                     using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
                     {
@@ -102,7 +99,7 @@ namespace MedicineShop.DL
             return companyBills;
 
         }
-        public bool GetCustomerBills(int customerid, decimal paymentAmount)
+        public bool AddCustomerPayment(int customerid, decimal paymentAmount)
         {
             try
             {
@@ -178,12 +175,8 @@ namespace MedicineShop.DL
             }
         }
 
-        public List<CompanyBill> GetCustomerBills(string text)
-        {
-            throw new NotImplementedException();
-        }
 
-        public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId)
+        public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId) //getpaymentrecord
         {
             var records = new List<custPaymentRecord>();
 
@@ -236,7 +229,7 @@ namespace MedicineShop.DL
         }
 
 
-        public List<custPaymentRecord> GetcustPaymentRecords(int companyId)
+        public List<custPaymentRecord> GetcustPaymentRecords(int companyId) //getcompanypaymentrecord
         {
             var records = new List<custPaymentRecord>();
             try
@@ -291,5 +284,10 @@ namespace MedicineShop.DL
 
             return records;
         }
+
+        //List<custbill> Icustomerbilldl.GetCustomerBills(string text)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

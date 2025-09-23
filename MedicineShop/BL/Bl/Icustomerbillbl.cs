@@ -7,12 +7,12 @@ using MedicineShop.BL.Models;
 
 namespace MedicineShop.BL.Bl
 {
-    internal interface Icustomerbillbl
+    public interface Icustomerbillbl
     {
         bool AddcustomerPayment(int companyId, decimal paymentAmount);
-        List<CompanyBill> GetAllCustomerBills(string search = "");
-        List<CompanyBill> GetCustomerBillById(int companyId);
-        List<PaymentRecord> GetcustPaymentRecords(int companyId);
-        List<PaymentRecord> getcustrecord(int company_id);
+        List<custbill> GetAllCustomerBills(string search = "");
+        List<custbill> GetCustomerBillById(int companyId);
+        List<custPaymentRecord> GetcustPaymentRecords(int companyId);
+        List<custPaymentRecord> getcustrecord(int company_id);
     }
 }

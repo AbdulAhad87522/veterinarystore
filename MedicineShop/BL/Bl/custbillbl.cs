@@ -4,34 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MedicineShop.BL.Models;
+using MedicineShop.Interfaces.DLInterfaces;
 
 namespace MedicineShop.BL.Bl
 {
     internal class custbillbl : Icustomerbillbl
     {
+        public readonly Icustomerbilldl idl;
+        public custbillbl(Icustomerbilldl idl)
+        {
+            this.idl = idl;
+        }
+
+        List<custbill> Icustomerbillbl.GetAllCustomerBills(string search)
+        {
+            return idl.GetCustomerBills(search);
+        }
+
         public bool AddcustomerPayment(int companyId, decimal paymentAmount)
         {
-            throw new NotImplementedException();
+            if (companyId <= 0)
+                throw new ArgumentException("Invalid customer ID.");
+            if (paymentAmount <= 0)
+                throw new ArgumentException("Payment amount must be positive.");
+            return idl.AddCustomerPayment(companyId, paymentAmount);
         }
 
-        public List<CompanyBill> GetAllCustomerBills(string search = "")
+        List<custPaymentRecord> Icustomerbillbl.GetcustPaymentRecords(int companyId)
         {
-            throw new NotImplementedException();
+            if (companyId <= 0)
+                throw new ArgumentException("Invalid customer ID.");
+            return idl.GetCustomerPaymentRecords(companyId);
         }
 
-        public List<CompanyBill> GetCustomerBillById(int companyId)
+        List<custPaymentRecord> Icustomerbillbl.getcustrecord(int company_id)
         {
-            throw new NotImplementedException();
+            if (company_id <= 0)
+                throw new ArgumentException("Invalid customer ID.");
+            return idl.GetcustPaymentRecords(company_id);
         }
-
-        public List<PaymentRecord> GetcustPaymentRecords(int companyId)
+        List<custbill> Icustomerbillbl.GetCustomerBillById(int companyId)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<PaymentRecord> getcustrecord(int company_id)
-        {
-            throw new NotImplementedException();
+            if (companyId <= 0)
+                throw new ArgumentException("Invalid customer ID.");
+            return idl.GetCustomerBills(companyId);
         }
     }
 }

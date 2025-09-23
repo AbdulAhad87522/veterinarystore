@@ -223,6 +223,18 @@
     <Compile Include="UI\CompanyMain.Designer.cs">
       <DependentUpon>CompanyMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\customerbillspecui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillspecui.Designer.cs">
+      <DependentUpon>customerbillspecui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customerbillui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillui.Designer.cs">
+      <DependentUpon>customerbillui.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,6 +321,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CompanyMain.resx">
       <DependentUpon>CompanyMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\customerbillspecui.resx">
+      <DependentUpon>customerbillspecui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\customerbillui.resx">
+      <DependentUpon>customerbillui.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomerBill_SpecificProducts.resx">
       <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>

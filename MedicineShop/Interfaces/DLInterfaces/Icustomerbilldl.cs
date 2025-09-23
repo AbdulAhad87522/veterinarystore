@@ -9,9 +9,9 @@ namespace MedicineShop.Interfaces.DLInterfaces
 {
     internal interface Icustomerbilldl
     {
-        bool AddCustomerPayment(int companyId, decimal paymentAmount);
         List<custbill> GetCustomerBills(int companyid);
         List<custbill> GetCustomerBills(string text);
+        bool AddCustomerPayment(int companyId, decimal paymentAmount);
         List<custPaymentRecord> GetCustomerPaymentRecords(int companyId);
         List<custPaymentRecord> GetcustPaymentRecords(int companyId);
     }

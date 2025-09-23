@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MedicineShop.BL.Models
 {
-    internal class custbill
+    public class custbill
     {
         public string full_name { get; set; }
         public int customer_id { get; set; }
