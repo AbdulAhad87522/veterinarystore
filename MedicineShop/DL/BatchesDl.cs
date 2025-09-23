@@ -91,6 +91,7 @@ namespace MedicineShop.DL
                 {
                     string query = @"SELECT 
                                     m.product_id,
+m.name,
                                     m.company_id,
                                     m.category_id,
                                     m.packing_id,

@@ -419,7 +419,7 @@
             this.btnsuppliers.Name = "btnsuppliers";
             this.btnsuppliers.Size = new System.Drawing.Size(270, 60);
             this.btnsuppliers.TabIndex = 3;
-            this.btnsuppliers.Text = "Suppliers";
+            this.btnsuppliers.Text = "Companies";
             this.btnsuppliers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnsuppliers.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnsuppliers.UseVisualStyleBackColor = false;
@@ -467,6 +467,7 @@
             this.Controls.Add(this.panelmenu);
             this.Name = "Dashboard";
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelmenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
