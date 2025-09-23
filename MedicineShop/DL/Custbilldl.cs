@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MedicineShop.BL.Models;
+using MedicineShop.Interfaces.DLInterfaces;
 using MySql.Data.MySqlClient;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MedicineShop.DL
 {
-    internal class Custbilldl
+    internal class Custbilldl : Icustomerbilldl
     {
-        public List<custbill> GetCompanyBills(string text)
+        public List<custbill> AddCustomerPayment(string text)
         {
             List<custbill> companyBills = new List<custbill>();
 
@@ -53,7 +54,13 @@ namespace MedicineShop.DL
             return companyBills;
 
         }
-        public List<custbill> GetCompanyBills(int companyid)
+
+        public bool AddCustomerPayment(int companyId, decimal paymentAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<custbill> GetCustomerBills(int companyid)
         {
             List<custbill> companyBills = new List<custbill>();
 
@@ -95,7 +102,7 @@ namespace MedicineShop.DL
             return companyBills;
 
         }
-        public bool AddCompanyPayment(int customerid, decimal paymentAmount)
+        public bool GetCustomerBills(int customerid, decimal paymentAmount)
         {
             try
             {
@@ -170,7 +177,13 @@ namespace MedicineShop.DL
                 throw new Exception("Error adding company payment", ex);
             }
         }
-        public List<custPaymentRecord> GetPaymentRecords(int companyId)
+
+        public List<CompanyBill> GetCustomerBills(string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId)
         {
             var records = new List<custPaymentRecord>();
 
@@ -223,9 +236,9 @@ namespace MedicineShop.DL
         }
 
 
-        public List<PaymentRecord> GetCompanyPaymentRecords(int companyId)
+        public List<custPaymentRecord> GetcustPaymentRecords(int companyId)
         {
-            var records = new List<PaymentRecord>();
+            var records = new List<custPaymentRecord>();
             try
             {
                 using (var conn = DatabaseHelper.Instance.GetConnection())
@@ -233,18 +246,17 @@ namespace MedicineShop.DL
                     conn.Open();
                     string query = @"
                     SELECT 
-                        pr.payment_id,
-                        pr.company_id,
-                        pr.payment_date,
-                        pr.amount,
-                        pb.status,
-                        pb.total_price,
-                        pb.paid,
-                        (pb.total_price - pb.paid) AS remaining_balance
-                    FROM payment_records pr
-                    JOIN purchase_batches pb ON pr.company_id = pb.company_id
-                    WHERE pr.company_id = @CompanyId
-                    ORDER BY pr.payment_date DESC;
+                        pr.record_id,
+                        pr.customer_id,
+                        pr.date,
+                        pr.payment,
+                        pb.total_amount,
+                        pb.paid_amount,
+                        (pb.total_amount - pb.paid_amount) AS remaining_balance
+                    FROM customerpricerecord pr
+                    JOIN sales pb ON pr.customer_id = pb.customer_id
+                    WHERE pr.customer_id = @CompanyId
+                    ORDER BY pr.date DESC;
                 ";
 
                     using (var cmd = new MySqlCommand(query, conn))
@@ -255,11 +267,11 @@ namespace MedicineShop.DL
                         {
                             while (reader.Read())
                             {
-                                var record = new PaymentRecord
+                                var record = new custPaymentRecord
                                 {
                                     PaymentId = reader.GetInt32("payment_id"),
-                                    CompanyId = reader.GetInt32("company_id"),
-                                    PaymentDate = reader.GetDateTime("payment_date"),
+                                    customerId = reader.GetInt32("company_id"),
+                                    Date = reader.GetDateTime("payment_date"),
                                     Amount = reader.GetDecimal("amount"),
                                     Status = reader.GetString("status"),
                                     TotalPrice = reader.GetDecimal("total_price"),

@@ -132,12 +132,14 @@
     <Compile Include="BL\Bl\BatchSessionData.cs" />
     <Compile Include="BL\Bl\CategoryBL.cs" />
     <Compile Include="BL\Bl\CompanyBillBl.cs" />
+    <Compile Include="BL\Bl\custbillbl.cs" />
     <Compile Include="BL\Bl\Customerbillbl.cs" />
     <Compile Include="BL\Bl\CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Bl\CustomerBl.cs" />
     <Compile Include="BL\Bl\IBatchesBl.cs" />
     <Compile Include="BL\Bl\IBatchItemsBl.cs" />
     <Compile Include="BL\Bl\ICompanyBillBl.cs" />
+    <Compile Include="BL\Bl\Icustomerbillbl.cs" />
     <Compile Include="BL\Bl\MedicineBL.cs" />
     <Compile Include="BL\Bl\PackingBL.cs" />
     <Compile Include="BL\Models\Category.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="DL\MedicineDL.cs" />
     <Compile Include="DL\MySqlbackupHelper.cs" />
     <Compile Include="DL\PackingDL.cs" />
+    <Compile Include="Interfaces\DLInterfaces\Icustomerbilldl.cs" />
     <Compile Include="UI\AddCategory.cs">
       <SubType>Form</SubType>
     </Compile>
