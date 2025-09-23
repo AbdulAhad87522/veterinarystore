@@ -27,7 +27,7 @@ namespace MedicineShop.BL.Models
             public decimal TotalPrice { get; set; }
             public decimal Paid { get; set; }
             public decimal RemainingBalance { get; set; }
-        public string CompanyName { get; set; }
+            public string CompanyName { get; set; }
     }
 
     

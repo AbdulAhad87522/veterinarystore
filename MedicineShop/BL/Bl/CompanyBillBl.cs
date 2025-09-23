@@ -20,6 +20,7 @@ namespace MedicineShop.BL.Bl
         {
             return idl.GetCompanyBills(search);
         }
+
         public bool AddCompanyPayment(int companyId, decimal paymentAmount)
         {
             if (companyId <= 0)
