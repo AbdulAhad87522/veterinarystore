@@ -45,10 +45,10 @@ namespace MedicineShop
                 ProductId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["product_id"].Value),
                 Name = dataGridView1.CurrentRow.Cells["name"].Value.ToString(),
                 Description = dataGridView1.CurrentRow.Cells["description"].Value.ToString(),
-                Packing = dataGridView1.CurrentRow.Cells["Packing"].Value.ToString(),
+                PackingId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["packing_id"].Value),
                 SalePrice = Convert.ToDecimal(dataGridView1.CurrentRow.Cells["sale_price"].Value),
-                CompanyId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["company_id"].Value),
                 CategoryId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Category_id"].Value)
+
             };
 
             AddMedicine form = new AddMedicine(med);
@@ -101,6 +101,7 @@ namespace MedicineShop
 
             if (grid.Columns.Contains("company_id")) grid.Columns["company_id"].Visible = false;
             if (grid.Columns.Contains("Category_id")) grid.Columns["Category_id"].Visible = false;
+            if (grid.Columns.Contains("packing_id")) grid.Columns["packing_id"].Visible = false;
         }
 
 

@@ -11,7 +11,7 @@ namespace MedicineShop.DL
         public int AddMedicine(Medicine medicine)
         {
             string query = @"INSERT INTO medicines 
-                (name, description, company_id, Category_id, Packing, sale_price) 
+                (name, description, company_id, Category_id, packing_Id, sale_price) 
                 VALUES (@name, @desc, @companyId, @catId, @packing, @price)";
 
             MySqlParameter[] parameters =
@@ -20,7 +20,7 @@ namespace MedicineShop.DL
                 new MySqlParameter("@desc", medicine.Description),
                 new MySqlParameter("@companyId", medicine.CompanyId),
                 new MySqlParameter("@catId", medicine.CategoryId),
-                new MySqlParameter("@packing", medicine.Packing),
+                new MySqlParameter("@packing", medicine.PackingId),
                 new MySqlParameter("@price", medicine.SalePrice)
             };
 
@@ -30,7 +30,7 @@ namespace MedicineShop.DL
         public int UpdateMedicine(Medicine medicine)
         {
             string query = @"UPDATE medicines 
-                SET name=@name, description=@desc, company_id=@companyId, Category_id=@catId, Packing=@packing, sale_price=@price
+                SET name=@name, description=@desc, company_id=@companyId, category_id=@catId, packing_Id=@packing, sale_price=@price
                 WHERE product_id=@id";
 
             MySqlParameter[] parameters =
@@ -40,7 +40,7 @@ namespace MedicineShop.DL
                 new MySqlParameter("@desc", medicine.Description),
                 new MySqlParameter("@companyId", medicine.CompanyId),
                 new MySqlParameter("@catId", medicine.CategoryId),
-                new MySqlParameter("@packing", medicine.Packing),
+                new MySqlParameter("@packing", medicine.PackingId),
                 new MySqlParameter("@price", medicine.SalePrice)
             };
 
@@ -57,9 +57,10 @@ namespace MedicineShop.DL
 
         public DataTable GetAllMedicines()
         {
-            string query = @"SELECT m.product_id, m.name, m.description, c.company_name, cat.category_name, m.Packing, m.sale_price, m.company_id, m.Category_id
+            string query = @"SELECT m.product_id, m.name, m.description, c.company_name,p.packing_name,cat.category_name, m.packing_id, m.sale_price, m.company_id, m.category_id
                              FROM medicines m
                              JOIN company c ON m.company_id = c.company_id
+                             JOIN packing p ON m.packing_id = p.packing_id
                              JOIN categories cat ON m.Category_id = cat.category_id";
 
             return DatabaseHelper.Instance.ExecuteDataTable(query);
@@ -68,9 +69,10 @@ namespace MedicineShop.DL
         public DataTable SearchMedicines(string keyword)
         {
             string query = @"SELECT m.product_id, m.name, m.description, c.company_name, cat.category_name, 
-                            m.Packing, m.sale_price, m.company_id, m.Category_id
+                            m.packingId,p.packing_name m.sale_price, m.company_id, m.Category_id
                      FROM medicines m
                      JOIN company c ON m.company_id = c.company_id
+                     JOIN packing p ON m.packing_id = p.packing_id
                      JOIN categories cat ON m.Category_id = cat.category_id
                      WHERE m.name LIKE @keyword 
                         OR c.company_name LIKE @keyword
@@ -143,6 +145,28 @@ namespace MedicineShop.DL
                 }
             }
             return categories;
+        }
+
+        public List<ComboItem> GetPackingList(string keyword)
+        {
+            string query = "SELECT packing_id, packing_name FROM packing WHERE packing_name LIKE @keyword LIMIT 20";
+            MySqlParameter[] parameters = {
+        new MySqlParameter("@keyword", "%" + keyword + "%")
+    };
+
+            List<ComboItem> packing = new List<ComboItem>();
+            using (var reader = DatabaseHelper.Instance.ExecuteReader(query, parameters))
+            {
+                while (reader.Read())
+                {
+                    packing.Add(new ComboItem
+                    {
+                        Id = Convert.ToInt32(reader["packing_id"]),
+                        Name = reader["packing_name"].ToString()
+                    });
+                }
+            }
+            return packing;
         }
 
     }

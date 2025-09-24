@@ -61,6 +61,7 @@ namespace fertilizesop.UI
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -172,6 +173,7 @@ namespace fertilizesop.UI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.addcustomer);
             this.panel1.Controls.Add(this.txtcustsearch);
             this.panel1.Controls.Add(this.walking_in);
@@ -213,6 +215,7 @@ namespace fertilizesop.UI
             this.addcustomer.TabIndex = 22;
             this.addcustomer.TabStop = true;
             this.addcustomer.Text = "+";
+            this.addcustomer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.addcustomer_LinkClicked);
             // 
             // txtcustsearch
             // 
@@ -357,6 +360,7 @@ namespace fertilizesop.UI
             this.txtfinaldiscount.Name = "txtfinaldiscount";
             this.txtfinaldiscount.Size = new System.Drawing.Size(276, 30);
             this.txtfinaldiscount.TabIndex = 8;
+            this.txtfinaldiscount.TextChanged += new System.EventHandler(this.txtfinaldiscount_TextChanged);
             // 
             // txtfinalprice
             // 
@@ -412,6 +416,16 @@ namespace fertilizesop.UI
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(1020, 142);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(54, 34);
+            this.button3.TabIndex = 23;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Customersale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -466,5 +480,6 @@ namespace fertilizesop.UI
         private RadioButton walking_in;
         private RadioButton regular;
         private LinkLabel addcustomer;
+        private Button button3;
     }
 }
