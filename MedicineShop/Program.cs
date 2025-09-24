@@ -1,8 +1,7 @@
-﻿using fertilizesop.UI;
+﻿﻿using fertilizesop.UI;
 using MedicineShop.BL;
 using MedicineShop.BL.Bl;
 using MedicineShop.DL;
-using MedicineShop.Interfaces.DLInterfaces;
 using MedicineShop.UI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -25,7 +24,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
+            var mainForm = ServiceProvider.GetRequiredService<HomeContentform>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
@@ -49,24 +48,18 @@ namespace MedicineShop
             services.AddTransient<CompanyMain>();
             services.AddTransient<AddCompany>();
             services.AddTransient<CompanyBill>();
-            services.AddTransient<Customersale>();
-            services.AddTransient<customerbillui>();
-            services.AddTransient<customerbillspecui>();
             services.AddTransient<Batchform>();
             services.AddTransient<AddBatchdetailsform>();
-            services.AddTransient<Customersale>();
+            services.AddTransient<HomeContentform>();
 
             // Register other dependencies like Bl classes, DbContext, etc.
-      services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
+            services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
             services.AddScoped<ICompanyBillBl, CompanyBillBl>();
-            services.AddScoped<IBatchesDl,BatchesDl>();
-            services.AddScoped<Icustomerbillbl, custbillbl>();
-            services.AddScoped<Icustomerbilldl, Custbilldl>();
-            services.AddScoped<IBatchesBl,BatchesBl>();
-            services.AddScoped<IBatchItemsBl,BatchItemsBl>();
-            services.AddScoped<IBatchItemsDl,BatchItemsDl>();
+            services.AddScoped<IBatchesBl, BatchesBl>();
+            services.AddScoped<IBatchItemsBl, BatchItemsBl>();
+            services.AddScoped<IBatchItemsDl, BatchItemsDl>();
 
             // Add DbContext registration here if needed
         }
     }
-    }
+}

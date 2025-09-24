@@ -1,4 +1,4 @@
-﻿namespace TechStore.UI
+﻿namespace MedicineShop.UI
 {
     partial class HomeContentform
     {
@@ -79,6 +79,7 @@
             this.Controls.Add(this.panel15);
             this.Name = "HomeContentform";
             this.Text = "HomeContentform";
+            //this.Load += new System.EventHandler(this.HomeContentform_Load);
             this.panel2.ResumeLayout(false);
             this.panel15.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -18,8 +18,6 @@ namespace MedicineShop.UI
         private readonly MedicineBL _medicineBL = new MedicineBL();
         private readonly Medicine _medicine;
         private readonly bool _isEdit;
-        private DataTable _allCompanies;
-        private DataTable _allCategories;
 
 
         public AddMedicine(Medicine med = null)
@@ -50,11 +48,11 @@ namespace MedicineShop.UI
         {
             txtName.Text = _medicine.Name;
             txtDesc.Text = _medicine.Description;
-            txtPacking.Text = _medicine.Packing;
             txtPrice.Text = _medicine.SalePrice.ToString();
 
             cmbCompany.SelectedValue = _medicine.CompanyId;
             cmbCategory.SelectedValue = _medicine.CategoryId;
+            pckcmb.SelectedValue = _medicine.PackingId;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -81,13 +79,15 @@ namespace MedicineShop.UI
         {
             _medicine.Name = txtName.Text.Trim();
             _medicine.Description = txtDesc.Text.Trim();
-            _medicine.Packing = txtPacking.Text.Trim();
             _medicine.SalePrice = decimal.TryParse(txtPrice.Text, out decimal price) ? price : 0;
             if (cmbCompany.SelectedItem is ComboItem selectedCompany)
                 _medicine.CompanyId = selectedCompany.Id;
 
             if (cmbCategory.SelectedItem is ComboItem selectedCategory)
                 _medicine.CategoryId = selectedCategory.Id;
+
+            if (pckcmb.SelectedItem is ComboItem selectedPacking)
+                _medicine.PackingId = selectedPacking.Id;
         }
 
         // For searchable combobox (optional)
@@ -127,7 +127,25 @@ namespace MedicineShop.UI
                 Cursor.Current = Cursors.Default;
             }
         }
-    
+
+        private void comboPacking_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = pckcmb.Text.Trim();
+
+            var packing = _medicineBL.GetPackingList(searchText);
+
+            if (packing != null && packing.Count > 0)
+            {
+                pckcmb.Items.Clear();
+                foreach (var c in packing)
+                    pckcmb.Items.Add(c);
+
+                pckcmb.SelectionStart = cmbCategory.Text.Length;
+                pckcmb.DroppedDown = true;
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
@@ -136,7 +154,7 @@ namespace MedicineShop.UI
 
         private void AddMedicine_Load(object sender, EventArgs e)
         {
-          
+           
         }
     }
 }
