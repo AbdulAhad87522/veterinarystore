@@ -36,7 +36,7 @@ namespace MedicineShop.UI
             try
             {
                 dataGridView2.DataSource = ibl.GetAllCustomerBills(search);
-                //dataGridView2.Columns["company_id"].Visible = false;
+                dataGridView2.Columns["customer_id"].Visible = false;
                 UIHelper.AddButtonColumn(dataGridView2, "payment", "payment", "Payment");
                 UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
             }

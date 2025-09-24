@@ -1,4 +1,5 @@
-﻿using FontAwesome.Sharp;
+﻿using fertilizesop.DL;
+using FontAwesome.Sharp;
 using MedicineShop.BL.Models;
 using MedicineShop.DL;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ namespace fertilizesop.UI
         public Customersale()
         {
             InitializeComponent();
+            walking_in.Checked = true;
             dataGridView1.CellEndEdit += dataGridView1_CellEndEdit;
             dataGridView1.RowsAdded += dataGridView1_RowsAdded;
             dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
@@ -131,7 +133,7 @@ namespace fertilizesop.UI
                         }
 
                         DataGridViewRow selectedrow = dgvcustomersearch.SelectedRows[0];
-                        string name = selectedrow.Cells["name"].Value.ToString();
+                        string name = selectedrow.Cells["full_name"].Value.ToString();
                         txtcustsearch.Text = name;
                         dgvcustomersearch.Visible = false;
                         button2.Visible = false;
@@ -665,6 +667,12 @@ namespace fertilizesop.UI
                     return;
                 }
 
+                if(walking_in.Checked && (txtfinalprice.Text != txtpaidamount.Text))
+                {
+                    MessageBox.Show("Walkin customers should pay full amount");
+                    return;
+                }
+
                 if (dataGridView1.Rows.Count == 0)
                 {
                     MessageBox.Show("Please select some product first");
@@ -698,6 +706,7 @@ namespace fertilizesop.UI
                 if (result)
                 {
                     MessageBox.Show("Data saved successfully");
+                    SavehthermalPdfInvoice();
                     clearallfields();
 
                     string tempFile = GetTempSaleFilePath();
@@ -715,6 +724,28 @@ namespace fertilizesop.UI
             }
         }
 
+        private void SavehthermalPdfInvoice()
+        {
+            using (SaveFileDialog saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                saveDialog.Title = "Save PDF Invoice";
+                saveDialog.FileName = $"Invoice_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
+                        MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error generating PDF:\n" + ex.Message, "PDF Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -730,29 +761,29 @@ namespace fertilizesop.UI
             button2.Visible = false;
         }
 
-        private void SavehthermalPdfInvoice()
-        {
-            using (SaveFileDialog saveDialog = new SaveFileDialog())
-            {
-                saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
-                saveDialog.Title = "Save PDF Invoice";
-                saveDialog.FileName = $"Invoice_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+        //private void SavehthermalPdfInvoice()
+        //{
+        //    using (SaveFileDialog saveDialog = new SaveFileDialog())
+        //    {
+        //        saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
+        //        saveDialog.Title = "Save PDF Invoice";
+        //        saveDialog.FileName = $"Invoice_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
-                if (saveDialog.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
+        //        if (saveDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            try
+        //            {
 
-                        MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error generating PDF:\n" + ex.Message, "PDF Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
+
+        //                MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Error generating PDF:\n" + ex.Message, "PDF Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            }
+        //        }
+        //    }
+        //}
         private string GetTempSaleFilePath()
         {
             // Store inside: %AppData%\Fertilizer\TempData
