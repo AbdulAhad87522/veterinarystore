@@ -47,11 +47,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnsave = new FontAwesome.Sharp.IconButton();
             this.btnAdd = new FontAwesome.Sharp.IconButton();
-            this.txtPacking = new System.Windows.Forms.TextBox();
             this.lblBatch = new System.Windows.Forms.Label();
             this.lblProducts = new System.Windows.Forms.Label();
             this.lblQuantity = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pckcmb = new System.Windows.Forms.ComboBox();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +115,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Linen;
+            this.panel2.Controls.Add(this.pckcmb);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.label1);
@@ -132,7 +133,6 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.btnsave);
             this.panel2.Controls.Add(this.btnAdd);
-            this.panel2.Controls.Add(this.txtPacking);
             this.panel2.Controls.Add(this.lblBatch);
             this.panel2.Controls.Add(this.lblProducts);
             this.panel2.Controls.Add(this.lblQuantity);
@@ -301,15 +301,6 @@
             this.btnAdd.UseVisualStyleBackColor = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // txtPacking
-            // 
-            this.txtPacking.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPacking.Location = new System.Drawing.Point(138, 177);
-            this.txtPacking.Multiline = true;
-            this.txtPacking.Name = "txtPacking";
-            this.txtPacking.Size = new System.Drawing.Size(286, 46);
-            this.txtPacking.TabIndex = 154;
-            // 
             // lblBatch
             // 
             this.lblBatch.AutoSize = true;
@@ -350,6 +341,16 @@
             this.panel1.Size = new System.Drawing.Size(566, 84);
             this.panel1.TabIndex = 206;
             // 
+            // pckcmb
+            // 
+            this.pckcmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pckcmb.FormattingEnabled = true;
+            this.pckcmb.Location = new System.Drawing.Point(138, 175);
+            this.pckcmb.Name = "pckcmb";
+            this.pckcmb.Size = new System.Drawing.Size(286, 37);
+            this.pckcmb.TabIndex = 221;
+            this.pckcmb.TextChanged += new System.EventHandler(this.comboPacking_TextChanged);
+            // 
             // AddMedicine
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -384,7 +385,6 @@
         private System.Windows.Forms.Label label2;
         private FontAwesome.Sharp.IconButton btnsave;
         private FontAwesome.Sharp.IconButton btnAdd;
-        private System.Windows.Forms.TextBox txtPacking;
         private System.Windows.Forms.Label lblBatch;
         private System.Windows.Forms.Label lblProducts;
         private System.Windows.Forms.Label lblQuantity;
@@ -395,5 +395,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbCompany;
         private System.Windows.Forms.ComboBox cmbCategory;
+        private System.Windows.Forms.ComboBox pckcmb;
     }
 }

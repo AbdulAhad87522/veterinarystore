@@ -12,12 +12,7 @@ namespace MedicineShop.BL
     {
         private readonly MedicineDL _medicineDL = new MedicineDL();
 
-        public DataTable GetMedicines() => _medicineDL.GetAllMedicines();
-
-        public DataTable GetCompanies(string keyword = "") => _medicineDL.GetCompanies(keyword);
-
-        public DataTable GetCategories(string keyword = "") => _medicineDL.GetCategories(keyword);
-
+        public DataTable GetMedicines() => _medicineDL.GetAllMedicines();        
         public int AddMedicine(Medicine med)
         {
             if (string.IsNullOrWhiteSpace(med.Name))
@@ -111,6 +106,12 @@ namespace MedicineShop.BL
         {
             return _medicineDL.GetCategoryList(keyword);
         }
+
+        public List<ComboItem> GetPackingList(string keyword)
+        {
+            return _medicineDL.GetPackingList(keyword);
+        }
+
 
     }
 }
