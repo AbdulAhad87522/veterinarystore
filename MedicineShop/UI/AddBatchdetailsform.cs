@@ -49,7 +49,9 @@ namespace MedicineShop.UI
 
             // Initially hide the details panel
             paneldetails.Visible = false;
-
+            UIHelper.StyleGridView(dgvbatches);
+            UIHelper.StyleGridView(dgvcompany);
+            UIHelper.StyleGridView(dgvmedicines);
             // Initialize in-memory batch items table
             InitializeBatchItemsTable();
 
@@ -257,12 +259,16 @@ namespace MedicineShop.UI
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                decimal paidAmount = 0; // default
 
-                if (!decimal.TryParse(txtpaid.Text, out decimal paidAmount) || paidAmount < 0)
+                if (!string.IsNullOrWhiteSpace(txtpaid.Text))
                 {
-                    MessageBox.Show("Please enter valid paid amount.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    if (!decimal.TryParse(txtpaid.Text, out paidAmount) || paidAmount < 0)
+                    {
+                        MessageBox.Show("Please enter valid paid amount.", "Validation Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                 }
 
                 // Create batch object

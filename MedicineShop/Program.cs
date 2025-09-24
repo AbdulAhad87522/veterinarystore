@@ -56,6 +56,7 @@ namespace MedicineShop
             services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
             services.AddScoped<ICompanyBillBl, CompanyBillBl>();
             services.AddScoped<IBatchesBl, BatchesBl>();
+            services.AddScoped<IBatchesDl, BatchesDl>();
             services.AddScoped<IBatchItemsBl, BatchItemsBl>();
             services.AddScoped<IBatchItemsDl, BatchItemsDl>();
 

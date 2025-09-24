@@ -44,8 +44,7 @@ namespace MedicineShop
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
-            UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
-            UIHelper.AddButtonColumn(dataGridView2, "Payment", "Payment", "Payment");
+
         }
 
         private void iconButton1_Click(object sender, EventArgs e)
