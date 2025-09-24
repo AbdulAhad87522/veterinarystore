@@ -2,6 +2,7 @@
 using FontAwesome.Sharp;
 using MedicineShop.BL.Models;
 using MedicineShop.DL;
+using MedicineShop.UI;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -237,6 +238,7 @@ namespace fertilizesop.UI
                             {
                                 dataGridView1.Rows.RemoveAt(row);
                             }
+                            totalprice();
                         }
                     }
                 }
@@ -428,6 +430,7 @@ namespace fertilizesop.UI
                 {
                     dataGridView1.Rows.Remove(row);
                 }
+                totalprice();
             }
             else
             {
@@ -844,6 +847,30 @@ namespace fertilizesop.UI
         private void walking_in_CheckedChanged(object sender, EventArgs e)
         {
             radiobuttons();
+        }
+
+        private void addcustomer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Addcustomer add = new Addcustomer();
+            //this.Close();
+            add.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            totalprice();
+        }
+
+        private void txtfinaldiscount_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                txtfinalprice.Text = (int.Parse(totalwithoutdisc.Text) - int.Parse(txtfinaldiscount.Text)).ToString();
+            }
+            catch
+            {
+                txtfinalprice.Text = "0";
+            }
         }
     }
 }
