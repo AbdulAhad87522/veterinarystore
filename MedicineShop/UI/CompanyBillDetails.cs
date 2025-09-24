@@ -62,5 +62,12 @@ namespace MedicineShop.UI
                 lblpending.Text = " Rs. " + bill.remaining.ToString("N2");
             }
         }
+
+        private void iconButton1_Click(object sender, EventArgs e)
+        {
+            //var f = new CompanyBill(SelectedId, ibl);
+            //this.Close();
+            //f.ShowDialog();
+        }
     }
 }

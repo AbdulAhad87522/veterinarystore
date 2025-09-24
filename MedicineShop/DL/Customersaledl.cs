@@ -33,8 +33,8 @@ namespace MedicineShop.DL
                                     FROM batch_items b
                                     JOIN medicines m ON m.product_id = b.product_id
                                     JOIN company c ON c.company_id = m.company_id
-    JOIN packing p ON m.packing_id = p.packing_id
-                                    JOIN categories ca ON ca.category_id = m.Category_id
+                                    JOIN packing p ON m.packing_id = p.packing_id
+                                    JOIN categories ca ON ca.category_id = m.category_id
                                     WHERE m.name LIKE @text and b.quantity_remaining != 0
                                     ORDER BY m.name, b.expiry_date;
                                     ";
@@ -73,6 +73,102 @@ namespace MedicineShop.DL
                 throw new Exception("Failed to recieve customer_id " + ex);
             }
         }
+
+        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(226, PageSizes.A4.Height, Unit.Point); // 80mm width
+                    page.Margin(5);
+                    page.DefaultTextStyle(x => x.FontFamily("Consolas").FontSize(9));
+
+                    page.Content().Column(column =>
+                    {
+                        // --- Logo + Header ---
+                        column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
+                        column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
+                        column.Item().AlignCenter().Text("office # 39 & 40, 1st floor Gallery 3, Rex city, Sitiana Road");
+                        column.Item().AlignCenter().Text("Phone: 0300-6634245");
+                        column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+
+                        // --- Invoice Info ---
+                        column.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text($"Customer: {customerName}");
+                            row.RelativeItem().AlignRight().Text($"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
+                        });
+
+                        column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+
+                        // --- Table Header ---
+                        column.Item().Text("----------------------------------------");
+                        column.Item().Text("MEDIC         QTY PRICE DISC TOTAL");
+                        column.Item().Text("----------------------------------------");
+
+                        // --- Cart Items ---
+                        decimal totalDiscount = 0;
+                        decimal subTotal = 0;
+
+                        foreach (DataGridViewRow row in cart.Rows)
+                        {
+                            if (row.IsNewRow) continue;
+
+                            string name = row.Cells["name"].Value?.ToString() ?? "";
+                            string qty = row.Cells["quantity"].Value?.ToString()?.PadLeft(2);
+                            //string war = Truncate(row.Cells["Warranty"]?.Value?.ToString(), 3).PadRight(3);
+                            string price = row.Cells["sale_price"].Value?.ToString()?.PadLeft(5);
+                            string discount = row.Cells["discount"].Value?.ToString()?.PadLeft(3);
+                            string totalPrice = row.Cells["final"].Value?.ToString()?.PadLeft(6);
+
+                            if (decimal.TryParse(row.Cells["discount"].Value?.ToString(), out decimal discVal))
+                                totalDiscount += discVal * Convert.ToInt32(row.Cells["quantity"].Value);
+                            if (decimal.TryParse(row.Cells["final"].Value?.ToString(), out decimal itemTotal))
+                                subTotal += itemTotal;
+
+                            // Split name across lines
+                            string[] nameParts = name.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
+                            string firstWord = nameParts.Length > 0 ? nameParts[0] : name;
+                            string[] remainingWords = nameParts.Skip(1).ToArray();
+
+                            // First line with first word and all data
+                            string firstLine = $"{firstWord,-12}{qty} {price} {discount} {totalPrice}";
+                            column.Item().Text(firstLine);
+
+                            // Remaining words as new lines
+                            foreach (var word in remainingWords)
+                            {
+                                column.Item().PaddingLeft(10).Text(word);
+                            }
+                        }
+
+                        // --- Summary ---
+                        column.Item().Text("----------------------------------------");
+                        column.Item().Text($"SUBTOTAL:    Rs. {subTotal + totalDiscount:N0}");
+                        column.Item().Text($"DISCOUNT:    Rs. {totalDiscount:N0}");
+                        column.Item().Text($"TOTAL:       Rs. {total:N0}");
+                        column.Item().Text($"PAID:        Rs. {paid:N0}");
+                        column.Item().Text($"BALANCE:     Rs. {(total - paid):N0}");
+                        column.Item().Text("----------------------------------------");
+
+                        // --- Footer ---
+                        column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold();
+                        column.Item().PaddingTop(5).LineHorizontal(0.5f);
+                        column.Item().AlignCenter().Text("** SPECIAL OFFERS **").Bold();
+                        column.Item().AlignCenter().Text("Free diagnostics with any repair");
+                        column.Item().AlignCenter().Text("10% discount on next purchase");
+                        column.Item().AlignCenter().Text("Ask about our warranty plans!");
+                        column.Item().AlignCenter().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
+                        column.Item().PaddingTop(5).AlignCenter().Text("Developed By:");
+                        column.Item().PaddingTop(5).AlignCenter().Text("abdulahad18022@gmail.com");
+                    });
+                });
+            }).GeneratePdf(filePath);
+        }
+
 
         public DataTable getallcustomer(string text)
         {
