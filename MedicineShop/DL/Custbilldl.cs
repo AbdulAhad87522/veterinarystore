@@ -10,7 +10,7 @@ namespace MedicineShop.DL
     {
         public List<custbill> GetCustomerBills(string text)
         {
-            List<custbill> companyBills = new List<custbill>();
+            List<custbill> customerBills = new List<custbill>();
 
             try
             {
@@ -41,7 +41,7 @@ namespace MedicineShop.DL
                                     paid = reader.GetDecimal("paid"),
                                     remaining = reader.GetDecimal("remaining")
                                 };
-                                companyBills.Add(bill);
+                                customerBills.Add(bill);
                             }
                         }
                     }
@@ -51,7 +51,7 @@ namespace MedicineShop.DL
             {
                 throw new Exception("Error fetching company bills", ex);
             }
-            return companyBills;
+            return customerBills;
         }
 
         public List<custbill> GetCustomerBills(int companyid)
@@ -102,77 +102,104 @@ namespace MedicineShop.DL
 
         public bool AddCustomerPayment(int customerid, decimal paymentAmount)
         {
+            MySqlTransaction tran = null;
             try
             {
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    using (var tran = conn.BeginTransaction())
+                    tran = conn.BeginTransaction();
+
+                    // 1. Fetch unpaid sales FIRST
+                    string selectQuery = @"SELECT sale_id, total_amount, paid_amount
+                                   FROM sales
+                                   WHERE customer_id = @customerid 
+                                   AND (total_amount - paid_amount) > 0
+                                   ORDER BY sale_date ASC, sale_id ASC";
+
+                    var sales = new List<(int id, decimal total, decimal paid)>();
+                    using (var cmd = new MySqlCommand(selectQuery, conn, tran))
                     {
-                        // 1. Insert into customerpricerecord
-                        string insertPayment = @"INSERT INTO customerpricerecord (customer_id, date, payment) 
-                                                 VALUES (@customerid, @date, @amount)";
-                        using (var cmdInsert = new MySqlCommand(insertPayment, conn, tran))
+                        cmd.Parameters.AddWithValue("@customerid", customerid);
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            cmdInsert.Parameters.AddWithValue("@customerid", customerid);
-                            cmdInsert.Parameters.AddWithValue("@date", DateTime.Now);
-                            cmdInsert.Parameters.AddWithValue("@amount", paymentAmount);
-                            cmdInsert.ExecuteNonQuery();
-                        }
-
-                        // 2. Fetch unpaid sales
-                        string selectQuery = @"SELECT sale_id, total_amount, paid_amount
-                                               FROM sales
-                                               WHERE customer_id = @customerid 
-                                               AND (total_amount - paid_amount) > 0
-                                               ORDER BY sale_date ASC, sale_id ASC";
-                        using (var cmd = new MySqlCommand(selectQuery, conn, tran))
-                        {
-                            cmd.Parameters.AddWithValue("@customerid", customerid);
-                            using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                var sales = new List<(int id, decimal total, decimal paid)>();
-                                while (reader.Read())
-                                {
-                                    sales.Add((
-                                        reader.GetInt32("sale_id"),
-                                        reader.GetDecimal("total_amount"),
-                                        reader.GetDecimal("paid_amount")
-                                    ));
-                                }
-                                reader.Close();
-
-                                // 3. Distribute payment
-                                foreach (var sale in sales)
-                                {
-                                    if (paymentAmount <= 0) break;
-
-                                    decimal remaining = sale.total - sale.paid;
-                                    decimal toPay = Math.Min(paymentAmount, remaining);
-
-                                    string updateQuery = @"UPDATE sales 
-                                                           SET paid_amount = paid_amount + @toPay 
-                                                           WHERE sale_id = @sale_id";
-                                    using (var updateCmd = new MySqlCommand(updateQuery, conn, tran))
-                                    {
-                                        updateCmd.Parameters.AddWithValue("@toPay", toPay);
-                                        updateCmd.Parameters.AddWithValue("@sale_id", sale.id);
-                                        updateCmd.ExecuteNonQuery();
-                                    }
-
-                                    paymentAmount -= toPay;
-                                }
+                                sales.Add((
+                                    reader.GetInt32("sale_id"),
+                                    reader.GetDecimal("total_amount"),
+                                    reader.GetDecimal("paid_amount")
+                                ));
                             }
                         }
-
-                        tran.Commit();
                     }
+
+                    decimal remainingPayment = paymentAmount;
+
+                    // 2. Distribute payment to sales and record each payment
+                    foreach (var sale in sales)
+                    {
+                        if (remainingPayment <= 0) break;
+
+                        decimal saleRemaining = sale.total - sale.paid;
+                        decimal toPay = Math.Min(remainingPayment, saleRemaining);
+
+                        if (toPay > 0)
+                        {
+                            // Update sale paid amount
+                            string updateQuery = @"UPDATE sales 
+                                           SET paid_amount = paid_amount + @toPay 
+                                           WHERE sale_id = @sale_id";
+                            using (var updateCmd = new MySqlCommand(updateQuery, conn, tran))
+                            {
+                                updateCmd.Parameters.AddWithValue("@toPay", toPay);
+                                updateCmd.Parameters.AddWithValue("@sale_id", sale.id);
+                                updateCmd.ExecuteNonQuery();
+                            }
+
+                            // Record the payment for this specific sale
+                            string insertPayment = @"INSERT INTO customerpricerecord 
+                                           (customer_id, sale_id, date, payment, remarks) 
+                                           VALUES (@customerid, @saleid, @date, @amount, @remarks)";
+                            using (var cmdInsert = new MySqlCommand(insertPayment, conn, tran))
+                            {
+                                cmdInsert.Parameters.AddWithValue("@customerid", customerid);
+                                cmdInsert.Parameters.AddWithValue("@saleid", sale.id);
+                                cmdInsert.Parameters.AddWithValue("@date", DateTime.Now);
+                                cmdInsert.Parameters.AddWithValue("@amount", toPay);
+                                cmdInsert.Parameters.AddWithValue("@remarks", $"Payment applied to sale #{sale.id}");
+                                cmdInsert.ExecuteNonQuery();
+                            }
+
+                            remainingPayment -= toPay;
+                        }
+                    }
+
+                    // 3. Handle any overpayment (create a credit record)
+                    if (remainingPayment > 0)
+                    {
+                        string overpaymentQuery = @"INSERT INTO customerpricerecord 
+                                          (customer_id, sale_id, date, payment, remarks) 
+                                          VALUES (@customerid, 0, @date, @amount, @remarks)";
+                        using (var overCmd = new MySqlCommand(overpaymentQuery, conn, tran))
+                        {
+                            overCmd.Parameters.AddWithValue("@customerid", customerid);
+                            overCmd.Parameters.AddWithValue("@saleid", 0); // 0 indicates credit
+                            overCmd.Parameters.AddWithValue("@date", DateTime.Now);
+                            overCmd.Parameters.AddWithValue("@amount", remainingPayment);
+                            overCmd.Parameters.AddWithValue("@remarks", "Credit balance");
+                            overCmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    tran.Commit();
+                    return true;
                 }
-                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error adding company payment", ex);
+                tran?.Rollback();
+                throw new Exception("Error adding customer payment", ex);
             }
         }
 

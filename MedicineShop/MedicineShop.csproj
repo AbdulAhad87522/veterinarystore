@@ -168,6 +168,7 @@
     <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\invoices.cs" />
     <Compile Include="UI\HomeContentform.cs">
       <SubType>Form</SubType>
     </Compile>
