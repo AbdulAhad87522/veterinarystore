@@ -285,7 +285,7 @@ namespace fertilizesop.UI
             {
                 DataGridViewRow selectedrow = dgvcustomersearch.Rows[e.RowIndex];
 
-                string name = selectedrow.Cells["name"].Value.ToString();
+                string name = selectedrow.Cells["full_name"].Value.ToString();
                 txtcustsearch.Text = name;
                 dgvcustomersearch.Visible = false;
             }

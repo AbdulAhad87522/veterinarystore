@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MedicineShop.BL.Models;
 using MedicineShop.Interfaces.DLInterfaces;
 using MySql.Data.MySqlClient;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MedicineShop.DL
 {
@@ -21,12 +17,16 @@ namespace MedicineShop.DL
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    string query = @"SELECT b.customer_id, c.full_name, SUM(b.total_amount) AS total_price, SUM(b.paid_amount) AS paid, (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
+                    string query = @"SELECT b.customer_id, 
+                                            c.full_name, 
+                                            SUM(b.total_amount) AS total_amount, 
+                                            SUM(b.paid_amount) AS paid, 
+                                            (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
                                      FROM sales b
                                      JOIN customers c ON b.customer_id = c.customer_id
                                      WHERE c.full_name LIKE @search OR b.customer_id LIKE @search
                                      GROUP BY b.customer_id, c.full_name";
-                    using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@search", $"%{text}%");
                         using (var reader = cmd.ExecuteReader())
@@ -35,9 +35,9 @@ namespace MedicineShop.DL
                             {
                                 custbill bill = new custbill
                                 {
-                                    customer_id = reader.GetInt32("company_id"),
-                                    full_name = reader.GetString("company_name"),
-                                    total_amount = reader.GetDecimal("total_price"),
+                                    customer_id = reader.GetInt32("customer_id"),
+                                    full_name = reader.GetString("full_name"),
+                                    total_amount = reader.GetDecimal("total_amount"),
                                     paid = reader.GetDecimal("paid"),
                                     remaining = reader.GetDecimal("remaining")
                                 };
@@ -52,10 +52,7 @@ namespace MedicineShop.DL
                 throw new Exception("Error fetching company bills", ex);
             }
             return companyBills;
-
         }
-
-      
 
         public List<custbill> GetCustomerBills(int companyid)
         {
@@ -66,23 +63,27 @@ namespace MedicineShop.DL
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    string query = @"SELECT b.customer_id, c.full_name, SUM(b.total_amount) AS total_price, SUM(b.paid_amount) AS paid, (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
+                    string query = @"SELECT b.customer_id, 
+                                            c.full_name, 
+                                            SUM(b.total_amount) AS total_amount, 
+                                            SUM(b.paid_amount) AS paid, 
+                                            (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
                                      FROM sales b
                                      JOIN customers c ON b.customer_id = c.customer_id
-                                     WHERE b.customer_id LIKE @search
+                                     WHERE b.customer_id = @search
                                      GROUP BY b.customer_id, c.full_name";
-                    using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@search", $"%{companyid}%");
+                        cmd.Parameters.AddWithValue("@search", companyid);
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 custbill bill = new custbill
                                 {
-                                    customer_id = reader.GetInt32("company_id"),
-                                    full_name = reader.GetString("company_name"),
-                                    total_amount = reader.GetDecimal("total_price"),
+                                    customer_id = reader.GetInt32("customer_id"),
+                                    full_name = reader.GetString("full_name"),
+                                    total_amount = reader.GetDecimal("total_amount"),
                                     paid = reader.GetDecimal("paid"),
                                     remaining = reader.GetDecimal("remaining")
                                 };
@@ -97,8 +98,8 @@ namespace MedicineShop.DL
                 throw new Exception("Error fetching company bills", ex);
             }
             return companyBills;
-
         }
+
         public bool AddCustomerPayment(int customerid, decimal paymentAmount)
         {
             try
@@ -108,10 +109,10 @@ namespace MedicineShop.DL
                     conn.Open();
                     using (var tran = conn.BeginTransaction())
                     {
-                        // 1. Insert into payment_records
+                        // 1. Insert into customerpricerecord
                         string insertPayment = @"INSERT INTO customerpricerecord (customer_id, date, payment) 
-                                         VALUES (@customerid, @date, @amount)";
-                        using (var cmdInsert = new MySql.Data.MySqlClient.MySqlCommand(insertPayment, conn, tran))
+                                                 VALUES (@customerid, @date, @amount)";
+                        using (var cmdInsert = new MySqlCommand(insertPayment, conn, tran))
                         {
                             cmdInsert.Parameters.AddWithValue("@customerid", customerid);
                             cmdInsert.Parameters.AddWithValue("@date", DateTime.Now);
@@ -119,13 +120,13 @@ namespace MedicineShop.DL
                             cmdInsert.ExecuteNonQuery();
                         }
 
-                        // 2. Fetch unpaid batches in order
+                        // 2. Fetch unpaid sales
                         string selectQuery = @"SELECT sale_id, total_amount, paid_amount
-                                       FROM sales
-                                       WHERE customer_id = @customerid 
-                                       AND (total_amount - paid_amount) > 0
-                                       ORDER BY sale_date ASC, sale_id ASC";
-                        using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(selectQuery, conn, tran))
+                                               FROM sales
+                                               WHERE customer_id = @customerid 
+                                               AND (total_amount - paid_amount) > 0
+                                               ORDER BY sale_date ASC, sale_id ASC";
+                        using (var cmd = new MySqlCommand(selectQuery, conn, tran))
                         {
                             cmd.Parameters.AddWithValue("@customerid", customerid);
                             using (var reader = cmd.ExecuteReader())
@@ -141,7 +142,7 @@ namespace MedicineShop.DL
                                 }
                                 reader.Close();
 
-                                // 3. Distribute payment across batches
+                                // 3. Distribute payment
                                 foreach (var sale in sales)
                                 {
                                     if (paymentAmount <= 0) break;
@@ -150,9 +151,9 @@ namespace MedicineShop.DL
                                     decimal toPay = Math.Min(paymentAmount, remaining);
 
                                     string updateQuery = @"UPDATE sales 
-                                                   SET paid_amount = paid_amount + @toPay 
-                                                   WHERE sale_id = @sale_id";
-                                    using (var updateCmd = new MySql.Data.MySqlClient.MySqlCommand(updateQuery, conn, tran))
+                                                           SET paid_amount = paid_amount + @toPay 
+                                                           WHERE sale_id = @sale_id";
+                                    using (var updateCmd = new MySqlCommand(updateQuery, conn, tran))
                                     {
                                         updateCmd.Parameters.AddWithValue("@toPay", toPay);
                                         updateCmd.Parameters.AddWithValue("@sale_id", sale.id);
@@ -175,8 +176,7 @@ namespace MedicineShop.DL
             }
         }
 
-
-        public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId) //getpaymentrecord
+        public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId)
         {
             var records = new List<custPaymentRecord>();
 
@@ -185,19 +185,18 @@ namespace MedicineShop.DL
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     string query = @"
-                SELECT 
-                    p.record_id,
-                    p.customer_id,
-                    p.date,
-                    p.payment,
-                    c.full_name
-                FROM customerpricerecord p
-                JOIN customers c ON p.customer_id = c.customer_id
-                WHERE p.customer_id = @companyId
-                ORDER BY p.date DESC;
-            ";
+                        SELECT 
+                            p.record_id,
+                            p.customer_id,
+                            p.date,
+                            p.payment,
+                            c.full_name
+                        FROM customerpricerecord p
+                        JOIN customers c ON p.customer_id = c.customer_id
+                        WHERE p.customer_id = @companyId
+                        ORDER BY p.date DESC;";
 
-                    using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@companyId", companyId);
                         conn.Open();
@@ -208,11 +207,11 @@ namespace MedicineShop.DL
                             {
                                 var record = new custPaymentRecord
                                 {
-                                    PaymentId = reader.GetInt32("payment_id"),
-                                    customerId = reader.GetInt32("company_id"),
-                                    Date = reader.GetDateTime("payment_date"),
-                                    Amount = reader.GetDecimal("amount"),
-                                    CustomerName = reader.GetString("company_name")
+                                    PaymentId = reader.GetInt32("record_id"),
+                                    customerId = reader.GetInt32("customer_id"),
+                                    Date = reader.GetDateTime("date"),
+                                    Amount = reader.GetDecimal("payment"),
+                                    CustomerName = reader.GetString("full_name")
                                 };
                                 records.Add(record);
                             }
@@ -228,8 +227,7 @@ namespace MedicineShop.DL
             return records;
         }
 
-
-        public List<custPaymentRecord> GetcustPaymentRecords(int companyId) //getcompanypaymentrecord
+        public List<custPaymentRecord> GetcustPaymentRecords(int companyId)
         {
             var records = new List<custPaymentRecord>();
             try
@@ -238,19 +236,18 @@ namespace MedicineShop.DL
                 {
                     conn.Open();
                     string query = @"
-                    SELECT 
-                        pr.record_id,
-                        pr.customer_id,
-                        pr.date,
-                        pr.payment,
-                        pb.total_amount,
-                        pb.paid_amount,
-                        (pb.total_amount - pb.paid_amount) AS remaining_balance
-                    FROM customerpricerecord pr
-                    JOIN sales pb ON pr.customer_id = pb.customer_id
-                    WHERE pr.customer_id = @CompanyId
-                    ORDER BY pr.date DESC;
-                ";
+                        SELECT 
+                            pr.record_id,
+                            pr.customer_id,
+                            pr.date,
+                            pr.payment,
+                            pb.total_amount,
+                            pb.paid_amount,
+                            (pb.total_amount - pb.paid_amount) AS remaining_balance
+                        FROM customerpricerecord pr
+                        JOIN sales pb ON pr.customer_id = pb.customer_id
+                        WHERE pr.customer_id = @CompanyId
+                        ORDER BY pr.date DESC;";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -262,13 +259,12 @@ namespace MedicineShop.DL
                             {
                                 var record = new custPaymentRecord
                                 {
-                                    PaymentId = reader.GetInt32("payment_id"),
-                                    customerId = reader.GetInt32("company_id"),
-                                    Date = reader.GetDateTime("payment_date"),
-                                    Amount = reader.GetDecimal("amount"),
-                                    Status = reader.GetString("status"),
-                                    TotalPrice = reader.GetDecimal("total_price"),
-                                    Paid = reader.GetDecimal("paid"),
+                                    PaymentId = reader.GetInt32("record_id"),
+                                    customerId = reader.GetInt32("customer_id"),
+                                    Date = reader.GetDateTime("date"),
+                                    Amount = reader.GetDecimal("payment"),
+                                    TotalPrice = reader.GetDecimal("total_amount"),
+                                    Paid = reader.GetDecimal("paid_amount"),
                                     RemainingBalance = reader.GetDecimal("remaining_balance")
                                 };
                                 records.Add(record);
@@ -284,10 +280,5 @@ namespace MedicineShop.DL
 
             return records;
         }
-
-        //List<custbill> Icustomerbilldl.GetCustomerBills(string text)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

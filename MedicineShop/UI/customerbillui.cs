@@ -36,7 +36,7 @@ namespace MedicineShop.UI
             try
             {
                 dataGridView2.DataSource = ibl.GetAllCustomerBills(search);
-                dataGridView2.Columns["company_id"].Visible = false;
+                //dataGridView2.Columns["company_id"].Visible = false;
                 UIHelper.AddButtonColumn(dataGridView2, "payment", "payment", "Payment");
                 UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
             }
@@ -109,6 +109,11 @@ namespace MedicineShop.UI
         private void iconButton4_Click(object sender, EventArgs e)
         {
             panelbill.Visible = false;
+        }
+
+        private void customerbillui_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

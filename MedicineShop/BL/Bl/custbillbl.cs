@@ -16,7 +16,7 @@ namespace MedicineShop.BL.Bl
             this.idl = idl;
         }
 
-        List<custbill> Icustomerbillbl.GetAllCustomerBills(string search)
+        List<custbill> GetAllCustomerBills(string search)
         {
             return idl.GetCustomerBills(search);
         }
@@ -48,6 +48,11 @@ namespace MedicineShop.BL.Bl
             if (companyId <= 0)
                 throw new ArgumentException("Invalid customer ID.");
             return idl.GetCustomerBills(companyId);
+        }
+
+        List<custbill> Icustomerbillbl.GetAllCustomerBills(string search)
+        {
+            return GetAllCustomerBills(search);
         }
     }
 }

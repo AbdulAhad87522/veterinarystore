@@ -16,5 +16,10 @@ namespace MedicineShop.UI
         {
             InitializeComponent();
         }
+
+        private void Batchform_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

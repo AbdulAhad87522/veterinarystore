@@ -26,15 +26,16 @@ namespace MedicineShop.DL
                                         m.name, 
                                         c.company_name, 
                                         m.sale_price,
-                                        b.stock,
-                                        m.Packing, 
+                                        b.quantity_remaining,
+                                        p.packing_name, 
                                         ca.category_name, 
                                         b.expiry_date
                                     FROM batch_items b
                                     JOIN medicines m ON m.product_id = b.product_id
                                     JOIN company c ON c.company_id = m.company_id
+    JOIN packing p ON m.packing_id = p.packing_id
                                     JOIN categories ca ON ca.category_id = m.Category_id
-                                    WHERE m.name LIKE @text and b.stock != 0
+                                    WHERE m.name LIKE @text and b.quantity_remaining != 0
                                     ORDER BY m.name, b.expiry_date;
                                     ";
 
@@ -58,7 +59,7 @@ namespace MedicineShop.DL
                 using (var con = DatabaseHelper.Instance.GetConnection())
                 {
                     con.Open();
-                    string query = "select customer_id from customers where concat(first_name,' ',last_name) = @text";
+                    string query = "select customer_id from customers where full_name = @text";
                     using (MySqlCommand cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.AddWithValue("@text", text);
@@ -79,7 +80,7 @@ namespace MedicineShop.DL
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
                 con.Open();
-                string query = "SELECT CONCAT(first_name, ' ', last_name) as name, address, phone FROM customers WHERE CONCAT(first_name, ' ', last_name) LIKE @text";
+                string query = "SELECT  full_name, address, phone FROM customers WHERE full_name LIKE @text";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
@@ -193,7 +194,7 @@ namespace MedicineShop.DL
                                                      FROM batch_items 
                                                      WHERE product_id = @product_id 
                                                      AND expiry_date = @expiry_date 
-                                                     AND stock >= @quantity 
+                                                     AND quantity_remaining >= @quantity 
                                                      ORDER BY expiry_date, batch_item_id 
                                                      LIMIT 1";
 
@@ -227,7 +228,7 @@ namespace MedicineShop.DL
 
                                         // Update batch stock
                                         string queryupdatequantity = @"UPDATE batch_items 
-                                          SET stock = stock - @quantitysold 
+                                          SET quantity_remaining = quantity_remaining - @quantitysold 
                                           WHERE batch_item_id = @batch_item_id";
 
                                         using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))

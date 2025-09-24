@@ -168,6 +168,12 @@
     <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="UI\HomeContentform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\HomeContentform.Designer.cs">
+      <DependentUpon>HomeContentform.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\DLInterfaces\IBatchesDl.cs" />
     <Compile Include="Interfaces\DLInterfaces\IBatchItemsDl.cs" />
     <Compile Include="Interfaces\DLInterfaces\ICompanyBillsDl.cs" />
@@ -298,6 +304,9 @@
       <DependentUpon>Sample.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UIHelper.cs" />
+    <EmbeddedResource Include="UI\HomeContentform.resx">
+      <DependentUpon>HomeContentform.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\AddCategory.resx">
       <DependentUpon>AddCategory.cs</DependentUpon>
     </EmbeddedResource>
