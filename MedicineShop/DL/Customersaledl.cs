@@ -11,6 +11,8 @@ using QuestPDF.Infrastructure;
 using System.Windows.Forms;
 using QuestPDF.Helpers;
 using System.Xml.Linq;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace MedicineShop.DL
 {
@@ -167,6 +169,139 @@ namespace MedicineShop.DL
                     });
                 });
             }).GeneratePdf(filePath);
+        }
+
+        public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid)
+        {
+            PrintDocument printDocument = new PrintDocument();
+
+            // Set up for 80mm thermal printer
+            printDocument.DefaultPageSettings.PaperSize = new PaperSize("Receipt", 280, 0);
+            printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
+
+            Font receiptFont = new Font("Consolas", 8, FontStyle.Regular);
+            Font boldFont = new Font("Consolas", 8, FontStyle.Bold);
+            Font headerFont = new Font("Consolas", 12, FontStyle.Bold); // Bigger font for header
+            int currentY = 5;
+
+            printDocument.PrintPage += (sender, e) =>
+            {
+                Graphics g = e.Graphics;
+                int width = e.PageBounds.Width;
+
+                // Helper functions
+                void DrawText(string text, Font font = null, int offsetX = 0)
+                {
+                    font = font ?? receiptFont;
+                    g.DrawString(text, font, Brushes.Black, offsetX, currentY);
+                    currentY += (int)g.MeasureString(text, font).Height + 1;
+                }
+
+                void DrawCenteredText(string text, Font font = null)
+                {
+                    font = font ?? receiptFont;
+                    SizeF textSize = g.MeasureString(text, font);
+                    float x = (width - textSize.Width) / 2;
+                    g.DrawString(text, font, Brushes.Black, x, currentY);
+                    currentY += (int)textSize.Height + 1;
+                }
+
+                void DrawLine()
+                {
+                    g.DrawLine(Pens.Black, 10, currentY, width - 10, currentY);
+                    currentY += 5;
+                }
+
+                void DrawLeftRight(string left, string right)
+                {
+                    g.DrawString(left, receiptFont, Brushes.Black, 10, currentY);
+                    SizeF rightSize = g.MeasureString(right, receiptFont);
+                    g.DrawString(right, receiptFont, Brushes.Black, width - rightSize.Width - 10, currentY);
+                    currentY += (int)rightSize.Height + 1;
+                }
+
+                // --- Header with Double Line Big Font ---
+                DrawCenteredText("ALI VETERINARY", headerFont);
+                DrawCenteredText("CLINIC", headerFont);
+                DrawCenteredText("office # 39 & 40, 1st floor Gallery 3, Rex city, Sitiana Road");
+                DrawCenteredText("Phone: 0300-6634245");
+                DrawLine();
+
+                // --- Customer Info ---
+                DrawLeftRight($"Customer: {customerName}", $"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
+                DrawLine();
+
+                // --- Table Header ---
+                DrawCenteredText("----------------------------------------");
+                DrawText("MEDIC         QTY PRICE DISC TOTAL");
+                DrawCenteredText("----------------------------------------");
+
+                // --- Cart Items ---
+                decimal totalDiscount = 0;
+                decimal subTotal = 0;
+
+                foreach (DataGridViewRow row in cart.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    string name = row.Cells["name"].Value?.ToString() ?? "";
+                    string qty = row.Cells["quantity"].Value?.ToString()?.PadLeft(2);
+                    string price = row.Cells["sale_price"].Value?.ToString()?.PadLeft(5);
+                    string discount = row.Cells["discount"].Value?.ToString()?.PadLeft(3);
+                    string totalPrice = row.Cells["final"].Value?.ToString()?.PadLeft(6);
+
+                    if (decimal.TryParse(row.Cells["discount"].Value?.ToString(), out decimal discVal))
+                        totalDiscount += discVal * Convert.ToInt32(row.Cells["quantity"].Value);
+                    if (decimal.TryParse(row.Cells["final"].Value?.ToString(), out decimal itemTotal))
+                        subTotal += itemTotal;
+
+                    // Split name across lines
+                    string[] nameParts = name.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
+                    string firstWord = nameParts.Length > 0 ? nameParts[0] : name;
+                    string[] remainingWords = nameParts.Skip(1).ToArray();
+
+                    // First line with first word and all data
+                    string firstLine = $"{firstWord,-12}{qty} {price} {discount} {totalPrice}";
+                    DrawText(firstLine);
+
+                    // Remaining words as new lines
+                    foreach (var word in remainingWords)
+                    {
+                        DrawText($"    {word}"); // 4 spaces indentation
+                    }
+                }
+
+                // --- Summary ---
+                DrawCenteredText("----------------------------------------");
+                DrawLeftRight($"SUBTOTAL:", $"Rs. {(subTotal + totalDiscount):N0}");
+                DrawLeftRight($"DISCOUNT:", $"Rs. {totalDiscount:N0}");
+                DrawLeftRight($"TOTAL:", $"Rs. {total:N0}");
+                DrawLeftRight($"PAID:", $"Rs. {paid:N0}");
+                DrawLeftRight($"BALANCE:", $"Rs. {(total - paid):N0}");
+                DrawCenteredText("----------------------------------------");
+
+                // --- Footer ---
+                currentY += 3;
+                DrawCenteredText("Thank you for your shopping here!", boldFont);
+                DrawLine();
+                DrawCenteredText("** SPECIAL OFFERS **", boldFont);
+                DrawCenteredText("Free diagnostics with any repair");
+                DrawCenteredText("10% discount on next purchase");
+                DrawCenteredText("Ask about our warranty plans!");
+                DrawCenteredText($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
+                currentY += 3;
+                DrawCenteredText("Developed By:");
+                DrawCenteredText("abdulahad18022@gmail.com");
+            };
+
+            // Show print dialog and print
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = printDocument;
+
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                printDocument.Print();
+            }
         }
 
 

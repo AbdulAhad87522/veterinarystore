@@ -710,6 +710,7 @@ namespace fertilizesop.UI
                 {
                     MessageBox.Show("Data saved successfully");
                     SavehthermalPdfInvoice();
+                    Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
                     clearallfields();
 
                     string tempFile = GetTempSaleFilePath();
