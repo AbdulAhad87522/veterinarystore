@@ -148,5 +148,10 @@ namespace MedicineShop.UI
                 MessageBox.Show("Please select a company to delete.");
             }
         }
+
+        private void Customermain_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -2,6 +2,7 @@
 using MedicineShop.BL;
 using MedicineShop.BL.Bl;
 using MedicineShop.DL;
+using MedicineShop.Interfaces.DLInterfaces;
 using MedicineShop.UI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,7 +25,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<MedicineMain>();
+            var mainForm = ServiceProvider.GetRequiredService<Dashboard>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
@@ -52,6 +53,12 @@ namespace MedicineShop
             services.AddTransient<AddBatchdetailsform>();
             services.AddTransient<HomeContentform>();
             services.AddTransient<MedicineMain>();
+            services.AddTransient<AddMedicine>();
+            services.AddTransient<Customersale>();
+            services.AddTransient<customerbillui>();
+            services.AddTransient<Customermain>();
+            services.AddTransient<CompanyMain>();
+
 
             // Register other dependencies like Bl classes, DbContext, etc.
             services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
@@ -60,7 +67,8 @@ namespace MedicineShop
             services.AddScoped<IBatchesDl, BatchesDl>();
             services.AddScoped<IBatchItemsBl, BatchItemsBl>();
             services.AddScoped<IBatchItemsDl, BatchItemsDl>();
-
+            services.AddScoped<Icustomerbillbl,custbillbl>();
+            services.AddScoped<Icustomerbilldl,Custbilldl>();
             // Add DbContext registration here if needed
         }
     }
