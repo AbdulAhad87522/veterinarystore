@@ -33,6 +33,7 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pckcmb = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,7 +52,6 @@
             this.lblProducts = new System.Windows.Forms.Label();
             this.lblQuantity = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pckcmb = new System.Windows.Forms.ComboBox();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -142,6 +142,16 @@
             this.panel2.Size = new System.Drawing.Size(566, 711);
             this.panel2.TabIndex = 207;
             // 
+            // pckcmb
+            // 
+            this.pckcmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pckcmb.FormattingEnabled = true;
+            this.pckcmb.Location = new System.Drawing.Point(138, 175);
+            this.pckcmb.Name = "pckcmb";
+            this.pckcmb.Size = new System.Drawing.Size(286, 37);
+            this.pckcmb.TabIndex = 221;
+            this.pckcmb.TextUpdate += new System.EventHandler(this.pckcmb_TextUpdate);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -180,7 +190,7 @@
             this.cmbCompany.Name = "cmbCompany";
             this.cmbCompany.Size = new System.Drawing.Size(286, 37);
             this.cmbCompany.TabIndex = 217;
-            this.cmbCompany.TextChanged += new System.EventHandler(this.cmbCompany_TextChanged);
+            this.cmbCompany.TextUpdate += new System.EventHandler(this.cmbCompany_TextUpdate);
             // 
             // cmbCategory
             // 
@@ -190,6 +200,7 @@
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(286, 37);
             this.cmbCategory.TabIndex = 216;
+            this.cmbCategory.TextUpdate += new System.EventHandler(this.cmbCategory_TextUpdate);
             this.cmbCategory.TextChanged += new System.EventHandler(this.comboCategory_TextChanged);
             // 
             // txtDesc
@@ -340,16 +351,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(566, 84);
             this.panel1.TabIndex = 206;
-            // 
-            // pckcmb
-            // 
-            this.pckcmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pckcmb.FormattingEnabled = true;
-            this.pckcmb.Location = new System.Drawing.Point(138, 175);
-            this.pckcmb.Name = "pckcmb";
-            this.pckcmb.Size = new System.Drawing.Size(286, 37);
-            this.pckcmb.TabIndex = 221;
-            this.pckcmb.TextChanged += new System.EventHandler(this.comboPacking_TextChanged);
             // 
             // AddMedicine
             // 
