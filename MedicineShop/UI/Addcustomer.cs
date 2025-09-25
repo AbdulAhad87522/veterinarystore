@@ -21,11 +21,19 @@ namespace MedicineShop.UI
         public Addcustomer()
         {
             InitializeComponent();
+            editbtn.Visible = false;
         }
 
         public Addcustomer(Customer customerToEdit)
         {
             InitializeComponent();
+            customer = customerToEdit;
+            txtName.Text = customer.full_name;
+            txtContact.Text = customer.Contact;
+            txtAddress.Text = customer.Address;
+
+            addbtn.Visible = false;   // Edit mode
+            editbtn.Visible = true;
         }
 
         private void editbtn_Click(object sender, EventArgs e)
@@ -37,7 +45,7 @@ namespace MedicineShop.UI
                 customer.Address = txtAddress.Text;
 
                 customerbl.UpdateCustomer(customer);
-                MessageBox.Show("Company updated successfully.");
+                MessageBox.Show("Customer updated successfully.");
                 this.Close();
             }
             catch (Exception ex)
@@ -58,7 +66,7 @@ namespace MedicineShop.UI
                 };
 
                 customerbl.AddCompany(customer);
-                MessageBox.Show("Company added successfully.");
+                MessageBox.Show("Customer added successfully.");
                 this.Close();
             }
             catch (Exception ex)

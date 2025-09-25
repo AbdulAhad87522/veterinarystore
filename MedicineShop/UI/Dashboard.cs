@@ -1,4 +1,6 @@
-﻿using FontAwesome.Sharp;
+﻿using fertilizesop.UI;
+using FontAwesome.Sharp;
+using MedicineShop.UI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace MedicineShop
@@ -29,7 +30,8 @@ namespace MedicineShop
 
         private void btninventory_Click(object sender, EventArgs e)
         {
-
+            var f=Program.ServiceProvider.GetRequiredService<MedicineMain>();
+            LoadFormIntoPanel(f);
         }
         public async void LoadFormIntoPanel(Form newForm)
         {
@@ -132,7 +134,8 @@ namespace MedicineShop
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            var f = Program.ServiceProvider.GetRequiredService<HomeContentform>();
+            LoadFormIntoPanel(f);
 
         }
 
@@ -141,6 +144,95 @@ namespace MedicineShop
             var f = Program.ServiceProvider.GetRequiredService<Batchform>();
             LoadFormIntoPanel(f);
             activebutton(sender, Color.FromArgb(253, 138, 114));
+        }
+
+        private void btndashboard_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<HomeContentform>();
+            LoadFormIntoPanel(f);
+        }
+
+        private void btnsale_Click(object sender, EventArgs e)
+        {
+            var f= Program.ServiceProvider.GetRequiredService<Customersale>();
+            LoadFormIntoPanel(f);
+        }
+        private void ExpandPanel(Panel panel, int expandedHeight)
+        {
+            panel.Height = expandedHeight;
+        }
+
+        private void CollapsePanel(Panel panel, int collapsedHeight)
+        {
+            panel.Height = collapsedHeight;
+        }
+        private void CollapseAllTogglePanels()
+        {
+            CollapsePanel(panelbatch, 60);
+            CollapsePanel(panelinventory, 60);
+        }
+        private void iconPictureBox1_Click(object sender, EventArgs e)
+        {
+            if (panelinventory.Height == 131)
+                CollapsePanel(panelinventory, 60);
+            else
+            {
+                CollapseAllTogglePanels();
+                ExpandPanel(panelinventory, 131);
+            }
+        }
+
+        private void iconPictureBox2_Click(object sender, EventArgs e)
+        {
+            if (panelbatch.Height == 131)
+                CollapsePanel(panelbatch, 60);
+            else
+            {
+                CollapseAllTogglePanels();
+                ExpandPanel(panelbatch, 131);
+            }
+        }
+
+        private void btnrecord_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<CompanyMain>();
+            f.ShowDialog(this);
+        }
+
+        private void btnbatchdetails_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<AddBatchdetailsform>();
+            LoadFormIntoPanel(f);
+        }
+
+        private void btnbatchdetails_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnsuppliers_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<CompanyMain>();
+            LoadFormIntoPanel(f);
+        }
+
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<CompanyBill>();
+            LoadFormIntoPanel(f);
+        }
+
+        private void iconButton3_Click(object sender, EventArgs e)
+        {
+            var f = Program.ServiceProvider.GetRequiredService<customerbillui>();
+            LoadFormIntoPanel(f);
+
+        }
+
+        private void iconButton4_Click(object sender, EventArgs e)
+        {
+            var f = Program.ServiceProvider.GetRequiredService<Customermain>();
+            LoadFormIntoPanel(f);
         }
     }
 }

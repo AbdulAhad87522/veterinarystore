@@ -35,6 +35,7 @@
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toplbl = new System.Windows.Forms.Label();
+            this.iconButton4 = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -142,6 +143,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
+            this.panel1.Controls.Add(this.iconButton4);
             this.panel1.Controls.Add(this.toplbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -161,6 +163,31 @@
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = "Batch Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // iconButton4
+            // 
+            this.iconButton4.BackColor = System.Drawing.Color.Transparent;
+            this.iconButton4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.iconButton4.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.iconButton4.FlatAppearance.BorderSize = 2;
+            this.iconButton4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
+            this.iconButton4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
+            this.iconButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton4.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iconButton4.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.iconButton4.IconChar = FontAwesome.Sharp.IconChar.RightFromBracket;
+            this.iconButton4.IconColor = System.Drawing.Color.White;
+            this.iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton4.IconSize = 40;
+            this.iconButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton4.Location = new System.Drawing.Point(0, 0);
+            this.iconButton4.Name = "iconButton4";
+            this.iconButton4.Size = new System.Drawing.Size(1439, 60);
+            this.iconButton4.TabIndex = 18;
+            this.iconButton4.Text = "Logout";
+            this.iconButton4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.iconButton4.UseVisualStyleBackColor = false;
             // 
             // Sample
             // 
@@ -190,5 +217,6 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label toplbl;
+        private FontAwesome.Sharp.IconButton iconButton4;
     }
 }

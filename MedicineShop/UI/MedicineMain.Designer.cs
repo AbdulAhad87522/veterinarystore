@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toplbl = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -68,37 +68,34 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.Location = new System.Drawing.Point(81, 150);
             this.txtSearch.Multiline = true;
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(1267, 56);
+            this.txtSearch.Size = new System.Drawing.Size(316, 51);
             this.txtSearch.TabIndex = 214;
             this.txtSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Baskerville Old Face", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Baskerville Old Face", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.label1.Location = new System.Drawing.Point(74, 109);
+            this.label1.Location = new System.Drawing.Point(77, 114);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(351, 32);
+            this.label1.Size = new System.Drawing.Size(293, 26);
             this.label1.TabIndex = 213;
             this.label1.Text = "Search Medicine by Name :";
             // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.OldLace;
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.AntiqueWhite;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.OldLace;
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -210,7 +207,7 @@
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.IconSize = 35;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(1168, 90);
+            this.iconButton1.Location = new System.Drawing.Point(1117, 150);
             this.iconButton1.Name = "iconButton1";
             this.iconButton1.Size = new System.Drawing.Size(231, 51);
             this.iconButton1.TabIndex = 215;
@@ -236,7 +233,7 @@
             this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton2.IconSize = 35;
             this.iconButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton2.Location = new System.Drawing.Point(907, 90);
+            this.iconButton2.Location = new System.Drawing.Point(864, 150);
             this.iconButton2.Name = "iconButton2";
             this.iconButton2.Size = new System.Drawing.Size(231, 51);
             this.iconButton2.TabIndex = 216;

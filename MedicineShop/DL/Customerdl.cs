@@ -26,7 +26,7 @@ namespace MedicineShop.DL
 
         public void AddCustomer(Customer cust)
         {
-            string query = "INSERT INTO customers (full_name, contact, address) VALUES (@name, @contact, @address)";
+            string query = "INSERT INTO customers (full_name, phone, address) VALUES (@name, @contact, @address)";
             var parameters = new[]
             {
                 new MySqlParameter("@name",  cust.full_name),
@@ -38,7 +38,7 @@ namespace MedicineShop.DL
 
         public void UpdateCustomer(Customer cust)
         {
-            string query = "UPDATE customers SET full_name=@name, phone=@contact, address=@address WHERE company_id=@id";
+            string query = "UPDATE customers SET full_name=@name, phone=@contact, address=@address WHERE customer_id=@id";
             var parameters = new[]
             {
                 new MySqlParameter("@id", cust.CustomerId),

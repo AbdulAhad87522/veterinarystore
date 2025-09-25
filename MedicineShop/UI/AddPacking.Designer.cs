@@ -214,6 +214,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "AddPacking";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AddPacking";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

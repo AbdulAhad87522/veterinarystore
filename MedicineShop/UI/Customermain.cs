@@ -49,9 +49,9 @@ namespace MedicineShop.UI
             grid.ReadOnly = true;
 
             // Optional: Hide ID column
-            if (grid.Columns.Contains("company_id"))
+            if (grid.Columns.Contains("customer_id"))
             {
-                grid.Columns["company_id"].Visible = false;
+                grid.Columns["customer_id"].Visible = false;
             }
         }
 
@@ -85,9 +85,9 @@ namespace MedicineShop.UI
             {
                 Customer customer = new Customer
                 {
-                    CustomerId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["company_id"].Value),
-                    full_name = dataGridView1.CurrentRow.Cells["company_name"].Value.ToString(),
-                    Contact = dataGridView1.CurrentRow.Cells["contact"].Value.ToString(),
+                    CustomerId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["customer_id"].Value),
+                    full_name = dataGridView1.CurrentRow.Cells["full_name"].Value.ToString(),
+                    Contact = dataGridView1.CurrentRow.Cells["phone"].Value.ToString(),
                     Address = dataGridView1.CurrentRow.Cells["address"].Value.ToString()
                 };
 
@@ -97,7 +97,7 @@ namespace MedicineShop.UI
             }
             else
             {
-                MessageBox.Show("Please select a company to edit.");
+                MessageBox.Show("Please select a Customer to edit.");
             }
         }
 
@@ -122,7 +122,7 @@ namespace MedicineShop.UI
 
                         if (rowsAffected > 0)
                         {
-                            MessageBox.Show("Company deleted successfully.");
+                            MessageBox.Show("customer deleted successfully.");
                             LoadCompanies();
                         }
                         else
@@ -145,8 +145,13 @@ namespace MedicineShop.UI
             }
             else
             {
-                MessageBox.Show("Please select a company to delete.");
+                MessageBox.Show("Please select a customer to delete.");
             }
+        }
+
+        private void Customermain_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
