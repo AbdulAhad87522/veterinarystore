@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MedicineShop.BL;
 using MedicineShop.DL;
 using MedicineShop.Models;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace MedicineShop.UI
 {
@@ -23,7 +24,10 @@ namespace MedicineShop.UI
         public AddMedicine(Medicine med = null)
         {
             InitializeComponent();
-            
+            this.FormBorderStyle = FormBorderStyle.FixedDialog; // Fixed size
+            this.MaximizeBox = false;  // disable maximize button
+            this.MinimizeBox = false;  // optional
+
 
 
             if (med != null)

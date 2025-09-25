@@ -12,6 +12,9 @@ namespace MedicineShop.UI
         public AddPacking()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedDialog; // Fixed size
+            this.MaximizeBox = false;  // disable maximize button
+            this.MinimizeBox = false;  // optional
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

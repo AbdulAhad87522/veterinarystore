@@ -102,6 +102,7 @@ namespace MedicineShop
             if (grid.Columns.Contains("company_id")) grid.Columns["company_id"].Visible = false;
             if (grid.Columns.Contains("Category_id")) grid.Columns["Category_id"].Visible = false;
             if (grid.Columns.Contains("packing_id")) grid.Columns["packing_id"].Visible = false;
+            if (grid.Columns.Contains("product_id")) grid.Columns["product_id"].Visible = false;
         }
 
 

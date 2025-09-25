@@ -70,7 +70,7 @@ namespace MedicineShop.DL
         public DataTable SearchMedicines(string keyword)
         {
             string query = @"SELECT m.product_id, m.name, m.description, c.company_name, cat.category_name, 
-                            m.packingId,p.packing_name m.sale_price, m.company_id, m.Category_id
+                            m.packing_id,p.packing_name,m.sale_price, m.company_id, m.Category_id
                      FROM medicines m
                      JOIN company c ON m.company_id = c.company_id
                      JOIN packing p ON m.packing_id = p.packing_id

@@ -1,5 +1,6 @@
 ﻿using MedicineShop.BL;
 using MedicineShop.Models;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
 using System.Windows.Forms;
 
@@ -12,6 +13,9 @@ namespace MedicineShop.UI
         public AddCategory()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedDialog; // Fixed size
+            this.MaximizeBox = false;  // disable maximize button
+            this.MinimizeBox = false;  // optional
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

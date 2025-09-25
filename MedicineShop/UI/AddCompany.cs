@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using MedicineShop.BL;
 using MedicineShop.Models;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace MedicineShop.UI
 {
@@ -14,6 +15,9 @@ namespace MedicineShop.UI
         public AddCompany()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedDialog; // Fixed size
+            this.MaximizeBox = false;  // disable maximize button
+            this.MinimizeBox = false;  // optional
             editbtn.Visible = false;  // Add mode
         }
 
