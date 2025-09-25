@@ -125,5 +125,10 @@ namespace MedicineShop.UI
         {
 
         }
+
+        private void txtSupplierName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

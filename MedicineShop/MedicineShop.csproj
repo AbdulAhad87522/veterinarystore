@@ -171,7 +171,11 @@
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DashboardRepository.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="Interfaces\DLInterfaces\ICategoryDL.cs" />
+    <Compile Include="Interfaces\DLInterfaces\ICompanyDL.cs" />
     <Compile Include="Interfaces\DLInterfaces\IDashboardRepository.cs" />
+    <Compile Include="Interfaces\DLInterfaces\IMedicineDL.cs" />
+    <Compile Include="Interfaces\DLInterfaces\IPackingDL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="UI\HomeContentform.cs">
       <SubType>Form</SubType>

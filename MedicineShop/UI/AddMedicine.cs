@@ -50,9 +50,44 @@ namespace MedicineShop.UI
             txtDesc.Text = _medicine.Description;
             txtPrice.Text = _medicine.SalePrice.ToString();
 
+            // ab DataSource pehle hi load ho chuka hoga
             cmbCompany.SelectedValue = _medicine.CompanyId;
             cmbCategory.SelectedValue = _medicine.CategoryId;
             pckcmb.SelectedValue = _medicine.PackingId;
+        }
+        private void BindSearchableCombo<T>(
+        ComboBox combo,
+        List<T> list,
+        string displayMember,
+        string valueMember,
+        string typedText)
+        {
+            string oldText = typedText;
+
+            combo.BeginUpdate();
+            combo.DataSource = null;
+
+            if (list.Count > 0)
+            {
+                combo.DisplayMember = displayMember;
+                combo.ValueMember = valueMember;
+                combo.DataSource = list;
+
+                combo.DroppedDown = true;
+
+                // Restore typed text + cursor
+                combo.Text = oldText;
+                combo.SelectionStart = oldText.Length;
+                combo.SelectionLength = 0;
+
+               
+            }
+            else
+            {
+                combo.DroppedDown = false;
+            }
+
+            combo.EndUpdate();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -93,57 +128,27 @@ namespace MedicineShop.UI
         // For searchable combobox (optional)
         private void cmbCompany_TextChanged(object sender, EventArgs e)
         {
-            string searchText = cmbCompany.Text.Trim();
-
-            var companies = _medicineBL.GetCompanyList(searchText);
-
-            if (companies != null && companies.Count > 0)
-            {
-                cmbCompany.Items.Clear();
-                foreach (var c in companies)
-                    cmbCompany.Items.Add(c);
-
-                cmbCompany.SelectionStart = cmbCompany.Text.Length;
-                cmbCompany.DroppedDown = true;
-                Cursor.Current = Cursors.Default;
-            }
+            
         }
 
 
         private void comboCategory_TextChanged(object sender, EventArgs e)
         {
-            string searchText = cmbCategory.Text.Trim();
-
-            var categories = _medicineBL.GetCategoryList(searchText);
-
-            if (categories != null && categories.Count > 0)
-            {
-                cmbCategory.Items.Clear();
-                foreach (var c in categories)
-                    cmbCategory.Items.Add(c);
-
-                cmbCategory.SelectionStart = cmbCategory.Text.Length;
-                cmbCategory.DroppedDown = true;
-                Cursor.Current = Cursors.Default;
-            }
+            
         }
+
+        private void cmbCategory_TextUpdate(object sender, EventArgs e)
+        {
+            string text = cmbCategory.Text.Trim();
+            var list = _medicineBL.GetCategoryList(text); // List<Category>
+
+            BindSearchableCombo(cmbCategory, list, "CategoryName", "CategoryId", text);
+        }
+
 
         private void comboPacking_TextChanged(object sender, EventArgs e)
         {
-            string searchText = pckcmb.Text.Trim();
-
-            var packing = _medicineBL.GetPackingList(searchText);
-
-            if (packing != null && packing.Count > 0)
-            {
-                pckcmb.Items.Clear();
-                foreach (var c in packing)
-                    pckcmb.Items.Add(c);
-
-                pckcmb.SelectionStart = cmbCategory.Text.Length;
-                pckcmb.DroppedDown = true;
-                Cursor.Current = Cursors.Default;
-            }
+           
         }
 
 
@@ -154,7 +159,23 @@ namespace MedicineShop.UI
 
         private void AddMedicine_Load(object sender, EventArgs e)
         {
-           
+    
+        }
+
+        private void cmbCompany_TextUpdate(object sender, EventArgs e)
+        {
+            string text = cmbCompany.Text.Trim();
+            var list = _medicineBL.GetCompanyList(text); // List<Company>
+
+            BindSearchableCombo(cmbCompany, list, "CompanyName", "CompanyId", text);
+        }
+
+        private void pckcmb_TextUpdate(object sender, EventArgs e)
+        {
+            string text = pckcmb.Text.Trim();
+            var list = _medicineBL.GetPackingList(text); // List<Packing>
+
+            BindSearchableCombo(pckcmb, list, "PackingName", "PackingId", text);
         }
     }
 }

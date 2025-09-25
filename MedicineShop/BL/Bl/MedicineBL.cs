@@ -20,9 +20,15 @@ namespace MedicineShop.BL
                 MessageBox.Show("Medicine name is required.");
                 return 0;
             }
-            if (med.CompanyId <= 0 || med.CategoryId <= 0)
+            // validate price
+            if (!decimal.TryParse(med.SalePrice.ToString(), out decimal price) || price <= 0)
             {
-                MessageBox.Show("Please select valid company and category.");
+                MessageBox.Show("Medicine price must be a valid positive number.");
+                return 0;
+            }
+            if (med.CompanyId <= 0 || med.CategoryId <= 0 || med.PackingId<=0)
+            {
+                MessageBox.Show("Please select valid company and category or Packing.");
                 return 0;
             }
 
@@ -44,7 +50,16 @@ namespace MedicineShop.BL
                 MessageBox.Show("Invalid medicine ID.");
                 return 0;
             }
-
+            if (!decimal.TryParse(med.SalePrice.ToString(), out decimal price) || price <= 0)
+            {
+                MessageBox.Show("Medicine price must be a valid positive number.");
+                return 0;
+            }
+            if (med.CompanyId <= 0 || med.CategoryId <= 0 || med.PackingId <= 0)
+            {
+                MessageBox.Show("Please select valid company and category or Packing.");
+                return 0;
+            }
             try
             {
                 return _medicineDL.UpdateMedicine(med);

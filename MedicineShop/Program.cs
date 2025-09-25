@@ -24,7 +24,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<HomeContentform>();
+            var mainForm = ServiceProvider.GetRequiredService<MedicineMain>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
@@ -51,11 +51,13 @@ namespace MedicineShop
             services.AddTransient<Batchform>();
             services.AddTransient<AddBatchdetailsform>();
             services.AddTransient<HomeContentform>();
+            services.AddTransient<MedicineMain>();
 
             // Register other dependencies like Bl classes, DbContext, etc.
             services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
             services.AddScoped<ICompanyBillBl, CompanyBillBl>();
             services.AddScoped<IBatchesBl, BatchesBl>();
+            services.AddScoped<IBatchesDl, BatchesDl>();
             services.AddScoped<IBatchItemsBl, BatchItemsBl>();
             services.AddScoped<IBatchItemsDl, BatchItemsDl>();
 

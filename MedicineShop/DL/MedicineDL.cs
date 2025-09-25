@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using MedicineShop.Interfaces.DLInterfaces;
 using MedicineShop.Models;
 using MySql.Data.MySqlClient;
 
 namespace MedicineShop.DL
 {
-    public class MedicineDL
+    public class MedicineDL:IMedicineDL
     {
         public int AddMedicine(Medicine medicine)
         {
@@ -83,21 +84,6 @@ namespace MedicineShop.DL
         new MySqlParameter("@keyword", "%" + keyword + "%")
     };
 
-            return DatabaseHelper.Instance.ExecuteDataTable(query, parameters);
-        }
-
-
-        public DataTable GetCompanies(string keyword = "")
-        {
-            string query = "SELECT company_id, company_name FROM company WHERE company_name LIKE @keyword";
-            MySqlParameter[] parameters = { new MySqlParameter("@keyword", "%" + keyword + "%") };
-            return DatabaseHelper.Instance.ExecuteDataTable(query, parameters);
-        }
-
-        public DataTable GetCategories(string keyword = "")
-        {
-            string query = "SELECT category_id, category_name FROM categories WHERE category_name LIKE @keyword";
-            MySqlParameter[] parameters = { new MySqlParameter("@keyword", "%" + keyword + "%") };
             return DatabaseHelper.Instance.ExecuteDataTable(query, parameters);
         }
 

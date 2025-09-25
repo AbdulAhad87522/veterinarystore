@@ -2,10 +2,11 @@
 using System.Data;
 using MySql.Data.MySqlClient;
 using MedicineShop.Models;
+using MedicineShop.Interfaces.DLInterfaces;
 
 namespace MedicineShop.DL
 {
-    public class CompanyDL
+    public class CompanyDL:ICompanyDL
     {
         private readonly DatabaseHelper db = DatabaseHelper.Instance;
 
