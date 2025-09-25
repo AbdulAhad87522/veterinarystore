@@ -402,6 +402,7 @@ namespace fertilizesop.UI
             if (string.IsNullOrWhiteSpace(txtproductsearch.Text))
             {
                 txtproductsearch.Text = string.Empty;
+                dgvproductsearch.Visible = false ;
                 txtproductsearch.Focus(); button2.Visible = false;
                 return;
             }

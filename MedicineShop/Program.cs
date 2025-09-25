@@ -24,7 +24,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<MedicineMain>();
+            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
@@ -48,6 +48,12 @@ namespace MedicineShop
             services.AddTransient<CompanyMain>();
             services.AddTransient<AddCompany>();
             services.AddTransient<CompanyBill>();
+            services.AddTransient<Customersale>();
+            services.AddTransient<Customermain>();
+            services.AddTransient<Addcustomer>();
+            services.AddTransient<AddMedicine>();
+
+
             services.AddTransient<Batchform>();
             services.AddTransient<AddBatchdetailsform>();
             services.AddTransient<HomeContentform>();
