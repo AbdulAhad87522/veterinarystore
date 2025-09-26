@@ -25,6 +25,7 @@ namespace MedicineShop
             InitializeComponent();
             this.Activated += Dashboard_Activated;
             Instance=this;
+            this.FormClosing += Dashboard_FormClosing;
 
         }
 
@@ -234,5 +235,41 @@ namespace MedicineShop
             var f = Program.ServiceProvider.GetRequiredService<Customermain>();
             LoadFormIntoPanel(f);
         }
+        private void Dashboard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "Do you want to back up the database before closing?",
+                "Backup Database",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    DatabaseHelper.Instance.BackupDatabase(@"D:\Backups");
+                    MessageBox.Show("Backup completed successfully!", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    // Optionally cancel closing if backup fails
+                    DialogResult retry = MessageBox.Show(
+                        "Backup failed: " + ex.Message + "\nDo you still want to exit?",
+                        "Backup Error",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (retry == DialogResult.No)
+                    {
+                        e.Cancel = true; // stop the app from closing
+                    }
+                }
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true; // user pressed Cancel → don’t exit
+            }
+        }
+
     }
 }

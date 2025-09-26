@@ -157,7 +157,7 @@
             this.pckcmb.Size = new System.Drawing.Size(321, 40);
             this.pckcmb.TabIndex = 221;
             this.pckcmb.SelectedIndexChanged += new System.EventHandler(this.pckcmb_SelectedIndexChanged);
-            this.pckcmb.TextUpdate += new System.EventHandler(this.pckcmb_TextUpdate);
+            //this.pckcmb.TextUpdate += new System.EventHandler(this.pckcmb_TextUpdate);
             // 
             // label6
             // 
@@ -198,7 +198,7 @@
             this.cmbCompany.Name = "cmbCompany";
             this.cmbCompany.Size = new System.Drawing.Size(321, 40);
             this.cmbCompany.TabIndex = 217;
-            this.cmbCompany.TextUpdate += new System.EventHandler(this.cmbCompany_TextUpdate);
+            //this.cmbCompany.TextUpdate += new System.EventHandler(this.cmbCompany_TextUpdate);
             // 
             // cmbCategory
             // 
@@ -209,7 +209,7 @@
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(321, 40);
             this.cmbCategory.TabIndex = 216;
-            this.cmbCategory.TextUpdate += new System.EventHandler(this.cmbCategory_TextUpdate);
+            //this.cmbCategory.TextUpdate += new System.EventHandler(this.cmbCategory_TextUpdate);
             this.cmbCategory.TextChanged += new System.EventHandler(this.comboCategory_TextChanged);
             // 
             // txtDesc

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Input;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
@@ -11,6 +13,9 @@ namespace MedicineShop
 {
     public sealed class DatabaseHelper
     {
+        private readonly string _connectionString =
+    ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+
         // Singleton instance
         private static readonly Lazy<DatabaseHelper> _instance = new Lazy<DatabaseHelper>(() => new DatabaseHelper());
 
@@ -235,9 +240,93 @@ namespace MedicineShop
 
             return dt;
         }
+        public  List<string> getcomapnynames(string keyword)
+        {
+            List<string> suppliers = new List<string>();
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT company_name FROM company WHERE company_name LIKE @keyword;";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
 
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                suppliers.Add(reader.GetString("company_name"));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving batches: " + ex.Message);
+            }
+            return suppliers;
+        }
+        public List<string> Getpacking(string keyword)
+        {
+            List<string> suppliers = new List<string>();
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT packing_name FROM packing WHERE packing_name LIKE @keyword;";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
 
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                suppliers.Add(reader.GetString("packing_name"));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving batches: " + ex.Message);
+            }
+            return suppliers;
+        }
+        public List<string> getcategories(string keyword)
+        {
+            List<string> suppliers = new List<string>();
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT category_name FROM categories WHERE category_name LIKE @keyword;";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
 
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                suppliers.Add(reader.GetString("category_name"));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving batches: " + ex.Message);
+            }
+            return suppliers;
+        }
         public int getcompany_id(string comapnyname)
         {
             try
@@ -245,7 +334,7 @@ namespace MedicineShop
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "Select  comapny_id from company where company_name=@name";
+                    string query = "Select  company_id from company where company_name=@name";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@name", comapnyname);
@@ -256,7 +345,47 @@ namespace MedicineShop
                     }
                 }
             }
-            catch (Exception ex) { throw new Exception("error ftechign company_id"+ex.Message); }
+            catch (Exception ex) { throw new Exception("error fetchign company_id"+ex.Message); }
+        }
+        public int getcategory_id(string comapnyname)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "Select  category_id from categories where category_name=@name";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", comapnyname);
+                        object result = cmd.ExecuteScalar();
+                        return Convert.ToInt32(result);
+
+
+                    }
+                }
+            }
+            catch (Exception ex) { throw new Exception("error fetchign company_id" + ex.Message); }
+        }
+        public int getpacking_id(string comapnyname)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = "Select  packing_id from packing where packing_name=@name";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", comapnyname);
+                        object result = cmd.ExecuteScalar();
+                        return Convert.ToInt32(result);
+
+
+                    }
+                }
+            }
+            catch (Exception ex) { throw new Exception("error fetchign company_id" + ex.Message); }
         }
         internal decimal getsaleprice(int product_id)
         {
@@ -320,6 +449,57 @@ namespace MedicineShop
             return dt;
         }
 
+        public void BackupDatabase(string backupPath)
+        {
+            try
+            {
+                var builder = new MySqlConnectionStringBuilder(_connectionString);
+
+                string server = builder.Server;
+                string user = builder.UserID;
+                string password = builder.Password;
+                string database = builder.Database;
+
+                // Ensure backup folder exists
+                if (!Directory.Exists(backupPath))
+                {
+                    Directory.CreateDirectory(backupPath);
+                }
+
+                string backupFile = Path.Combine(backupPath, $"{database}_backup.sql");
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    // 🔹 Use full path to mysqldump.exe
+                    FileName = @"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    Arguments = $"--host={server} --user={user} --password={password} {database}"
+                };
+
+                using (Process process = Process.Start(psi))
+                {
+                    string dumpData = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+
+                    if (process.ExitCode == 0)
+                    {
+                        File.WriteAllText(backupFile, dumpData); // overwrite old file
+                    }
+                    else
+                    {
+                        throw new Exception("mysqldump failed: " + error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Backup failed: " + ex.Message);
+            }
+        }
 
 
 

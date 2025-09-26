@@ -32,6 +32,7 @@ namespace MedicineShop.DL
 
         public int UpdateMedicine(Medicine medicine)
         {
+
             string query = @"UPDATE medicines 
                 SET name=@name, description=@desc, company_id=@companyId, category_id=@catId, packing_Id=@packing, sale_price=@price
                 WHERE product_id=@id";

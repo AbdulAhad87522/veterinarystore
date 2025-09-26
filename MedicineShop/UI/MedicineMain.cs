@@ -4,18 +4,20 @@ using System.Windows.Forms;
 using MedicineShop.BL;
 using MedicineShop.Models;
 using MedicineShop.UI;
+using TechStore.UI;
 
 namespace MedicineShop
 {
     public partial class MedicineMain : Form
     {
         private readonly MedicineBL _medicineBL = new MedicineBL();
-
+        private int SelectedId = -1;
         public MedicineMain()
         {
             InitializeComponent();
             LoadMedicines();
             CustomizeGrid();
+            panelbill.Visible = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -29,13 +31,18 @@ namespace MedicineShop
                 }
                 else if (keyData == (Keys.Control | Keys.E))
                 {
-                    btnEdit.PerformClick();
+                    dataGridView1_CellContentClick(this, new DataGridViewCellEventArgs(dataGridView1.Columns["Edit"].Index, dataGridView1.CurrentRow.Index));
                     return true;
                 }
 
                 else if (keyData == Keys.Delete)
                 {
                     btnDelete.PerformClick();
+                    return true;
+                }
+                else if (keyData == Keys.Escape && panelbill.Visible)
+                {
+                    panelbill.Visible = false;
                     return true;
                 }
 
@@ -50,6 +57,7 @@ namespace MedicineShop
         private void LoadMedicines()
         {
             dataGridView1.DataSource = _medicineBL.GetMedicines();
+            UIHelper.AddButtonColumn(dataGridView1, "Edit", "Edit", "Edit");
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -136,10 +144,13 @@ namespace MedicineShop
 
 
 
-            private void MedicineMain_Load(object sender, EventArgs e)
-            {
+        private void MedicineMain_Load(object sender, EventArgs e)
+        {
+            BindCompanies();
+            BindCategories();
+            BindPackings();
+        }
 
-            }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -148,7 +159,10 @@ namespace MedicineShop
             if (string.IsNullOrEmpty(keyword))
                 LoadMedicines();
             else
+            {
                 dataGridView1.DataSource = _medicineBL.SearchMedicines(keyword);
+                UIHelper.AddButtonColumn(dataGridView1, "Edit", "Edit", "Edit");
+            }
         }
 
         private void iconButton1_Click(object sender, EventArgs e)
@@ -165,7 +179,122 @@ namespace MedicineShop
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+            var row = dataGridView1.Rows[e.RowIndex];
+            SelectedId = Convert.ToInt32(row.Cells["product_id"].Value);
+            string columnName = dataGridView1.Columns[e.ColumnIndex].Name;
+            if (columnName == "Edit")
+            {
+                txtName.Text = row.Cells["name"].Value.ToString();
+                cmbCompany.Text = row.Cells["company_name"].Value.ToString();
+                txtPrice.Text = row.Cells["sale_price"].Value.ToString();
+                cmbCategory.Text = row.Cells["category_name"].Value.ToString();
+                pckcmb.Text = row.Cells["packing_name"].Value.ToString();
+                txtDesc.Text= row.Cells["description"].Value.ToString();
+                panelbill.Visible = true;
+                UIHelper.RoundPanelCorners(panelbill, 20);
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            string company_name = cmbCompany.Text;
+            string category_name = cmbCategory.Text;
+            string packing_name = pckcmb.Text;
+            string description = txtDesc.Text.Trim();
+            string name = txtName.Text.Trim();
+            decimal sale_price = decimal.TryParse(txtPrice.Text.Trim(), out var sp) ? sp : 0;
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(company_name) || string.IsNullOrWhiteSpace(category_name) || string.IsNullOrWhiteSpace(packing_name) || sale_price <= 0)
+            {
+                MessageBox.Show("Please fill all required fields with valid data.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                var medicine=new Medicine
+                {
+                    ProductId = SelectedId,
+                    Name = name,
+                    Description = description,
+                    SalePrice = sale_price,
+                    CompanyId=DatabaseHelper.Instance.getcompany_id(company_name),
+                    CategoryId=DatabaseHelper.Instance.getcategory_id(category_name),
+                    PackingId=DatabaseHelper.Instance.getpacking_id(packing_name)
+
+
+                };
+                int rows = _medicineBL.UpdateMedicine(medicine);
+                if (rows > 0)
+                {
+                    MessageBox.Show("Medicine updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadMedicines();
+                    panelbill.Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update medicine.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating medicine: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
+        private void BindCompanies()
+        {
+            var names = DatabaseHelper.Instance.getcomapnynames("");
+            cmbCompany.Items.Clear();
+            cmbCompany.Items.AddRange(names.ToArray());
+
+            cmbCompany.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbCompany.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbCompany.SelectedIndex = -1;
+        }
+
+        private void BindCategories()
+        {
+            var names = DatabaseHelper.Instance.getcategories("");
+            cmbCategory.Items.Clear();
+            cmbCategory.Items.AddRange(names.ToArray());
+
+            cmbCategory.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbCategory.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cmbCategory.SelectedIndex = -1;
+        }
+
+        private void BindPackings()
+        {
+            var names = DatabaseHelper.Instance.Getpacking("");
+            pckcmb.Items.Clear();
+            pckcmb.Items.AddRange(names.ToArray());
+
+            pckcmb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            pckcmb.AutoCompleteSource = AutoCompleteSource.ListItems;
+            pckcmb.SelectedIndex = -1;
+        }
+
+        private void loadbatches()
+        {
+            var batchNames = DatabaseHelper.Instance.getcomapnynames("");
+            if (batchNames != null && batchNames.Count > 0)
+            {
+                cmbCompany.Items.Clear();
+                cmbCompany.Items.AddRange(batchNames.ToArray());
+
+                var autoSource = new AutoCompleteStringCollection();
+                autoSource.AddRange(batchNames.ToArray());
+                cmbCompany.AutoCompleteCustomSource = autoSource;
+                cmbCompany.AutoCompleteMode = AutoCompleteMode.Suggest;
+                cmbCompany.SelectedIndex = -1;
+            }
+        }
+        private void iconButton4_Click(object sender, EventArgs e)
+        {
+            panelbill.Visible = false;
+        }
+    }
     } 
-}
+

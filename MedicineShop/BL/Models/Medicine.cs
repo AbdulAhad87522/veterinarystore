@@ -9,5 +9,8 @@
         public int CategoryId { get; set; }
         public int PackingId { get; set; }
         public decimal SalePrice { get; set; }
+        public string CompanyName { get; set; } // For display purposes
+        public string CategoryName { get; set; } // For display purposes
+        public string packingName { get; set; } // For display purposes
     }
 }
