@@ -19,6 +19,7 @@ namespace MedicineShop.UI
         private readonly MedicineBL _medicineBL = new MedicineBL();
         private readonly Medicine _medicine;
         private readonly bool _isEdit;
+        private List<string> _allProductNames;
 
 
         public AddMedicine(Medicine med = null)
@@ -27,7 +28,6 @@ namespace MedicineShop.UI
             this.FormBorderStyle = FormBorderStyle.FixedDialog; // Fixed size
             this.MaximizeBox = false;  // disable maximize button
             this.MinimizeBox = false;  // optional
-
 
 
             if (med != null)
@@ -180,6 +180,11 @@ namespace MedicineShop.UI
             var list = _medicineBL.GetPackingList(text); // List<Packing>
 
             BindSearchableCombo(pckcmb, list, "PackingName", "PackingId", text);
+        }
+
+        private void pckcmb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

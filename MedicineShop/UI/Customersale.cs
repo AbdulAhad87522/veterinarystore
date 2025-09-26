@@ -483,8 +483,8 @@ namespace fertilizesop.UI
             {
                 var data = new Temporarycustomersale
                 {
-                    customername = txtcustsearch.Text ?? "",
-                    productname = txtproductsearch.Text ?? "",
+                    //customername = txtcustsearch.Text ?? "",
+                    //productname = txtproductsearch.Text ?? "",
                     totaldiscount = int.TryParse(txtfinaldiscount.Text, out var discount) ? discount : 0,
                     finalpriceafterdisc = decimal.TryParse(txtfinalprice.Text, out var finalprice) ? finalprice : 0,
                     totalprice = decimal.TryParse(totalwithoutdisc.Text, out var total) ? total : 0,
@@ -532,8 +532,8 @@ namespace fertilizesop.UI
 
                 if (data == null) return;
 
-                txtcustsearch.Text = data.customername;
-                txtproductsearch.Text = data.productname;
+                //txtcustsearch.Text = data.customername;
+                //txtproductsearch.Text = data.productname;
                 txtfinaldiscount.Text = data.totaldiscount.ToString();
                 txtfinalprice.Text = data.finalpriceafterdisc.ToString();
                 totalwithoutdisc.Text = data.totalprice.ToString();

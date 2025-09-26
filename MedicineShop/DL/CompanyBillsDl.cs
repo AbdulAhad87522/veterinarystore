@@ -234,6 +234,7 @@ namespace MedicineShop.DL
                     SELECT 
                         pr.payment_id,
                         pr.company_id,
+                        pb.BatchName,
                         pr.payment_date,
                         pr.amount,
                         pb.status,
