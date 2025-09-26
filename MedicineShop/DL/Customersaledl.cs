@@ -26,6 +26,7 @@ namespace MedicineShop.DL
                 con.Open();
                 string query = @"SELECT 
                                         m.name, 
+                                        m.description,
                                         c.company_name, 
                                         m.sale_price,
                                         b.quantity_remaining,
@@ -37,7 +38,7 @@ namespace MedicineShop.DL
                                     JOIN company c ON c.company_id = m.company_id
                                     JOIN packing p ON m.packing_id = p.packing_id
                                     JOIN categories ca ON ca.category_id = m.category_id
-                                    WHERE m.name LIKE @text and b.quantity_remaining != 0
+                                    WHERE m.name LIKE @text and b.quantity_remaining != 0 AND b.expiry_date > NOW()
                                     ORDER BY m.name, b.expiry_date;
                                     ";
 

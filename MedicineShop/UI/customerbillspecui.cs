@@ -64,5 +64,10 @@ namespace MedicineShop.UI
                 lblpending.Text = " Rs. " + bill.remaining.ToString("N2");
             }
         }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
