@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using TechStore.UI;
 
 namespace MedicineShop.UI
@@ -23,6 +24,27 @@ namespace MedicineShop.UI
             UIHelper.StyleGridView(dataGridView2);
             panelbill.Visible = false;
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtpayement.Focused)
+                    {
+                        iconButton5.PerformClick();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
 
         private void CompanyBill_Load(object sender, EventArgs e)
         {

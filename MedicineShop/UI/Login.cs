@@ -27,17 +27,29 @@ namespace TechStore.UI
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Enter)
+            try
             {
-                if (txtpassword.Focused )
+                if (keyData == Keys.Enter)
                 {
-                    btnlogin.PerformClick();
-                    return true;
+                    if(txtname.Focused)
+                    {
+                        txtpassword.Focus();
+                        return true;
+                    }
+                    else if(txtpassword.Focused)
+                    {
+                        btnlogin.PerformClick();
+                        return true;
+                    }
                 }
-               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
         private void txtname_TextChanged(object sender, EventArgs e)
         {
 
@@ -81,6 +93,11 @@ namespace TechStore.UI
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

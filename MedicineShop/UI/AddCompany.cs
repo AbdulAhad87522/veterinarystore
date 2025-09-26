@@ -12,6 +12,40 @@ namespace MedicineShop.UI
         private readonly CompanyBL companyBL = new CompanyBL();
         private Company company;
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtName.Focused)
+                    {
+                        //string name = txtName.Text;
+                        txtContact.Focus();
+                        //txtName.Text = name;
+                        return true;
+                    }
+
+                    else if (txtContact.Focused)
+                    {
+                        txtAddress.Focus();
+                        return true;
+                    }
+
+                    else  if(txtAddress.Focused)
+                    {
+                        txtAddress.Focus();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         public AddCompany()
         {
             InitializeComponent();

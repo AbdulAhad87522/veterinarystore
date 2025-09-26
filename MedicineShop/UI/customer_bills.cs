@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using fertilizesop.BL.Bl;
 using fertilizesop.BL.Models;
 using fertilizesop.DL;
@@ -25,6 +26,27 @@ namespace fertilizesop.UI
             paneledit.Visible = false;
             //UIHelper.StyleGridView(dataGridView2);
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtpayment.Focused && paneledit.Visible)
+                    {
+                        btnsave1.PerformClick();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
 
         private void customer_bills_load(object sender, EventArgs e)
         {
@@ -164,20 +186,6 @@ namespace fertilizesop.UI
 
             dataGridView2.Columns.Add(btnDetails);
             dataGridView2.Columns.Add(btnPayment);
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == Keys.Enter)
-            {
-                if (paneledit.Visible)
-                {
-                    btnsave1.PerformClick();
-                    return true;
-                }
-
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void LoadBillingRecords(string searchTerm = "")
@@ -485,6 +493,11 @@ namespace fertilizesop.UI
             {
                 MessageBox.Show("Error calculating total due: " + ex.Message);
             }
+        }
+
+        private void txtdate_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

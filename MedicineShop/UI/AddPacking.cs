@@ -17,6 +17,27 @@ namespace MedicineShop.UI
             this.MinimizeBox = false;  // optional
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtName.Focused)
+                    {
+                        addbtn.Focus();
+                        return true;
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             try
@@ -45,6 +66,11 @@ namespace MedicineShop.UI
                 MessageBox.Show(ex.Message, "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

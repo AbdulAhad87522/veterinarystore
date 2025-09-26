@@ -18,6 +18,25 @@ namespace MedicineShop.UI
             this.MinimizeBox = false;  // optional
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if(keyData == Keys.Enter)
+                {
+                    if(txtCategoryName.Focused )
+                    {
+                        addbtn.PerformClick();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("error in event listener" , ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             try
@@ -46,6 +65,16 @@ namespace MedicineShop.UI
                 MessageBox.Show(ex.Message, "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void txtCategoryName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblBatch_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -25,6 +25,35 @@ namespace MedicineShop.UI
             CustomizeGrid();
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == (Keys.Control | Keys.A))
+                {
+                    btnAdd.PerformClick();
+                    return true;
+                }
+                else if (keyData == (Keys.Control | Keys.E))
+                {
+                    btnEdit.PerformClick();
+                    return true;
+                }
+
+                else if (keyData == Keys.Delete)
+                {
+                    btnDelete.PerformClick();
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void CustomizeGrid()
         {
             var grid = dataGridView1;
@@ -150,6 +179,11 @@ namespace MedicineShop.UI
         }
 
         private void Customermain_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
