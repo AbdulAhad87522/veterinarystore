@@ -3,6 +3,7 @@ using MedicineShop.BL;
 using MedicineShop.BL.Models;
 using MedicineShop.DL;
 using MedicineShop.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Data;
 using System.Drawing;
@@ -26,6 +27,7 @@ namespace MedicineShop.UI
         private bool isEditing = false;
         private bool batchSavedToDatabase = false;
         private DataTable batchItemsTable;
+        private bool suppressTextChanged = false;
 
         public AddBatchdetailsform(IBatchItemsBl batchItemsBl, IBatchesBl batchesBl)
         {
@@ -848,26 +850,49 @@ namespace MedicineShop.UI
                 switch (e.KeyCode)
                 {
                     case Keys.Down:
-                        if (dgvcompany.SelectedRows.Count == 0 || dgvcompany.CurrentCell.RowIndex < dgvcompany.Rows.Count - 1)
                         {
-                            int nextRow = dgvcompany.SelectedRows.Count == 0 ? 0 : dgvcompany.CurrentCell.RowIndex + 1;
-                            dgvcompany.ClearSelection();
-                            dgvcompany.Rows[nextRow].Selected = true;
-                            dgvcompany.CurrentCell = dgvcompany.Rows[nextRow].Cells[0];
+                            int currentRow = dgvcompany.CurrentCell?.RowIndex ?? -1;
+                            int nextRow = currentRow + 1;
+
+                            if (currentRow == -1) // nothing selected yet
+                                nextRow = 0;
+
+                            if (nextRow < dgvcompany.Rows.Count)
+                            {
+                                dgvcompany.ClearSelection();
+
+                                int firstVisibleColIndex = dgvcompany.Columns
+                                    .Cast<DataGridViewColumn>()
+                                    .First(c => c.Visible).Index;
+
+                                dgvcompany.Rows[nextRow].Selected = true;
+                                dgvcompany.CurrentCell = dgvcompany.Rows[nextRow].Cells[firstVisibleColIndex];
+                            }
+                            e.Handled = true;
+                            break;
                         }
-                        e.Handled = true;
-                        break;
 
                     case Keys.Up:
-                        if (dgvcompany.SelectedRows.Count > 0 && dgvcompany.CurrentCell.RowIndex > 0)
                         {
-                            int prevRow = dgvcompany.CurrentCell.RowIndex - 1;
-                            dgvcompany.ClearSelection();
-                            dgvcompany.Rows[prevRow].Selected = true;
-                            dgvcompany.CurrentCell = dgvcompany.Rows[prevRow].Cells[0];
+                            int currentRow = dgvcompany.CurrentCell?.RowIndex ?? -1;
+                            int prevRow = currentRow - 1;
+
+                            if (prevRow >= 0)
+                            {
+                                dgvcompany.ClearSelection();
+
+                                int firstVisibleColIndex = dgvcompany.Columns
+                                    .Cast<DataGridViewColumn>()
+                                    .First(c => c.Visible).Index;
+
+                                dgvcompany.Rows[prevRow].Selected = true;
+                                dgvcompany.CurrentCell = dgvcompany.Rows[prevRow].Cells[firstVisibleColIndex];
+                            }
+                            e.Handled = true;
+                            break;
                         }
-                        e.Handled = true;
-                        break;
+
+
 
                     case Keys.Enter:
                         if (dgvcompany.SelectedRows.Count > 0)
@@ -992,45 +1017,49 @@ namespace MedicineShop.UI
         {
             if (dgvmedicines.Visible && dgvmedicines.Rows.Count > 0)
             {
+                int firstVisibleCol = GetFirstVisibleColumnIndex(dgvmedicines);
+
                 switch (e.KeyCode)
                 {
                     case Keys.Down:
-                        if (dgvmedicines.SelectedRows.Count == 0 || dgvmedicines.CurrentCell.RowIndex < dgvmedicines.Rows.Count - 1)
                         {
-                            int nextRow = dgvmedicines.SelectedRows.Count == 0 ? 0 : dgvmedicines.CurrentCell.RowIndex + 1;
-                            dgvmedicines.ClearSelection();
+                            int currentRow = dgvmedicines.CurrentCell?.RowIndex ?? -1;
+                            int nextRow = (currentRow < dgvmedicines.Rows.Count - 1) ? currentRow + 1 : 0;
+
+                            dgvmedicines.CurrentCell = dgvmedicines.Rows[nextRow].Cells[firstVisibleCol];
                             dgvmedicines.Rows[nextRow].Selected = true;
-                            dgvmedicines.CurrentCell = dgvmedicines.Rows[nextRow].Cells[0];
                         }
                         e.Handled = true;
                         break;
 
                     case Keys.Up:
-                        if (dgvmedicines.SelectedRows.Count > 0 && dgvmedicines.CurrentCell.RowIndex > 0)
                         {
-                            int prevRow = dgvmedicines.CurrentCell.RowIndex - 1;
-                            dgvmedicines.ClearSelection();
+                            int currentRow = dgvmedicines.CurrentCell?.RowIndex ?? 0;
+                            int prevRow = (currentRow > 0) ? currentRow - 1 : dgvmedicines.Rows.Count - 1;
+
+                            dgvmedicines.CurrentCell = dgvmedicines.Rows[prevRow].Cells[firstVisibleCol];
                             dgvmedicines.Rows[prevRow].Selected = true;
-                            dgvmedicines.CurrentCell = dgvmedicines.Rows[prevRow].Cells[0];
                         }
                         e.Handled = true;
                         break;
 
                     case Keys.Enter:
-                        if (dgvmedicines.SelectedRows.Count > 0)
+                        if (dgvmedicines.CurrentRow != null)
                         {
-                            SelectMedicineFromGrid(dgvmedicines.SelectedRows[0]);
+                            SelectMedicineFromGrid(dgvmedicines.CurrentRow);
                             e.Handled = true;
                         }
                         break;
 
                     case Keys.Escape:
                         dgvmedicines.Visible = false;
+                        txtproduct.Focus();
                         e.Handled = true;
                         break;
                 }
             }
         }
+
 
         private void TxtProduct_Leave(object sender, EventArgs e)
         {
@@ -1076,17 +1105,17 @@ namespace MedicineShop.UI
             try
             {
                 selectedProductId = Convert.ToInt32(row.Cells["product_id"].Value);
-                txtsaleprice.Text=row.Cells["sale_price"].Value.ToString();
+                txtsaleprice.Text = row.Cells["sale_price"].Value.ToString();
 
-                // Display product information
                 string companyName = row.Cells["company_name"].Value.ToString();
                 string categoryName = row.Cells["category_name"].Value.ToString();
                 string packingName = row.Cells["packing_name"].Value.ToString();
 
+                suppressTextChanged = true;
                 txtproduct.Text = $"{companyName} - {categoryName} - {packingName}";
-                dgvmedicines.Visible = false;
+                suppressTextChanged = false;
 
-                // Move focus to next control
+                dgvmedicines.Visible = false;
                 txtquantity.Focus();
             }
             catch (Exception ex)
@@ -1095,7 +1124,17 @@ namespace MedicineShop.UI
             }
         }
 
+
         #endregion
+        private int GetFirstVisibleColumnIndex(DataGridView dgv)
+        {
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                if (col.Visible)
+                    return col.Index;
+            }
+            throw new InvalidOperationException("No visible columns found in DataGridView.");
+        }
 
         #region Batch Items Grid Event Handlers
 
@@ -1278,9 +1317,16 @@ namespace MedicineShop.UI
 
         #endregion
 
-        private void dgvcompany_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void iconButton4_Click(object sender, EventArgs e)
         {
+            var f = Program.ServiceProvider.GetRequiredService<AddCompany>();
+            f.ShowDialog(this);
+        }
 
+        private void iconButton5_Click(object sender, EventArgs e)
+        {
+            var f= Program.ServiceProvider.GetRequiredService<AddMedicine>();
+            f.ShowDialog(this);
         }
     }
 }

@@ -259,11 +259,13 @@ namespace MedicineShop.DL
                                 {
                                     PaymentId = reader.GetInt32("payment_id"),
                                     CompanyId = reader.GetInt32("company_id"),
+                                    BatchName = reader.GetString("BatchName"),
                                     PaymentDate = reader.GetDateTime("payment_date"),
                                     Amount = reader.GetDecimal("amount"),
                                     Status = reader.GetString("status"),
                                     TotalPrice = reader.GetDecimal("total_price"),
                                     Paid = reader.GetDecimal("paid"),
+                                  
                                     RemainingBalance = reader.GetDecimal("remaining_balance")
                                 };
                                 records.Add(record);

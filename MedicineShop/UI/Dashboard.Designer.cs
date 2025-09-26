@@ -32,9 +32,11 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btndashboard = new FontAwesome.Sharp.IconButton();
             this.panelinventory = new System.Windows.Forms.Panel();
+            this.iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
             this.btnrecord = new FontAwesome.Sharp.IconButton();
             this.btninventory = new FontAwesome.Sharp.IconButton();
             this.panelbatch = new System.Windows.Forms.Panel();
+            this.iconPictureBox2 = new FontAwesome.Sharp.IconPictureBox();
             this.btnbatchdetails = new FontAwesome.Sharp.IconButton();
             this.btnbatches = new FontAwesome.Sharp.IconButton();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -44,20 +46,18 @@
             this.panelsupp = new System.Windows.Forms.Panel();
             this.btnSbills = new FontAwesome.Sharp.IconButton();
             this.btnsuppliers = new FontAwesome.Sharp.IconButton();
-            this.panel10 = new System.Windows.Forms.Panel();
             this.iconButton2 = new FontAwesome.Sharp.IconButton();
             this.iconButton3 = new FontAwesome.Sharp.IconButton();
             this.iconButton4 = new FontAwesome.Sharp.IconButton();
-            this.iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
-            this.iconPictureBox2 = new FontAwesome.Sharp.IconPictureBox();
+            this.panel10 = new System.Windows.Forms.Panel();
             this.panelmenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelinventory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).BeginInit();
             this.panelbatch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox2)).BeginInit();
             this.panel4.SuspendLayout();
             this.panelsupp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // panelmenu
@@ -122,8 +122,23 @@
             this.panelinventory.Controls.Add(this.btninventory);
             this.panelinventory.Location = new System.Drawing.Point(3, 219);
             this.panelinventory.Name = "panelinventory";
-            this.panelinventory.Size = new System.Drawing.Size(270, 66);
+            this.panelinventory.Size = new System.Drawing.Size(270, 124);
             this.panelinventory.TabIndex = 10;
+            // 
+            // iconPictureBox1
+            // 
+            this.iconPictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
+            this.iconPictureBox1.ForeColor = System.Drawing.SystemColors.Control;
+            this.iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Neuter;
+            this.iconPictureBox1.IconColor = System.Drawing.SystemColors.Control;
+            this.iconPictureBox1.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconPictureBox1.Location = new System.Drawing.Point(204, 13);
+            this.iconPictureBox1.Name = "iconPictureBox1";
+            this.iconPictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.iconPictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.iconPictureBox1.TabIndex = 8;
+            this.iconPictureBox1.TabStop = false;
+            this.iconPictureBox1.Click += new System.EventHandler(this.iconPictureBox1_Click);
             // 
             // btnrecord
             // 
@@ -183,10 +198,25 @@
             this.panelbatch.Controls.Add(this.iconPictureBox2);
             this.panelbatch.Controls.Add(this.btnbatchdetails);
             this.panelbatch.Controls.Add(this.btnbatches);
-            this.panelbatch.Location = new System.Drawing.Point(3, 291);
+            this.panelbatch.Location = new System.Drawing.Point(3, 349);
             this.panelbatch.Name = "panelbatch";
             this.panelbatch.Size = new System.Drawing.Size(270, 63);
             this.panelbatch.TabIndex = 11;
+            // 
+            // iconPictureBox2
+            // 
+            this.iconPictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
+            this.iconPictureBox2.ForeColor = System.Drawing.SystemColors.Control;
+            this.iconPictureBox2.IconChar = FontAwesome.Sharp.IconChar.Neuter;
+            this.iconPictureBox2.IconColor = System.Drawing.SystemColors.Control;
+            this.iconPictureBox2.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconPictureBox2.Location = new System.Drawing.Point(204, 20);
+            this.iconPictureBox2.Name = "iconPictureBox2";
+            this.iconPictureBox2.Size = new System.Drawing.Size(32, 32);
+            this.iconPictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.iconPictureBox2.TabIndex = 9;
+            this.iconPictureBox2.TabStop = false;
+            this.iconPictureBox2.Click += new System.EventHandler(this.iconPictureBox2_Click);
             // 
             // btnbatchdetails
             // 
@@ -246,7 +276,7 @@
             this.panel4.Controls.Add(this.iconButton1);
             this.panel4.Controls.Add(this.iconButton8);
             this.panel4.Controls.Add(this.btnsale);
-            this.panel4.Location = new System.Drawing.Point(3, 360);
+            this.panel4.Location = new System.Drawing.Point(3, 418);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(270, 61);
             this.panel4.TabIndex = 12;
@@ -332,7 +362,7 @@
             this.panelsupp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
             this.panelsupp.Controls.Add(this.btnSbills);
             this.panelsupp.Controls.Add(this.btnsuppliers);
-            this.panelsupp.Location = new System.Drawing.Point(3, 427);
+            this.panelsupp.Location = new System.Drawing.Point(3, 485);
             this.panelsupp.Name = "panelsupp";
             this.panelsupp.Size = new System.Drawing.Size(270, 64);
             this.panelsupp.TabIndex = 13;
@@ -388,15 +418,6 @@
             this.btnsuppliers.UseVisualStyleBackColor = false;
             this.btnsuppliers.Click += new System.EventHandler(this.btnsuppliers_Click);
             // 
-            // panel10
-            // 
-            this.panel10.BackColor = System.Drawing.Color.Linen;
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(270, 0);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1042, 1010);
-            this.panel10.TabIndex = 15;
-            // 
             // iconButton2
             // 
             this.iconButton2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
@@ -413,7 +434,7 @@
             this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton2.IconSize = 40;
             this.iconButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton2.Location = new System.Drawing.Point(3, 497);
+            this.iconButton2.Location = new System.Drawing.Point(3, 555);
             this.iconButton2.Name = "iconButton2";
             this.iconButton2.Size = new System.Drawing.Size(270, 60);
             this.iconButton2.TabIndex = 14;
@@ -439,7 +460,7 @@
             this.iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton3.IconSize = 40;
             this.iconButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton3.Location = new System.Drawing.Point(3, 563);
+            this.iconButton3.Location = new System.Drawing.Point(3, 621);
             this.iconButton3.Name = "iconButton3";
             this.iconButton3.Size = new System.Drawing.Size(270, 60);
             this.iconButton3.TabIndex = 15;
@@ -465,7 +486,7 @@
             this.iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton4.IconSize = 40;
             this.iconButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton4.Location = new System.Drawing.Point(3, 629);
+            this.iconButton4.Location = new System.Drawing.Point(3, 687);
             this.iconButton4.Name = "iconButton4";
             this.iconButton4.Size = new System.Drawing.Size(270, 60);
             this.iconButton4.TabIndex = 16;
@@ -475,35 +496,14 @@
             this.iconButton4.UseVisualStyleBackColor = false;
             this.iconButton4.Click += new System.EventHandler(this.iconButton4_Click);
             // 
-            // iconPictureBox1
+            // panel10
             // 
-            this.iconPictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.iconPictureBox1.ForeColor = System.Drawing.SystemColors.Control;
-            this.iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Neuter;
-            this.iconPictureBox1.IconColor = System.Drawing.SystemColors.Control;
-            this.iconPictureBox1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconPictureBox1.Location = new System.Drawing.Point(204, 13);
-            this.iconPictureBox1.Name = "iconPictureBox1";
-            this.iconPictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.iconPictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.iconPictureBox1.TabIndex = 8;
-            this.iconPictureBox1.TabStop = false;
-            this.iconPictureBox1.Click += new System.EventHandler(this.iconPictureBox1_Click);
-            // 
-            // iconPictureBox2
-            // 
-            this.iconPictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.iconPictureBox2.ForeColor = System.Drawing.SystemColors.Control;
-            this.iconPictureBox2.IconChar = FontAwesome.Sharp.IconChar.Neuter;
-            this.iconPictureBox2.IconColor = System.Drawing.SystemColors.Control;
-            this.iconPictureBox2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconPictureBox2.Location = new System.Drawing.Point(204, 20);
-            this.iconPictureBox2.Name = "iconPictureBox2";
-            this.iconPictureBox2.Size = new System.Drawing.Size(32, 32);
-            this.iconPictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.iconPictureBox2.TabIndex = 9;
-            this.iconPictureBox2.TabStop = false;
-            this.iconPictureBox2.Click += new System.EventHandler(this.iconPictureBox2_Click);
+            this.panel10.BackColor = System.Drawing.Color.Linen;
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(270, 0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1042, 1010);
+            this.panel10.TabIndex = 15;
             // 
             // Dashboard
             // 
@@ -519,11 +519,11 @@
             this.panelmenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelinventory.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).EndInit();
             this.panelbatch.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox2)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panelsupp.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -1,5 +1,6 @@
 ﻿using fertilizesop.DL;
 using FontAwesome.Sharp;
+using MedicineShop;
 using MedicineShop.BL.Models;
 using MedicineShop.DL;
 using MedicineShop.UI;
@@ -587,12 +588,12 @@ namespace fertilizesop.UI
             if(walking_in.Checked)
             {
                 txtcustsearch.Visible = false;
-                addcustomer.Visible = false;
+                iconButton4.Visible = false;
             }
             else
             {
                 txtcustsearch.Visible = true;
-                addcustomer.Visible = true;
+               iconButton4.Visible = true;
             }
         }
 
@@ -853,9 +854,8 @@ namespace fertilizesop.UI
 
         private void addcustomer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Addcustomer add = new Addcustomer();
-            //this.Close();
-            add.Show();
+            var f=Program.ServiceProvider.GetRequiredService<Addcustomer>();
+            f.ShowDialog(this);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -873,6 +873,17 @@ namespace fertilizesop.UI
             {
                 txtfinalprice.Text = "0";
             }
+        }
+
+        private void iconButton2_Click(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void iconButton4_Click(object sender, EventArgs e)
+        {
+            var f = Program.ServiceProvider.GetRequiredService<Addcustomer>();
+            f.ShowDialog(this);
         }
     }
 }

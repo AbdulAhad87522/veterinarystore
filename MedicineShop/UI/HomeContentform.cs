@@ -29,15 +29,21 @@ namespace MedicineShop.UI
 
         // Additional UI Components
         private Panel mainContentPanel;
-        private Label lblWelcome, lblDateTime;
+        private Label lblWelcome;
+
+        // Performance tracking
+        private DateTime lastDataRefresh;
+        private bool isRefreshing;
 
         public HomeContentform()
         {
             InitializeComponent();
             _dashboardService = new DashboardService();
             InitializeDashboard();
-            SetupRefreshTimer();
-            LoadDashboardData();
+            SetupTimers();
+
+            // Load data immediately when form opens
+            this.Load += async (s, e) => await LoadDashboardDataAsync();
         }
 
         protected override CreateParams CreateParams
@@ -45,14 +51,20 @@ namespace MedicineShop.UI
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED for double buffering
                 return cp;
             }
         }
+
         private void InitializeDashboard()
         {
             this.WindowState = FormWindowState.Maximized;
             this.BackColor = Color.FromArgb(245, 248, 250);
+
+            // Enable double buffering for smoother rendering
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.UserPaint |
+                     ControlStyles.DoubleBuffer, true);
 
             // Clear and setup main container
             panel4.Controls.Clear();
@@ -60,30 +72,28 @@ namespace MedicineShop.UI
             panel4.Dock = DockStyle.Fill;
             panel4.Padding = new Padding(0);
 
-            // Create a temporary list to add controls in proper order
-            var controlsToAdd = new List<Control>();
-
-            // Create all sections first
+            // Create sections in correct visual order
             var welcomeSection = CreateWelcomeSectionPanel();
             var summarySection = CreateSummaryCardsPanel();
             var dataSection = CreateDataGridPanelsSection();
             var footerSection = CreateAdditionalInfoPanelSection();
 
-            // Add in correct visual order (top to bottom)
-            panel4.Controls.Add(footerSection);   // Added first (appears at bottom)
-            panel4.Controls.Add(dataSection);     // Added second
-            panel4.Controls.Add(summarySection);  // Added third
-            panel4.Controls.Add(welcomeSection);  // Added last (appears at top)
+            // Add in reverse order for proper stacking
+            panel4.Controls.Add(footerSection);
+            panel4.Controls.Add(dataSection);
+            panel4.Controls.Add(summarySection);
+            panel4.Controls.Add(welcomeSection);
 
             // Handle resize events
             this.Resize += HomeContentform_Resize;
             panel4.Resize += Panel4_Resize;
         }
+
         private Panel CreateWelcomeSectionPanel()
         {
             var welcomePanel = new Panel
             {
-                Height = 120,
+                Height = 80,
                 Dock = DockStyle.Top,
                 BackColor = Color.White,
                 Margin = new Padding(0, 0, 0, 15),
@@ -111,22 +121,11 @@ namespace MedicineShop.UI
                 Font = new Font("Segoe UI", 24F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(44, 62, 80),
                 AutoSize = true,
-                Location = new Point(0, 0),
-                BackColor = Color.Transparent
-            };
-
-            lblDateTime = new Label
-            {
-                Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy - hh:mm tt"),
-                Font = new Font("Segoe UI", 12F),
-                ForeColor = Color.FromArgb(127, 140, 141),
-                AutoSize = true,
-                Location = new Point(0, 45),
+                Location = new Point(0, 10),
                 BackColor = Color.Transparent
             };
 
             contentContainer.Controls.Add(lblWelcome);
-            //contentContainer.Controls.Add(lblDateTime);
             welcomePanel.Controls.Add(contentContainer);
 
             return welcomePanel;
@@ -147,187 +146,24 @@ namespace MedicineShop.UI
             return summaryPanel;
         }
 
-        private Panel CreateDataGridPanelsSection()
-        {
-            var dataContainer = new Panel
-            {
-                Height = 400,
-                Dock = DockStyle.Top,
-                BackColor = Color.Transparent,
-                Padding = new Padding(25, 0, 25, 20),
-                Margin = new Padding(0, 0, 0, 20)
-            };
-
-            RefreshDataPanelLayout(dataContainer);
-            return dataContainer;
-        }
-
-        private Panel CreateAdditionalInfoPanelSection()
-        {
-            var infoPanel = new Panel
-            {
-                Height = 80,
-                Dock = DockStyle.Top,
-                BackColor = Color.White,
-                Padding = new Padding(25, 20, 25, 20)
-            };
-
-            infoPanel.Paint += (s, e) =>
-            {
-                using (var pen = new Pen(Color.FromArgb(230, 235, 240)))
-                {
-                    e.Graphics.DrawLine(pen, 0, 0, infoPanel.Width, 0);
-                }
-            };
-
-            var refreshBtn = new Button
-            {
-                Text = "🔄 Refresh Dashboard",
-                Font = new Font("Segoe UI", 11F, FontStyle.Regular),
-                BackColor = Color.FromArgb(59, 130, 246),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Size = new Size(180, 42),
-                Location = new Point(0, 19),
-                Cursor = Cursors.Hand
-            };
-            refreshBtn.FlatAppearance.BorderSize = 0;
-            refreshBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(37, 99, 235);
-            refreshBtn.Click += (s, e) => RefreshDashboard();
-
-            var exportBtn = new Button
-            {
-                Text = "📊 Export Data",
-                Font = new Font("Segoe UI", 11F, FontStyle.Regular),
-                BackColor = Color.FromArgb(16, 185, 129),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Size = new Size(140, 42),
-                Location = new Point(195, 19),
-                Cursor = Cursors.Hand
-            };
-            exportBtn.FlatAppearance.BorderSize = 0;
-            exportBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(5, 150, 105);
-            exportBtn.Click += (s, e) => ExportDashboardData();
-
-            var lastUpdateLabel = new Label
-            {
-                Text = $"Last Updated: {DateTime.Now:HH:mm:ss}",
-                Font = new Font("Segoe UI", 11F),
-                ForeColor = Color.FromArgb(108, 117, 125),
-                AutoSize = true,
-                Location = new Point(355, 30)
-            };
-
-            infoPanel.Controls.Add(refreshBtn);
-            infoPanel.Controls.Add(exportBtn);
-            infoPanel.Controls.Add(lastUpdateLabel);
-
-            return infoPanel;
-        }
-
-
-        private void CreateWelcomeSection()
-        {
-            var welcomePanel = new Panel
-            {
-                Height = 120, // Increased height to ensure proper containment
-                Dock = DockStyle.Top,
-                BackColor = Color.White,
-                Margin = new Padding(0, 0, 0, 15),
-                BorderStyle = BorderStyle.None
-            };
-
-            // Add bottom border
-            welcomePanel.Paint += (s, e) =>
-            {
-                using (var pen = new Pen(Color.FromArgb(230, 235, 240)))
-                {
-                    e.Graphics.DrawLine(pen, 0, welcomePanel.Height - 1, welcomePanel.Width, welcomePanel.Height - 1);
-                }
-            };
-
-            // Create a container panel with proper padding
-            var contentContainer = new Panel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.Transparent,
-                Padding = new Padding(25, 20, 25, 20)
-            };
-
-            lblWelcome = new Label
-            {
-                Text = "Pharmacy Management Dashboard",
-                Font = new Font("Segoe UI", 24F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(44, 62, 80),
-                AutoSize = true,
-                Location = new Point(0, 0),
-                BackColor = Color.Transparent
-            };
-
-            lblDateTime = new Label
-            {
-                Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy - hh:mm tt"),
-                Font = new Font("Segoe UI", 12F),
-                ForeColor = Color.FromArgb(127, 140, 141),
-                AutoSize = true,
-                Location = new Point(0, 45), // Position below welcome label with proper spacing
-                BackColor = Color.Transparent
-            };
-
-            // Add labels to the content container, not directly to welcome panel
-            contentContainer.Controls.Add(lblWelcome);
-            contentContainer.Controls.Add(lblDateTime);
-
-            // Add content container to welcome panel
-            welcomePanel.Controls.Add(contentContainer);
-
-            // Finally add welcome panel to main container
-            panel4.Controls.Add(welcomePanel);
-        }
-
-        private void CreateSummaryCards()
-        {
-            summaryPanel = new Panel
-            {
-                Height = 180,
-                Dock = DockStyle.Top,
-                BackColor = Color.Transparent,
-                Padding = new Padding(25, 15, 25, 25),
-                Margin = new Padding(0, 0, 0, 20)
-            };
-
-            RefreshSummaryCardLayout();
-            panel4.Controls.Add(summaryPanel);
-        }
-
         private void RefreshSummaryCardLayout()
         {
             if (summaryPanel == null) return;
 
             summaryPanel.Controls.Clear();
 
-            // Get actual available width
-            var containerWidth = summaryPanel.ClientSize.Width - 50; // Account for padding
+            var containerWidth = summaryPanel.ClientSize.Width - 50;
             var spacing = 10;
+            int cardsPerRow = containerWidth < 1000 ? 2 : 4;
 
-            // Determine layout based on available width
-            int cardsPerRow = 4;
-
-            if (containerWidth < 1000)
-            {
-                cardsPerRow = 2;
-                summaryPanel.Height = 320; // Increase height for 4 rows
-            }
+            if (cardsPerRow == 2)
+                summaryPanel.Height = 320;
             else
-            {
-                summaryPanel.Height = 180; // Original height for 2 rows
-            }
+                summaryPanel.Height = 180;
 
             var cardWidth = (containerWidth - (spacing * (cardsPerRow - 1))) / cardsPerRow;
             var cardHeight = 75;
 
-            // Ensure minimum card width
             if (cardWidth < 180)
             {
                 cardWidth = Math.Max(180, (containerWidth - spacing) / 2);
@@ -335,24 +171,21 @@ namespace MedicineShop.UI
                 summaryPanel.Height = 320;
             }
 
-            // Create cards with proper positioning
             var cardData = new[]
             {
-        new { Title = "Total Products", Value = "0", Color = Color.FromArgb(52, 152, 219) },
-        new { Title = "Companies", Value = "0", Color = Color.FromArgb(46, 204, 113) },
-        new { Title = "Low Stock Items", Value = "0", Color = Color.FromArgb(231, 76, 60) },
-        new { Title = "Expiring Soon", Value = "0", Color = Color.FromArgb(243, 156, 18) },
-        new { Title = "Today's Sales", Value = "0", Color = Color.FromArgb(155, 89, 182) },
-        new { Title = "Today's Revenue", Value = "Rs 0", Color = Color.FromArgb(52, 73, 94) },
-        new { Title = "Pending Payments", Value = "Rs 0", Color = Color.FromArgb(230, 126, 34) },
-        new { Title = "Inventory Value", Value = "Rs 0", Color = Color.FromArgb(22, 160, 133) }
-    };
+                new { Title = "Total Products", Value = "0", Color = Color.FromArgb(52, 152, 219), IsClickable = true },
+                new { Title = "Companies", Value = "0", Color = Color.FromArgb(46, 204, 113), IsClickable = true },
+                new { Title = "Low Stock Items", Value = "0", Color = Color.FromArgb(231, 76, 60), IsClickable = true },
+                new { Title = "Expiring Soon", Value = "0", Color = Color.FromArgb(243, 156, 18), IsClickable = true },
+                new { Title = "Today's Sales", Value = "0", Color = Color.FromArgb(155, 89, 182), IsClickable = true },
+                new { Title = "Today's Revenue", Value = "Rs 0", Color = Color.FromArgb(52, 73, 94), IsClickable = true },
+                new { Title = "Pending Payments", Value = "Rs 0", Color = Color.FromArgb(230, 126, 34), IsClickable = true },
+                new { Title = "Inventory Value", Value = "Rs 0", Color = Color.FromArgb(22, 160, 133), IsClickable = true }
+            };
 
-            // Create label references
             var labels = new[] { lblTotalProducts, lblTotalCompanies, lblLowStock, lblExpiringItems,
                         lblTodaySales, lblTodayRevenue, lblPendingPayments, lblInventoryValue };
 
-            // Position cards in grid layout
             for (int i = 0; i < cardData.Length; i++)
             {
                 int row = i / cardsPerRow;
@@ -364,7 +197,6 @@ namespace MedicineShop.UI
                 var card = cardData[i];
                 var label = labels[i] ?? new Label();
 
-                // Update the label reference
                 switch (i)
                 {
                     case 0: lblTotalProducts = label; break;
@@ -377,10 +209,12 @@ namespace MedicineShop.UI
                     case 7: lblInventoryValue = label; break;
                 }
 
-                CreateSummaryCard(card.Title, card.Value, card.Color, x, y, cardWidth, cardHeight, label);
+                CreateSummaryCard(card.Title, card.Value, card.Color, x, y, cardWidth, cardHeight, label, card.IsClickable, i);
             }
         }
-        private void CreateSummaryCard(string title, string value, Color bgColor, int x, int y, int width, int height, Label valueLabel)
+
+        private void CreateSummaryCard(string title, string value, Color bgColor, int x, int y, int width, int height,
+            Label valueLabel, bool isClickable, int cardIndex)
         {
             var card = new Panel
             {
@@ -388,23 +222,21 @@ namespace MedicineShop.UI
                 Location = new Point(x, y),
                 BackColor = bgColor,
                 BorderStyle = BorderStyle.None,
-                Cursor = Cursors.Hand
+                Cursor = isClickable ? Cursors.Hand : Cursors.Default,
+                Tag = cardIndex
             };
 
-            // Add rounded corners and shadow effect
             card.Paint += (s, e) =>
             {
                 var graphics = e.Graphics;
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                // Draw shadow
                 var shadowRect = new Rectangle(3, 3, card.Width - 3, card.Height - 3);
                 using (var shadowBrush = new SolidBrush(Color.FromArgb(30, 0, 0, 0)))
                 {
                     graphics.FillRoundedRectangle(shadowBrush, shadowRect, 10);
                 }
 
-                // Draw main card
                 var mainRect = new Rectangle(0, 0, card.Width - 3, card.Height - 3);
                 using (var brush = new SolidBrush(bgColor))
                 {
@@ -412,7 +244,6 @@ namespace MedicineShop.UI
                 }
             };
 
-            // Hover effects
             var originalColor = bgColor;
             card.MouseEnter += (s, e) =>
             {
@@ -447,11 +278,11 @@ namespace MedicineShop.UI
             summaryPanel.Controls.Add(card);
         }
 
-        private void CreateDataGridPanels()
+        private Panel CreateDataGridPanelsSection()
         {
             var dataContainer = new Panel
             {
-                Height = 400, // Initial height, will be adjusted in RefreshDataPanelLayout
+                Height = 400,
                 Dock = DockStyle.Top,
                 BackColor = Color.Transparent,
                 Padding = new Padding(25, 0, 25, 20),
@@ -459,76 +290,42 @@ namespace MedicineShop.UI
             };
 
             RefreshDataPanelLayout(dataContainer);
-            panel4.Controls.Add(dataContainer);
+            return dataContainer;
         }
 
         private void RefreshDataPanelLayout(Panel dataContainer)
         {
             dataContainer.Controls.Clear();
 
-            var availableWidth = dataContainer.Width - 50; // Account for padding
-
-            // Show maximum 2 panels per row for better visibility
-            var panelsPerRow = Math.Min(2, 3);
-            var totalPanels = 3;
-            var rows = (int)Math.Ceiling((double)totalPanels / panelsPerRow);
-
-            var panelWidth = (availableWidth - (10 * (panelsPerRow - 1))) / panelsPerRow;
+            var availableWidth = dataContainer.Width - 50;
+            var spacing = 15;
             var panelHeight = 350;
-            var spacing = 10;
 
-            // Ensure minimum panel width
-            if (panelWidth < 400)
-            {
-                panelsPerRow = 1;
-                panelWidth = availableWidth;
-                dataContainer.Height = panelHeight * totalPanels + (spacing * (totalPanels - 1)) + 20;
-            }
-            else if (panelsPerRow == 2)
-            {
-                dataContainer.Height = (panelHeight * rows) + (spacing * (rows - 1)) + 20;
-            }
+            // Always use the 2+1 layout as requested
+            var firstRowPanelWidth = (availableWidth - spacing) / 2;
+            var secondRowPanelWidth = (int)(availableWidth * 0.6); // 60% width for centered panel
+            var secondRowX = (availableWidth - secondRowPanelWidth) / 2;
 
-            // Position panels
-            int currentPanel = 0;
+            dataContainer.Height = (panelHeight * 2) + spacing + 40;
 
-            // Row 1: Low Stock and Expiring Items
-            lowStockPanel = CreateDataPanel("⚠️ Low Stock Items", 0, 10, panelWidth, panelHeight, Color.FromArgb(231, 76, 60));
+            // First row - Low Stock and Expiring Items
+            lowStockPanel = CreateDataPanel("⚠️ Low Stock Items", 0, 10, firstRowPanelWidth, panelHeight, Color.FromArgb(231, 76, 60));
             dgvLowStock = CreateDataGrid(lowStockPanel);
             SetupLowStockGrid();
             dataContainer.Controls.Add(lowStockPanel);
 
-            if (panelsPerRow >= 2)
-            {
-                expiringPanel = CreateDataPanel("⏰ Items Expiring Soon", panelWidth + spacing, 10, panelWidth, panelHeight, Color.FromArgb(243, 156, 18));
-                dgvExpiringItems = CreateDataGrid(expiringPanel);
-                SetupExpiringItemsGrid();
-                dataContainer.Controls.Add(expiringPanel);
+            expiringPanel = CreateDataPanel("⏰ Items Expiring Soon", firstRowPanelWidth + spacing, 10, firstRowPanelWidth, panelHeight, Color.FromArgb(243, 156, 18));
+            dgvExpiringItems = CreateDataGrid(expiringPanel);
+            SetupExpiringItemsGrid();
+            dataContainer.Controls.Add(expiringPanel);
 
-                // Row 2: Pending Purchases (centered if only one in second row)
-                var row2Y = panelHeight + spacing + 10;
-                var row2X = panelsPerRow == 2 ? (availableWidth - panelWidth) / 2 : 0;
-
-                purchasesPanel = CreateDataPanel("💰 Pending Purchases", row2X, row2Y, panelWidth, panelHeight, Color.FromArgb(155, 89, 182));
-                dgvPendingPurchases = CreateDataGrid(purchasesPanel);
-                SetupPendingPurchasesGrid();
-                dataContainer.Controls.Add(purchasesPanel);
-            }
-            else
-            {
-                // Stack vertically if not enough width
-                expiringPanel = CreateDataPanel("⏰ Items Expiring Soon", 0, panelHeight + spacing + 10, panelWidth, panelHeight, Color.FromArgb(243, 156, 18));
-                dgvExpiringItems = CreateDataGrid(expiringPanel);
-                SetupExpiringItemsGrid();
-                dataContainer.Controls.Add(expiringPanel);
-
-                purchasesPanel = CreateDataPanel("💰 Pending Purchases", 0, (panelHeight + spacing) * 2 + 10, panelWidth, panelHeight, Color.FromArgb(155, 89, 182));
-                dgvPendingPurchases = CreateDataGrid(purchasesPanel);
-                SetupPendingPurchasesGrid();
-                dataContainer.Controls.Add(purchasesPanel);
-            }
+            // Second row - Pending Purchases (centered)
+            var secondRowY = panelHeight + spacing + 20;
+            purchasesPanel = CreateDataPanel("💰 Pending Purchases", secondRowX, secondRowY, secondRowPanelWidth, panelHeight, Color.FromArgb(155, 89, 182));
+            dgvPendingPurchases = CreateDataGrid(purchasesPanel);
+            SetupPendingPurchasesGrid();
+            dataContainer.Controls.Add(purchasesPanel);
         }
-
 
         private Panel CreateDataPanel(string title, int x, int y, int width, int height, Color headerColor)
         {
@@ -540,27 +337,23 @@ namespace MedicineShop.UI
                 BorderStyle = BorderStyle.None
             };
 
-            // Add shadow and rounded corners
             panel.Paint += (s, e) =>
             {
                 var graphics = e.Graphics;
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                // Shadow
                 var shadowRect = new Rectangle(3, 3, panel.Width - 3, panel.Height - 3);
                 using (var shadowBrush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
                 {
                     graphics.FillRoundedRectangle(shadowBrush, shadowRect, 8);
                 }
 
-                // Main panel
                 var mainRect = new Rectangle(0, 0, panel.Width - 3, panel.Height - 3);
                 using (var brush = new SolidBrush(Color.White))
                 {
                     graphics.FillRoundedRectangle(brush, mainRect, 8);
                 }
 
-                // Border
                 using (var pen = new Pen(Color.FromArgb(230, 235, 240)))
                 {
                     graphics.DrawRoundedRectangle(pen, mainRect, 8);
@@ -603,10 +396,12 @@ namespace MedicineShop.UI
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 RowHeadersVisible = false,
+                ColumnHeadersVisible = true, // Fixed: Ensure headers are visible
                 Font = new Font("Segoe UI", 9F),
                 GridColor = Color.FromArgb(240, 244, 247),
                 ColumnHeadersHeight = 40,
                 RowTemplate = { Height = 32 },
+                EnableHeadersVisualStyles = false, // Fixed: Disable visual styles to show custom header colors
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = Color.White,
@@ -655,7 +450,6 @@ namespace MedicineShop.UI
             dgvLowStock.Columns["Stock"].Width = 80;
             dgvLowStock.Columns["Status"].Width = 100;
 
-            // Enhanced color coding
             dgvLowStock.CellFormatting += (s, e) =>
             {
                 if (e.ColumnIndex == dgvLowStock.Columns["Status"].Index && e.Value != null)
@@ -709,7 +503,6 @@ namespace MedicineShop.UI
             dgvExpiringItems.Columns["ExpiryDate"].Width = 90;
             dgvExpiringItems.Columns["DaysLeft"].Width = 80;
 
-            // Enhanced color coding for urgency
             dgvExpiringItems.CellFormatting += (s, e) =>
             {
                 if (e.ColumnIndex == dgvExpiringItems.Columns["DaysLeft"].Index && e.Value != null)
@@ -763,25 +556,24 @@ namespace MedicineShop.UI
             dgvPendingPurchases.Columns["Paid"].Width = 90;
             dgvPendingPurchases.Columns["Remaining"].Width = 90;
 
-            // Enhanced color coding for amounts
             dgvPendingPurchases.CellFormatting += (s, e) =>
             {
                 if (e.ColumnIndex == dgvPendingPurchases.Columns["Remaining"].Index && e.Value != null)
                 {
                     if (decimal.TryParse(e.Value.ToString(), out decimal remaining))
                     {
-                        if (remaining > 500000) // Very high amount
+                        if (remaining > 500000)
                         {
                             e.CellStyle.BackColor = Color.FromArgb(254, 226, 226);
                             e.CellStyle.ForeColor = Color.FromArgb(185, 28, 28);
                             e.CellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
                         }
-                        else if (remaining > 200000) // High amount
+                        else if (remaining > 200000)
                         {
                             e.CellStyle.BackColor = Color.FromArgb(255, 237, 213);
                             e.CellStyle.ForeColor = Color.FromArgb(194, 65, 12);
                         }
-                        else if (remaining > 50000) // Medium amount
+                        else if (remaining > 50000)
                         {
                             e.CellStyle.BackColor = Color.FromArgb(254, 249, 195);
                             e.CellStyle.ForeColor = Color.FromArgb(161, 98, 7);
@@ -791,7 +583,7 @@ namespace MedicineShop.UI
             };
         }
 
-        private void CreateAdditionalInfoPanel()
+        private Panel CreateAdditionalInfoPanelSection()
         {
             var infoPanel = new Panel
             {
@@ -801,7 +593,6 @@ namespace MedicineShop.UI
                 Padding = new Padding(25, 20, 25, 20)
             };
 
-            // Add top border
             infoPanel.Paint += (s, e) =>
             {
                 using (var pen = new Pen(Color.FromArgb(230, 235, 240)))
@@ -818,12 +609,12 @@ namespace MedicineShop.UI
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Size = new Size(180, 42),
-                Location = new Point(25, 19),
+                Location = new Point(0, 19),
                 Cursor = Cursors.Hand
             };
             refreshBtn.FlatAppearance.BorderSize = 0;
             refreshBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(37, 99, 235);
-            refreshBtn.Click += (s, e) => RefreshDashboard();
+            refreshBtn.Click += (s, e) => RefreshDashboardAsync();
 
             var exportBtn = new Button
             {
@@ -833,7 +624,7 @@ namespace MedicineShop.UI
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Size = new Size(140, 42),
-                Location = new Point(220, 19),
+                Location = new Point(195, 19),
                 Cursor = Cursors.Hand
             };
             exportBtn.FlatAppearance.BorderSize = 0;
@@ -846,16 +637,209 @@ namespace MedicineShop.UI
                 Font = new Font("Segoe UI", 11F),
                 ForeColor = Color.FromArgb(108, 117, 125),
                 AutoSize = true,
-                Location = new Point(380, 30)
+                Location = new Point(355, 30)
             };
 
             infoPanel.Controls.Add(refreshBtn);
             infoPanel.Controls.Add(exportBtn);
             infoPanel.Controls.Add(lastUpdateLabel);
-            panel4.Controls.Add(infoPanel);
+
+            return infoPanel;
         }
 
-        // Helper method for rounded rectangles
+        #region Timer and Async Methods
+
+        private void SetupTimers()
+        {
+            // Main refresh timer
+            refreshTimer = new System.Windows.Forms.Timer();
+            refreshTimer.Interval = 300000; // 5 minutes
+            refreshTimer.Tick += async (s, e) => await RefreshTimerTick();
+            refreshTimer.Start();
+        }
+
+        private async Task RefreshTimerTick()
+        {
+            if (!isRefreshing)
+            {
+                await LoadDashboardDataAsync();
+                UpdateTimestamps();
+            }
+        }
+
+        private async Task LoadDashboardDataAsync()
+        {
+            if (isRefreshing) return;
+
+            try
+            {
+                isRefreshing = true;
+                this.Cursor = Cursors.WaitCursor;
+
+                var summary = await Task.Run(() => _dashboardService.GetDashboardSummary());
+                UpdateSummaryCards(summary);
+
+                var tasks = new[]
+                {
+                    Task.Run(() => LoadLowStockData()),
+                    Task.Run(() => LoadExpiringItemsData()),
+                    Task.Run(() => LoadPendingPurchasesData())
+                };
+
+                await Task.WhenAll(tasks);
+                lastDataRefresh = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading dashboard data: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isRefreshing = false;
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private async Task RefreshDashboardAsync()
+        {
+            await LoadDashboardDataAsync();
+            UpdateTimestamps();
+        }
+
+        #endregion
+
+        #region Data Loading Methods
+
+        private void UpdateSummaryCards(DashboardSummary summary)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<DashboardSummary>(UpdateSummaryCards), summary);
+                return;
+            }
+
+            if (lblTotalProducts != null) lblTotalProducts.Text = summary.TotalProducts.ToString("N0");
+            if (lblTotalCompanies != null) lblTotalCompanies.Text = summary.TotalCompanies.ToString("N0");
+            if (lblLowStock != null) lblLowStock.Text = summary.LowStockItems.ToString("N0");
+            if (lblExpiringItems != null) lblExpiringItems.Text = summary.ExpiringItems.ToString("N0");
+            if (lblTodaySales != null) lblTodaySales.Text = summary.TodaySales.ToString("N0");
+            if (lblTodayRevenue != null) lblTodayRevenue.Text = $"Rs {summary.TodayRevenue:N0}";
+            if (lblPendingPayments != null) lblPendingPayments.Text = $"Rs {summary.PendingPayments:N0}";
+            if (lblInventoryValue != null) lblInventoryValue.Text = $"Rs {summary.TotalInventoryValue:N0}";
+        }
+
+        private void LoadLowStockData()
+        {
+            try
+            {
+                var lowStockItems = _dashboardService.GetLowStockItems();
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => UpdateLowStockGrid(lowStockItems)));
+                }
+                else
+                {
+                    UpdateLowStockGrid(lowStockItems);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading low stock data: {ex.Message}");
+            }
+        }
+
+        private void UpdateLowStockGrid(List<StockInfo> items)
+        {
+            dgvLowStock.Rows.Clear();
+            foreach (var item in items.Take(10))
+            {
+                dgvLowStock.Rows.Add(
+                    item.Name.Length > 25 ? item.Name.Substring(0, 25) + "..." : item.Name,
+                    item.CompanyName.Length > 18 ? item.CompanyName.Substring(0, 18) + "..." : item.CompanyName,
+                    item.CurrentStock,
+                    item.StockStatus
+                );
+            }
+        }
+
+        private void LoadExpiringItemsData()
+        {
+            try
+            {
+                var expiringItems = _dashboardService.GetExpiringItems();
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => UpdateExpiringItemsGrid(expiringItems)));
+                }
+                else
+                {
+                    UpdateExpiringItemsGrid(expiringItems);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading expiring items data: {ex.Message}");
+            }
+        }
+
+        private void UpdateExpiringItemsGrid(List<ExpiringItem> items)
+        {
+            dgvExpiringItems.Rows.Clear();
+            foreach (var item in items.Take(10))
+            {
+                dgvExpiringItems.Rows.Add(
+                    item.Name.Length > 25 ? item.Name.Substring(0, 25) + "..." : item.Name,
+                    item.CompanyName.Length > 15 ? item.CompanyName.Substring(0, 15) + "..." : item.CompanyName,
+                    item.QuantityRemaining,
+                    item.ExpiryDate,
+                    item.DaysToExpiry
+                );
+            }
+        }
+
+        private void LoadPendingPurchasesData()
+        {
+            try
+            {
+                var pendingPurchases = _dashboardService.GetPendingPurchases();
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => UpdatePendingPurchasesGrid(pendingPurchases)));
+                }
+                else
+                {
+                    UpdatePendingPurchasesGrid(pendingPurchases);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading pending purchases data: {ex.Message}");
+            }
+        }
+
+        private void UpdatePendingPurchasesGrid(List<PurchaseSummary> purchases)
+        {
+            dgvPendingPurchases.Rows.Clear();
+            foreach (var purchase in purchases.Take(10))
+            {
+                dgvPendingPurchases.Rows.Add(
+                    purchase.BatchName.Length > 20 ? purchase.BatchName.Substring(0, 20) + "..." : purchase.BatchName,
+                    purchase.CompanyName.Length > 15 ? purchase.CompanyName.Substring(0, 15) + "..." : purchase.CompanyName,
+                    purchase.TotalPrice,
+                    purchase.Paid,
+                    purchase.RemainingAmount
+                );
+            }
+        }
+
+        #endregion
+
+        #region Helper Methods
+
         private Color ChangeColorBrightness(Color color, float correctionFactor)
         {
             float red = color.R;
@@ -879,147 +863,24 @@ namespace MedicineShop.UI
             return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
         }
 
-        private void SetupRefreshTimer()
-        {
-            refreshTimer = new System.Windows.Forms.Timer();
-            refreshTimer.Interval = 300000; // 5 minutes
-            refreshTimer.Tick += (s, e) =>
-            {
-                LoadDashboardData();
-                UpdateTimestamps();
-            };
-            refreshTimer.Start();
-        }
-
         private void UpdateTimestamps()
         {
-            RefreshWelcomeSection();
+            if (InvokeRequired)
+            {
+                Invoke(new Action(UpdateTimestamps));
+                return;
+            }
 
-            // Update last updated label in footer
             var infoPanel = panel4.Controls.OfType<Panel>().LastOrDefault();
             var lastUpdateLabel = infoPanel?.Controls.OfType<Label>().FirstOrDefault(l => l.Text.StartsWith("Last Updated"));
             if (lastUpdateLabel != null)
                 lastUpdateLabel.Text = $"Last Updated: {DateTime.Now:HH:mm:ss}";
         }
-        private void LoadDashboardData()
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
 
-                var summary = _dashboardService.GetDashboardSummary();
-                UpdateSummaryCards(summary);
+        #endregion
 
-                LoadLowStockData();
-                LoadExpiringItemsData();
-                LoadPendingPurchasesData();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading dashboard data: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
+        #region Event Handlers
 
-        private void UpdateSummaryCards(DashboardSummary summary)
-        {
-            if (lblTotalProducts != null) lblTotalProducts.Text = summary.TotalProducts.ToString("N0");
-            if (lblTotalCompanies != null) lblTotalCompanies.Text = summary.TotalCompanies.ToString("N0");
-            if (lblLowStock != null) lblLowStock.Text = summary.LowStockItems.ToString("N0");
-            if (lblExpiringItems != null) lblExpiringItems.Text = summary.ExpiringItems.ToString("N0");
-            if (lblTodaySales != null) lblTodaySales.Text = summary.TodaySales.ToString("N0");
-            if (lblTodayRevenue != null) lblTodayRevenue.Text = $"Rs {summary.TodayRevenue:N0}";
-            if (lblPendingPayments != null) lblPendingPayments.Text = $"Rs {summary.PendingPayments:N0}";
-            if (lblInventoryValue != null) lblInventoryValue.Text = $"Rs {summary.TotalInventoryValue:N0}";
-        }
-
-        private void LoadLowStockData()
-        {
-            try
-            {
-                var lowStockItems = _dashboardService.GetLowStockItems();
-                dgvLowStock.Rows.Clear();
-
-                foreach (var item in lowStockItems.Take(10))
-                {
-                    dgvLowStock.Rows.Add(
-                        item.Name.Length > 25 ? item.Name.Substring(0, 25) + "..." : item.Name,
-                        item.CompanyName.Length > 18 ? item.CompanyName.Substring(0, 18) + "..." : item.CompanyName,
-                        item.CurrentStock,
-                        item.StockStatus
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading low stock data: {ex.Message}");
-            }
-        }
-
-        private void LoadExpiringItemsData()
-        {
-            try
-            {
-                var expiringItems = _dashboardService.GetExpiringItems();
-                dgvExpiringItems.Rows.Clear();
-
-                foreach (var item in expiringItems.Take(10))
-                {
-                    dgvExpiringItems.Rows.Add(
-                        item.Name.Length > 25 ? item.Name.Substring(0, 25) + "..." : item.Name,
-                        item.CompanyName.Length > 15 ? item.CompanyName.Substring(0, 15) + "..." : item.CompanyName,
-                        item.QuantityRemaining,
-                        item.ExpiryDate,
-                        item.DaysToExpiry
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading expiring items data: {ex.Message}");
-            }
-        }
-
-        private void LoadPendingPurchasesData()
-        {
-            try
-            {
-                var pendingPurchases = _dashboardService.GetPendingPurchases();
-                dgvPendingPurchases.Rows.Clear();
-
-                foreach (var purchase in pendingPurchases.Take(10))
-                {
-                    dgvPendingPurchases.Rows.Add(
-                        purchase.BatchName.Length > 20 ? purchase.BatchName.Substring(0, 20) + "..." : purchase.BatchName,
-                        purchase.CompanyName.Length > 15 ? purchase.CompanyName.Substring(0, 15) + "..." : purchase.CompanyName,
-                        purchase.TotalPrice,
-                        purchase.Paid,
-                        purchase.RemainingAmount
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading pending purchases data: {ex.Message}");
-            }
-        }
-        private void RefreshWelcomeSection()
-        {
-            if (lblWelcome != null && lblDateTime != null)
-            {
-                // Ensure proper positioning within the welcome panel
-                lblWelcome.Location = new Point(0, 0);
-                lblDateTime.Location = new Point(0, 40);
-
-                // Update the datetime
-                lblDateTime.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy - hh:mm tt");
-            }
-        }
-        // Event Handlers for Responsive Design
         private void HomeContentform_Resize(object sender, EventArgs e)
         {
             RefreshSummaryCardLayout();
@@ -1034,7 +895,6 @@ namespace MedicineShop.UI
 
         private void RefreshAllDataPanels()
         {
-            // Find data container and refresh layout
             foreach (Control control in panel4.Controls)
             {
                 if (control is Panel panel && panel.Controls.Count > 0)
@@ -1049,14 +909,9 @@ namespace MedicineShop.UI
             }
         }
 
-        private void RefreshDashboard()
-        {
-            LoadDashboardData();
-            UpdateTimestamps();
+        #endregion
 
-            MessageBox.Show("Dashboard refreshed successfully!", "Info",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        #region Export Functionality
 
         private void ExportDashboardData()
         {
@@ -1074,6 +929,7 @@ namespace MedicineShop.UI
                 sb.AppendLine($"• Total Products: {summary.TotalProducts:N0}");
                 sb.AppendLine($"• Total Companies: {summary.TotalCompanies:N0}");
                 sb.AppendLine($"• Low Stock Items: {summary.LowStockItems:N0}");
+                sb.AppendLine($"• Out of Stock Items: {summary.OutOfStockItems:N0}");
                 sb.AppendLine($"• Items Expiring Soon: {summary.ExpiringItems:N0}");
                 sb.AppendLine();
 
@@ -1087,13 +943,12 @@ namespace MedicineShop.UI
                 sb.AppendLine($"• Total Inventory Value: Rs {summary.TotalInventoryValue:N2}");
                 sb.AppendLine();
 
-                // Add detailed data
                 var lowStockItems = _dashboardService.GetLowStockItems();
                 if (lowStockItems.Any())
                 {
                     sb.AppendLine("LOW STOCK ITEMS:");
                     sb.AppendLine(new string('-', 40));
-                    foreach (var item in lowStockItems.Take(10))
+                    foreach (var item in lowStockItems.Take(20))
                     {
                         sb.AppendLine($"• {item.Name} ({item.CompanyName}) - Stock: {item.CurrentStock} - Status: {item.StockStatus}");
                     }
@@ -1105,7 +960,7 @@ namespace MedicineShop.UI
                 {
                     sb.AppendLine("ITEMS EXPIRING SOON:");
                     sb.AppendLine(new string('-', 40));
-                    foreach (var item in expiringItems.Take(10))
+                    foreach (var item in expiringItems.Take(20))
                     {
                         sb.AppendLine($"• {item.Name} ({item.CompanyName}) - Expires: {item.ExpiryDate:dd/MM/yyyy} ({item.DaysToExpiry} days)");
                     }
@@ -1117,7 +972,7 @@ namespace MedicineShop.UI
                 {
                     sb.AppendLine("PENDING PURCHASES:");
                     sb.AppendLine(new string('-', 40));
-                    foreach (var purchase in pendingPurchases.Take(10))
+                    foreach (var purchase in pendingPurchases.Take(20))
                     {
                         sb.AppendLine($"• {purchase.BatchName} ({purchase.CompanyName}) - Remaining: Rs {purchase.RemainingAmount:N2}");
                     }
@@ -1132,8 +987,8 @@ namespace MedicineShop.UI
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         System.IO.File.WriteAllText(sfd.FileName, sb.ToString());
-                        MessageBox.Show($"Dashboard report exported successfully to:\n{sfd.FileName}", "Export Complete",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"Report exported successfully to: {System.IO.Path.GetFileName(sfd.FileName)}",
+                            "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -1144,76 +999,10 @@ namespace MedicineShop.UI
             }
         }
 
-        // Context menu for enhanced functionality
-        private void SetupContextMenus()
-        {
-            var contextMenu = new ContextMenuStrip();
-            contextMenu.Items.Add("View Details", null, (s, e) => ViewSelectedItemDetails());
-            contextMenu.Items.Add("Refresh Data", null, (s, e) => RefreshDashboard());
-            contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add("Export Report", null, (s, e) => ExportDashboardData());
+        #endregion
 
-            dgvLowStock.ContextMenuStrip = contextMenu;
-            dgvExpiringItems.ContextMenuStrip = contextMenu;
-            dgvPendingPurchases.ContextMenuStrip = contextMenu;
-        }
+        #region Cleanup
 
-        private void ViewSelectedItemDetails()
-        {
-            try
-            {
-                DataGridView activeGrid = null;
-                string gridType = "";
-
-                if (dgvLowStock.Focused)
-                {
-                    activeGrid = dgvLowStock;
-                    gridType = "Low Stock Item";
-                }
-                else if (dgvExpiringItems.Focused)
-                {
-                    activeGrid = dgvExpiringItems;
-                    gridType = "Expiring Item";
-                }
-                else if (dgvPendingPurchases.Focused)
-                {
-                    activeGrid = dgvPendingPurchases;
-                    gridType = "Pending Purchase";
-                }
-
-                if (activeGrid?.SelectedRows.Count > 0)
-                {
-                    var row = activeGrid.SelectedRows[0];
-                    var details = new StringBuilder();
-                    details.AppendLine($"{gridType} Details:");
-                    details.AppendLine(new string('=', 30));
-
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        if (cell.Value != null)
-                        {
-                            string columnName = activeGrid.Columns[cell.ColumnIndex].HeaderText;
-                            details.AppendLine($"{columnName}: {cell.Value}");
-                        }
-                    }
-
-                    MessageBox.Show(details.ToString(), $"{gridType} Information",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Please select a row to view details.", "No Selection",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error viewing details: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Cleanup resources
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             refreshTimer?.Stop();
@@ -1221,22 +1010,11 @@ namespace MedicineShop.UI
             base.OnFormClosed(e);
         }
 
-        // Initialize context menus on first load
-        private void InitializeContextMenus()
-        {
-            SetupContextMenus();
-        }
-
-        // Call this after creating data grids
-        private void FinalizeSetup()
-        {
-            SetupContextMenus();
-            LoadDashboardData();
-        }
+        #endregion
     }
 }
 
-// Extension method for rounded rectangles
+// Extension methods for rounded rectangles
 public static class GraphicsExtensions
 {
     public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle rect, int cornerRadius)
@@ -1268,24 +1046,15 @@ public static class GraphicsExtensions
         int diameter = cornerRadius * 2;
         var arcRect = new Rectangle(rect.Location, new Size(diameter, diameter));
 
-        // Top left arc
         path.AddArc(arcRect, 180, 90);
-
-        // Top right arc
         arcRect.X = rect.Right - diameter;
         path.AddArc(arcRect, 270, 90);
-
-        // Bottom right arc
         arcRect.Y = rect.Bottom - diameter;
         path.AddArc(arcRect, 0, 90);
-
-        // Bottom left arc
         arcRect.X = rect.Left;
         path.AddArc(arcRect, 90, 90);
 
         path.CloseFigure();
         return path;
     }
-
-
 }

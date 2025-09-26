@@ -195,7 +195,7 @@ namespace MedicineShop
 
         private void btnrecord_Click(object sender, EventArgs e)
         {
-            var f=Program.ServiceProvider.GetRequiredService<CompanyMain>();
+            var f=Program.ServiceProvider.GetRequiredService<AddCategory>();
             f.ShowDialog(this);
         }
 
