@@ -4,6 +4,7 @@ using System.Data;
 using MedicineShop.Interfaces.DLInterfaces;
 using MedicineShop.Models;
 using MySql.Data.MySqlClient;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MedicineShop.DL
 {
@@ -58,13 +59,37 @@ namespace MedicineShop.DL
 
         public DataTable GetAllMedicines()
         {
-            string query = @"SELECT m.product_id, m.name, m.description, c.company_name,p.packing_name,cat.category_name, m.packing_id, m.sale_price, m.company_id, m.category_id
-                             FROM medicines m
-                             JOIN company c ON m.company_id = c.company_id
-                             JOIN packing p ON m.packing_id = p.packing_id
-                             JOIN categories cat ON m.Category_id = cat.category_id";
+            DataTable dt = new DataTable();
+            using (var con = DatabaseHelper.Instance.GetConnection())
+            {
+                con.Open();
+                string query = @"SELECT 
+                                        m.name, 
+                                        c.company_name, 
+                                        m.sale_price,
+                                        b.quantity_remaining,
+                                        p.packing_name, 
+                                        ca.category_name, 
+                                        b.expiry_date
+                                    FROM batch_items b
+                                    JOIN medicines m ON m.product_id = b.product_id
+                                    JOIN company c ON c.company_id = m.company_id
+                                    JOIN packing p ON m.packing_id = p.packing_id
+                                    JOIN categories ca ON ca.category_id = m.category_id
+                                    ORDER BY m.name, b.expiry_date;
+                                    ";
 
-            return DatabaseHelper.Instance.ExecuteDataTable(query);
+                using (MySqlCommand cmd = new MySqlCommand(query, con))
+                {
+                    //cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                }
+            }
+            return dt;
         }
 
         public DataTable SearchMedicines(string keyword)

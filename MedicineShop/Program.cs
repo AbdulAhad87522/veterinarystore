@@ -26,7 +26,7 @@ namespace MedicineShop
             var services = new ServiceCollection();
             configureServices(services);
             ServiceProvider = services.BuildServiceProvider();
-            var mainForm = ServiceProvider.GetRequiredService<Login>();
+            var mainForm = ServiceProvider.GetRequiredService<MedicineMain>();
             Application.Run(mainForm);
 
             ////Show login first(Modal)
