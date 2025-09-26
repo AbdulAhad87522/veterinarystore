@@ -15,6 +15,7 @@ namespace MedicineShop.BL.Models
         public decimal paid { get; set; }
         public decimal remaining { get; set; }
 
+
     }
     
         public class PaymentRecord
@@ -28,6 +29,7 @@ namespace MedicineShop.BL.Models
             public decimal Paid { get; set; }
             public decimal RemainingBalance { get; set; }
             public string CompanyName { get; set; }
+        public string BatchName { get; set; }
     }
 
     

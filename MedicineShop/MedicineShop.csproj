@@ -179,6 +179,7 @@
     <Compile Include="Interfaces\DLInterfaces\IMedicineDL.cs" />
     <Compile Include="Interfaces\DLInterfaces\IPackingDL.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="UI\GraphicsExtensions.cs" />
     <Compile Include="UI\HomeContentform.cs">
       <SubType>Form</SubType>
     </Compile>

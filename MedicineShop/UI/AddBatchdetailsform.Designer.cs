@@ -62,6 +62,8 @@
             this.txtBnames = new System.Windows.Forms.TextBox();
             this.lblBatch = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.iconButton4 = new FontAwesome.Sharp.IconButton();
+            this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.paneldetails.SuspendLayout();
@@ -107,6 +109,7 @@
             // 
             // paneldetails
             // 
+            this.paneldetails.Controls.Add(this.iconButton5);
             this.paneldetails.Controls.Add(this.dateTimePicker1);
             this.paneldetails.Controls.Add(this.dgvmedicines);
             this.paneldetails.Controls.Add(this.dgvbatches);
@@ -123,9 +126,9 @@
             this.paneldetails.Controls.Add(this.label10);
             this.paneldetails.Controls.Add(this.label11);
             this.paneldetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.paneldetails.Location = new System.Drawing.Point(0, 288);
+            this.paneldetails.Location = new System.Drawing.Point(0, 324);
             this.paneldetails.Name = "paneldetails";
-            this.paneldetails.Size = new System.Drawing.Size(1482, 564);
+            this.paneldetails.Size = new System.Drawing.Size(1482, 528);
             this.paneldetails.TabIndex = 1;
             // 
             // dateTimePicker1
@@ -152,12 +155,12 @@
             this.dgvmedicines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvmedicines.GridColor = System.Drawing.SystemColors.AppWorkspace;
             this.dgvmedicines.Location = new System.Drawing.Point(462, 264);
-            this.dgvmedicines.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvmedicines.Margin = new System.Windows.Forms.Padding(4);
             this.dgvmedicines.Name = "dgvmedicines";
             this.dgvmedicines.ReadOnly = true;
             this.dgvmedicines.RowHeadersWidth = 51;
             this.dgvmedicines.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvmedicines.Size = new System.Drawing.Size(761, 234);
+            this.dgvmedicines.Size = new System.Drawing.Size(761, 198);
             this.dgvmedicines.TabIndex = 202;
             this.dgvmedicines.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMedicines_CellClick);
             // 
@@ -178,12 +181,12 @@
             this.dgvbatches.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvbatches.GridColor = System.Drawing.SystemColors.AppWorkspace;
             this.dgvbatches.Location = new System.Drawing.Point(100, 237);
-            this.dgvbatches.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvbatches.Margin = new System.Windows.Forms.Padding(4);
             this.dgvbatches.Name = "dgvbatches";
             this.dgvbatches.ReadOnly = true;
             this.dgvbatches.RowHeadersWidth = 51;
             this.dgvbatches.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvbatches.Size = new System.Drawing.Size(1231, 234);
+            this.dgvbatches.Size = new System.Drawing.Size(1231, 198);
             this.dgvbatches.TabIndex = 200;
             // 
             // iconButton3
@@ -333,6 +336,7 @@
             // panel3
             // 
             this.panel3.Controls.Add(this.dgvcompany);
+            this.panel3.Controls.Add(this.iconButton4);
             this.panel3.Controls.Add(this.iconButton1);
             this.panel3.Controls.Add(this.txtpaid);
             this.panel3.Controls.Add(this.label4);
@@ -346,7 +350,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1482, 288);
+            this.panel3.Size = new System.Drawing.Size(1482, 324);
             this.panel3.TabIndex = 0;
             // 
             // dgvcompany
@@ -365,15 +369,15 @@
             this.dgvcompany.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dgvcompany.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvcompany.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgvcompany.Location = new System.Drawing.Point(407, 4);
-            this.dgvcompany.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvcompany.Location = new System.Drawing.Point(340, 12);
+            this.dgvcompany.Margin = new System.Windows.Forms.Padding(4);
             this.dgvcompany.Name = "dgvcompany";
             this.dgvcompany.ReadOnly = true;
             this.dgvcompany.RowHeadersWidth = 51;
             this.dgvcompany.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvcompany.Size = new System.Drawing.Size(761, 237);
+            this.dgvcompany.Size = new System.Drawing.Size(761, 273);
             this.dgvcompany.TabIndex = 201;
-            this.dgvcompany.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvcompany_CellContentClick);
+            this.dgvcompany.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvCompany_CellClick);
             // 
             // iconButton1
             // 
@@ -483,6 +487,54 @@
             this.label1.Text = " Add Batch";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // iconButton4
+            // 
+            this.iconButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
+            this.iconButton4.FlatAppearance.BorderColor = System.Drawing.Color.Indigo;
+            this.iconButton4.FlatAppearance.BorderSize = 2;
+            this.iconButton4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DodgerBlue;
+            this.iconButton4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(51)))), ((int)(((byte)(69)))));
+            this.iconButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton4.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iconButton4.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.iconButton4.IconChar = FontAwesome.Sharp.IconChar.PlusSquare;
+            this.iconButton4.IconColor = System.Drawing.Color.Gainsboro;
+            this.iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton4.IconSize = 35;
+            this.iconButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton4.Location = new System.Drawing.Point(917, 57);
+            this.iconButton4.Name = "iconButton4";
+            this.iconButton4.Size = new System.Drawing.Size(48, 41);
+            this.iconButton4.TabIndex = 198;
+            this.iconButton4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.iconButton4.UseVisualStyleBackColor = false;
+            this.iconButton4.Click += new System.EventHandler(this.iconButton4_Click);
+            // 
+            // iconButton5
+            // 
+            this.iconButton5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
+            this.iconButton5.FlatAppearance.BorderColor = System.Drawing.Color.Indigo;
+            this.iconButton5.FlatAppearance.BorderSize = 2;
+            this.iconButton5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DodgerBlue;
+            this.iconButton5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(51)))), ((int)(((byte)(69)))));
+            this.iconButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton5.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iconButton5.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.PlusSquare;
+            this.iconButton5.IconColor = System.Drawing.Color.Gainsboro;
+            this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton5.IconSize = 35;
+            this.iconButton5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton5.Location = new System.Drawing.Point(447, 65);
+            this.iconButton5.Name = "iconButton5";
+            this.iconButton5.Size = new System.Drawing.Size(48, 41);
+            this.iconButton5.TabIndex = 204;
+            this.iconButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.iconButton5.UseVisualStyleBackColor = false;
+            this.iconButton5.Click += new System.EventHandler(this.iconButton5_Click);
+            // 
             // AddBatchdetailsform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -541,5 +593,7 @@
         private System.Windows.Forms.DataGridView dgvcompany;
         private System.Windows.Forms.DataGridView dgvmedicines;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private FontAwesome.Sharp.IconButton iconButton4;
+        private FontAwesome.Sharp.IconButton iconButton5;
     }
 }

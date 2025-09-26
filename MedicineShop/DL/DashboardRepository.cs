@@ -21,57 +21,68 @@ namespace TechStore.DataAccess
         {
             var summary = new DashboardSummary();
 
-            // Get total products
-            var productsTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM medicines");
-            summary.TotalProducts = productsTable.Rows.Count > 0 ? Convert.ToInt32(productsTable.Rows[0]["count"]) : 0;
-
-            // Get total companies
-            var companiesTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM company");
-            summary.TotalCompanies = companiesTable.Rows.Count > 0 ? Convert.ToInt32(companiesTable.Rows[0]["count"]) : 0;
-
-            // Get total categories
-            var categoriesTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM categories");
-            summary.TotalCategories = categoriesTable.Rows.Count > 0 ? Convert.ToInt32(categoriesTable.Rows[0]["count"]) : 0;
-
-            // Get low stock items count
-            var lowStockTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM v_low_stock");
-            summary.LowStockItems = lowStockTable.Rows.Count > 0 ? Convert.ToInt32(lowStockTable.Rows[0]["count"]) : 0;
-
-            // Get out of stock items
-            var outOfStockTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM v_low_stock WHERE stock_status = 'OUT_OF_STOCK'");
-            summary.OutOfStockItems = outOfStockTable.Rows.Count > 0 ? Convert.ToInt32(outOfStockTable.Rows[0]["count"]) : 0;
-
-            // Get expiring items (next 30 days)
-            var expiringTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM v_expiring_items WHERE days_to_expiry <= 30");
-            summary.ExpiringItems = expiringTable.Rows.Count > 0 ? Convert.ToInt32(expiringTable.Rows[0]["count"]) : 0;
-
-            // Get total inventory value
-            var inventoryTable = _dbHelper.ExecuteDataTable(@"
-                SELECT COALESCE(SUM(bi.quantity_remaining * bi.purchase_price), 0) as total_value 
-                FROM batch_items bi 
-                WHERE bi.quantity_remaining > 0");
-            summary.TotalInventoryValue = inventoryTable.Rows.Count > 0 ? Convert.ToDecimal(inventoryTable.Rows[0]["total_value"]) : 0;
-
-            // Get pending purchases count
-            var pendingTable = _dbHelper.ExecuteDataTable("SELECT COUNT(*) as count FROM purchase_batches WHERE status = 'pending'");
-            summary.PendingPurchases = pendingTable.Rows.Count > 0 ? Convert.ToInt32(pendingTable.Rows[0]["count"]) : 0;
-
-            // Get pending payments
-            var paymentsTable = _dbHelper.ExecuteDataTable(@"
-                SELECT COALESCE(SUM(total_price - paid), 0) as pending_amount 
-                FROM purchase_batches 
-                WHERE status = 'pending'");
-            summary.PendingPayments = paymentsTable.Rows.Count > 0 ? Convert.ToDecimal(paymentsTable.Rows[0]["pending_amount"]) : 0;
-
-            // Get today's sales
-            var todaySalesTable = _dbHelper.ExecuteDataTable(@"
-                SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as revenue
-                FROM sales 
-                WHERE DATE(sale_date) = CURDATE()");
-            if (todaySalesTable.Rows.Count > 0)
+            try
             {
-                summary.TodaySales = Convert.ToInt32(todaySalesTable.Rows[0]["count"]);
-                summary.TodayRevenue = Convert.ToDecimal(todaySalesTable.Rows[0]["revenue"]);
+                // Get all basic counts in a single query for better performance
+                var basicStatsTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        (SELECT COUNT(*) FROM medicines) as total_products,
+                        (SELECT COUNT(*) FROM company) as total_companies,
+                        (SELECT COUNT(*) FROM categories) as total_categories,
+                        (SELECT COUNT(*) FROM v_low_stock) as low_stock_items,
+                        (SELECT COUNT(*) FROM v_low_stock WHERE stock_status = 'OUT_OF_STOCK') as out_of_stock_items,
+                        (SELECT COUNT(*) FROM v_expiring_items WHERE days_to_expiry <= 30) as expiring_items,
+                        (SELECT COUNT(*) FROM purchase_batches WHERE status = 'pending') as pending_purchases");
+
+                if (basicStatsTable.Rows.Count > 0)
+                {
+                    var row = basicStatsTable.Rows[0];
+                    summary.TotalProducts = Convert.ToInt32(row["total_products"]);
+                    summary.TotalCompanies = Convert.ToInt32(row["total_companies"]);
+                    summary.TotalCategories = Convert.ToInt32(row["total_categories"]);
+                    summary.LowStockItems = Convert.ToInt32(row["low_stock_items"]);
+                    summary.OutOfStockItems = Convert.ToInt32(row["out_of_stock_items"]);
+                    summary.ExpiringItems = Convert.ToInt32(row["expiring_items"]);
+                    summary.PendingPurchases = Convert.ToInt32(row["pending_purchases"]);
+                }
+
+                // Get financial data
+                var financialStatsTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        COALESCE(SUM(bi.quantity_remaining * bi.purchase_price), 0) as total_value,
+                        (SELECT COALESCE(SUM(total_price - paid), 0) FROM purchase_batches WHERE status = 'pending') as pending_amount
+                    FROM batch_items bi 
+                    WHERE bi.quantity_remaining > 0");
+
+                if (financialStatsTable.Rows.Count > 0)
+                {
+                    var row = financialStatsTable.Rows[0];
+                    summary.TotalInventoryValue = Convert.ToDecimal(row["total_value"]);
+                    summary.PendingPayments = Convert.ToDecimal(row["pending_amount"]);
+                }
+
+                // Get today's sales data
+                var todaySalesTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        COUNT(*) as count, 
+                        COALESCE(SUM(total_amount), 0) as revenue
+                    FROM sales 
+                    WHERE DATE(sale_date) = CURDATE()");
+
+                if (todaySalesTable.Rows.Count > 0)
+                {
+                    var row = todaySalesTable.Rows[0];
+                    summary.TodaySales = Convert.ToInt32(row["count"]);
+                    summary.TodayRevenue = Convert.ToDecimal(row["revenue"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error (you might want to use a logging framework)
+                Console.WriteLine($"Error in GetDashboardSummary: {ex.Message}");
+
+                // Return a default summary to prevent crashes
+                summary = new DashboardSummary();
             }
 
             return summary;
@@ -80,24 +91,40 @@ namespace TechStore.DataAccess
         public List<StockInfo> GetLowStockItems()
         {
             var stockItems = new List<StockInfo>();
-            var stockTable = _dbHelper.ExecuteDataTable(@"
-                SELECT product_id, name, sale_price, company_name, 
-                       current_stock, stock_status
-                FROM v_low_stock 
-                ORDER BY current_stock ASC, name
-                LIMIT 10");
 
-            foreach (DataRow row in stockTable.Rows)
+            try
             {
-                stockItems.Add(new StockInfo
+                var stockTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT product_id, name, sale_price, company_name, 
+                           current_stock, stock_status
+                    FROM v_low_stock 
+                    ORDER BY 
+                        CASE stock_status 
+                            WHEN 'OUT_OF_STOCK' THEN 1 
+                            WHEN 'CRITICAL' THEN 2 
+                            WHEN 'LOW' THEN 3 
+                            ELSE 4 
+                        END,
+                        current_stock ASC, 
+                        name
+                    LIMIT 10");
+
+                foreach (DataRow row in stockTable.Rows)
                 {
-                    ProductId = Convert.ToInt32(row["product_id"]),
-                    Name = row["name"].ToString(),
-                    SalePrice = Convert.ToDecimal(row["sale_price"]),
-                    CompanyName = row["company_name"].ToString(),
-                    CurrentStock = Convert.ToInt32(row["current_stock"]),
-                    StockStatus = row["stock_status"].ToString()
-                });
+                    stockItems.Add(new StockInfo
+                    {
+                        ProductId = Convert.ToInt32(row["product_id"]),
+                        Name = row["name"].ToString(),
+                        SalePrice = Convert.ToDecimal(row["sale_price"]),
+                        CompanyName = row["company_name"].ToString(),
+                        CurrentStock = Convert.ToInt32(row["current_stock"]),
+                        StockStatus = row["stock_status"].ToString()
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetLowStockItems: {ex.Message}");
             }
 
             return stockItems;
@@ -106,26 +133,34 @@ namespace TechStore.DataAccess
         public List<ExpiringItem> GetExpiringItems()
         {
             var expiringItems = new List<ExpiringItem>();
-            var expiringTable = _dbHelper.ExecuteDataTable(@"
-                SELECT name, expiry_date, quantity_remaining, 
-                       purchase_price, sale_price, days_to_expiry, company_name
-                FROM v_expiring_items 
-                WHERE days_to_expiry <= 30
-                ORDER BY days_to_expiry ASC
-                LIMIT 10");
 
-            foreach (DataRow row in expiringTable.Rows)
+            try
             {
-                expiringItems.Add(new ExpiringItem
+                var expiringTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT name, expiry_date, quantity_remaining, 
+                           purchase_price, sale_price, days_to_expiry, company_name
+                    FROM v_expiring_items 
+                    WHERE days_to_expiry <= 30 AND quantity_remaining > 0
+                    ORDER BY days_to_expiry ASC, name
+                    LIMIT 10");
+
+                foreach (DataRow row in expiringTable.Rows)
                 {
-                    Name = row["name"].ToString(),
-                    ExpiryDate = Convert.ToDateTime(row["expiry_date"]),
-                    QuantityRemaining = Convert.ToInt32(row["quantity_remaining"]),
-                    PurchasePrice = Convert.ToDecimal(row["purchase_price"]),
-                    SalePrice = Convert.ToDecimal(row["sale_price"]),
-                    DaysToExpiry = Convert.ToInt32(row["days_to_expiry"]),
-                    CompanyName = row["company_name"].ToString()
-                });
+                    expiringItems.Add(new ExpiringItem
+                    {
+                        Name = row["name"].ToString(),
+                        ExpiryDate = Convert.ToDateTime(row["expiry_date"]),
+                        QuantityRemaining = Convert.ToInt32(row["quantity_remaining"]),
+                        PurchasePrice = Convert.ToDecimal(row["purchase_price"]),
+                        SalePrice = Convert.ToDecimal(row["sale_price"]),
+                        DaysToExpiry = Convert.ToInt32(row["days_to_expiry"]),
+                        CompanyName = row["company_name"].ToString()
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetExpiringItems: {ex.Message}");
             }
 
             return expiringItems;
@@ -134,29 +169,37 @@ namespace TechStore.DataAccess
         public List<PurchaseSummary> GetPendingPurchases()
         {
             var purchases = new List<PurchaseSummary>();
-            var purchasesTable = _dbHelper.ExecuteDataTable(@"
-                SELECT pb.purchase_batch_id, pb.BatchName, c.company_name,
-                       pb.purchase_date, pb.total_price, pb.paid, 
-                       (pb.total_price - pb.paid) as remaining_amount, pb.status
-                FROM purchase_batches pb
-                JOIN company c ON pb.company_id = c.company_id
-                WHERE pb.status = 'pending'
-                ORDER BY pb.purchase_date DESC
-                LIMIT 10");
 
-            foreach (DataRow row in purchasesTable.Rows)
+            try
             {
-                purchases.Add(new PurchaseSummary
+                var purchasesTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT pb.purchase_batch_id, pb.BatchName, c.company_name,
+                           pb.purchase_date, pb.total_price, pb.paid, 
+                           (pb.total_price - pb.paid) as remaining_amount, pb.status
+                    FROM purchase_batches pb
+                    JOIN company c ON pb.company_id = c.company_id
+                    WHERE pb.status = 'pending' AND (pb.total_price - pb.paid) > 0
+                    ORDER BY (pb.total_price - pb.paid) DESC, pb.purchase_date DESC
+                    LIMIT 10");
+
+                foreach (DataRow row in purchasesTable.Rows)
                 {
-                    PurchaseBatchId = Convert.ToInt32(row["purchase_batch_id"]),
-                    BatchName = row["BatchName"].ToString(),
-                    CompanyName = row["company_name"].ToString(),
-                    PurchaseDate = Convert.ToDateTime(row["purchase_date"]),
-                    TotalPrice = Convert.ToDecimal(row["total_price"]),
-                    Paid = Convert.ToDecimal(row["paid"]),
-                    RemainingAmount = Convert.ToDecimal(row["remaining_amount"]),
-                    Status = row["status"].ToString()
-                });
+                    purchases.Add(new PurchaseSummary
+                    {
+                        PurchaseBatchId = Convert.ToInt32(row["purchase_batch_id"]),
+                        BatchName = row["BatchName"].ToString(),
+                        CompanyName = row["company_name"].ToString(),
+                        PurchaseDate = Convert.ToDateTime(row["purchase_date"]),
+                        TotalPrice = Convert.ToDecimal(row["total_price"]),
+                        Paid = Convert.ToDecimal(row["paid"]),
+                        RemainingAmount = Convert.ToDecimal(row["remaining_amount"]),
+                        Status = row["status"].ToString()
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetPendingPurchases: {ex.Message}");
             }
 
             return purchases;
@@ -165,21 +208,29 @@ namespace TechStore.DataAccess
         public List<SalesSummary> GetRecentSales(int days = 7)
         {
             var sales = new List<SalesSummary>();
-            var salesTable = _dbHelper.ExecuteDataTable(@"
-                SELECT sale_day, total_bills, total_sales
-                FROM v_daily_sales 
-                WHERE sale_day >= DATE_SUB(CURDATE(), INTERVAL @days DAY)
-                ORDER BY sale_day DESC",
-                new MySqlParameter[] { new MySqlParameter("@days", days) });
 
-            foreach (DataRow row in salesTable.Rows)
+            try
             {
-                sales.Add(new SalesSummary
+                var salesTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT sale_day, total_bills, total_sales
+                    FROM v_daily_sales 
+                    WHERE sale_day >= DATE_SUB(CURDATE(), INTERVAL @days DAY)
+                    ORDER BY sale_day DESC",
+                    new MySqlParameter[] { new MySqlParameter("@days", days) });
+
+                foreach (DataRow row in salesTable.Rows)
                 {
-                    SaleDay = Convert.ToDateTime(row["sale_day"]),
-                    TotalBills = Convert.ToInt32(row["total_bills"]),
-                    TotalSales = Convert.ToDecimal(row["total_sales"])
-                });
+                    sales.Add(new SalesSummary
+                    {
+                        SaleDay = Convert.ToDateTime(row["sale_day"]),
+                        TotalBills = Convert.ToInt32(row["total_bills"]),
+                        TotalSales = Convert.ToDecimal(row["total_sales"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetRecentSales: {ex.Message}");
             }
 
             return sales;
@@ -188,28 +239,37 @@ namespace TechStore.DataAccess
         public List<TopSellingProduct> GetTopSellingProducts(int count = 5)
         {
             var products = new List<TopSellingProduct>();
-            var productsTable = _dbHelper.ExecuteDataTable(@"
-                SELECT m.name, c.company_name, 
-                       SUM(si.quantity) as total_quantity,
-                       SUM(si.quantity * si.price) as total_revenue
-                FROM sale_items si
-                JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
-                JOIN medicines m ON bi.product_id = m.product_id
-                JOIN company c ON m.company_id = c.company_id
-                GROUP BY m.product_id, m.name, c.company_name
-                ORDER BY total_quantity DESC
-                LIMIT @count",
-                new MySqlParameter[] { new MySqlParameter("@count", count) });
 
-            foreach (DataRow row in productsTable.Rows)
+            try
             {
-                products.Add(new TopSellingProduct
+                var productsTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT m.name, c.company_name, 
+                           SUM(si.quantity) as total_quantity,
+                           SUM(si.quantity * si.price) as total_revenue
+                    FROM sale_items si
+                    JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
+                    JOIN medicines m ON bi.product_id = m.product_id
+                    JOIN company c ON m.company_id = c.company_id
+                    WHERE si.sale_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                    GROUP BY m.product_id, m.name, c.company_name
+                    ORDER BY total_quantity DESC
+                    LIMIT @count",
+                    new MySqlParameter[] { new MySqlParameter("@count", count) });
+
+                foreach (DataRow row in productsTable.Rows)
                 {
-                    ProductName = row["name"].ToString(),
-                    CompanyName = row["company_name"].ToString(),
-                    TotalQuantitySold = Convert.ToInt32(row["total_quantity"]),
-                    TotalRevenue = Convert.ToDecimal(row["total_revenue"])
-                });
+                    products.Add(new TopSellingProduct
+                    {
+                        ProductName = row["name"].ToString(),
+                        CompanyName = row["company_name"].ToString(),
+                        TotalQuantitySold = Convert.ToInt32(row["total_quantity"]),
+                        TotalRevenue = Convert.ToDecimal(row["total_revenue"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetTopSellingProducts: {ex.Message}");
             }
 
             return products;
@@ -218,32 +278,95 @@ namespace TechStore.DataAccess
         public List<MonthlyStats> GetMonthlyStats(int months = 6)
         {
             var stats = new List<MonthlyStats>();
-            var statsTable = _dbHelper.ExecuteDataTable(@"
-                SELECT 
-                    DATE_FORMAT(sale_date, '%Y-%m') as month,
-                    SUM(total_amount) as total_sales,
-                    0 as total_purchases,
-                    0 as profit,
-                    COUNT(*) as products_sold
-                FROM sales 
-                WHERE sale_date >= DATE_SUB(CURDATE(), INTERVAL @months MONTH)
-                GROUP BY DATE_FORMAT(sale_date, '%Y-%m')
-                ORDER BY month DESC",
-                new MySqlParameter[] { new MySqlParameter("@months", months) });
 
-            foreach (DataRow row in statsTable.Rows)
+            try
             {
-                stats.Add(new MonthlyStats
+                var statsTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        DATE_FORMAT(sale_date, '%Y-%m') as month,
+                        SUM(total_amount) as total_sales,
+                        0 as total_purchases,
+                        0 as profit,
+                        COUNT(*) as products_sold
+                    FROM sales 
+                    WHERE sale_date >= DATE_SUB(CURDATE(), INTERVAL @months MONTH)
+                    GROUP BY DATE_FORMAT(sale_date, '%Y-%m')
+                    ORDER BY month DESC",
+                    new MySqlParameter[] { new MySqlParameter("@months", months) });
+
+                foreach (DataRow row in statsTable.Rows)
                 {
-                    Month = row["month"].ToString(),
-                    TotalSales = Convert.ToDecimal(row["total_sales"]),
-                    TotalPurchases = Convert.ToDecimal(row["total_purchases"]),
-                    Profit = Convert.ToDecimal(row["profit"]),
-                    ProductsSold = Convert.ToInt32(row["products_sold"])
-                });
+                    stats.Add(new MonthlyStats
+                    {
+                        Month = row["month"].ToString(),
+                        TotalSales = Convert.ToDecimal(row["total_sales"]),
+                        TotalPurchases = Convert.ToDecimal(row["total_purchases"]),
+                        Profit = Convert.ToDecimal(row["profit"]),
+                        ProductsSold = Convert.ToInt32(row["products_sold"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetMonthlyStats: {ex.Message}");
             }
 
             return stats;
+        }
+
+        // Additional helper method to check database connection
+        public bool TestConnection()
+        {
+            try
+            {
+                var testTable = _dbHelper.ExecuteDataTable("SELECT 1");
+                return testTable != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Method to get critical alerts for immediate attention
+        public List<string> GetCriticalAlerts()
+        {
+            var alerts = new List<string>();
+
+            try
+            {
+                var alertsTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        (SELECT COUNT(*) FROM v_low_stock WHERE stock_status = 'OUT_OF_STOCK') as out_of_stock,
+                        (SELECT COUNT(*) FROM v_expiring_items WHERE days_to_expiry <= 3) as expiring_soon,
+                        (SELECT COUNT(*) FROM purchase_batches WHERE status = 'pending' AND (total_price - paid) > 100000) as high_pending
+                ");
+
+                if (alertsTable.Rows.Count > 0)
+                {
+                    var row = alertsTable.Rows[0];
+
+                    int outOfStock = Convert.ToInt32(row["out_of_stock"]);
+                    int expiringSoon = Convert.ToInt32(row["expiring_soon"]);
+                    int highPending = Convert.ToInt32(row["high_pending"]);
+
+                    if (outOfStock > 0)
+                        alerts.Add($"{outOfStock} products are completely out of stock");
+
+                    if (expiringSoon > 0)
+                        alerts.Add($"{expiringSoon} products expire within 3 days");
+
+                    if (highPending > 0)
+                        alerts.Add($"{highPending} purchase batches have high pending payments (>1 lakh)");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetCriticalAlerts: {ex.Message}");
+                alerts.Add("Unable to fetch critical alerts due to database error");
+            }
+
+            return alerts;
         }
     }
 }

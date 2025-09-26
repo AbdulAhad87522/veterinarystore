@@ -42,12 +42,14 @@ namespace MedicineShop.UI
             dataGridView1.Columns["Paid"].Visible = false;
             dataGridView1.Columns["RemainingBalance"].Visible = false;
             dataGridView1.Columns["CompanyName"].Visible = false;
+            dataGridView1.Columns["BatchName"].Visible = false;
             var batchesdetails=ibl.getrecord(billId);
             dataGridView2.DataSource = batchesdetails;
             dataGridView2.Columns["CompanyId"].Visible = false;
             dataGridView2.Columns["PaymentId"].Visible = false;
             dataGridView2.Columns["RemainingBalance"].Visible = false;
             dataGridView2.Columns["CompanyName"].Visible = false;
+
         }
         private void LoadHeaderInfo()
         {
