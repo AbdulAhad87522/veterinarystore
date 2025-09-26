@@ -67,5 +67,10 @@ namespace MedicineShop.UI
             //this.Close();
             //f.ShowDialog();
         }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

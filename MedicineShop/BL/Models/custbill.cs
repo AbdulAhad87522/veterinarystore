@@ -25,5 +25,21 @@ namespace MedicineShop.BL.Models
         public decimal Paid { get; set; }
         public decimal RemainingBalance { get; set; }
         public string CustomerName { get; set; }
+        public decimal AllocatedAmount { get; internal set; }
+        public int SaleId { get; internal set; }
+
     }
 }
+
+//public int PaymentId { get; set; }
+//public int CompanyId { get; set; }
+//public DateTime PaymentDate { get; set; }
+//public decimal Amount { get; set; }
+//public string Status { get; set; }
+//public decimal TotalPrice { get; set; }
+//public decimal Paid { get; set; }
+//public decimal RemainingBalance { get; set; }
+//public string CompanyName { get; set; }
+//public string BatchName { get; set; }
+//public int BatchId { get; internal set; }
+//public decimal AllocatedAmount { get; internal set; }
