@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using TechStore.UI;
 
@@ -34,22 +35,17 @@ namespace MedicineShop.UI
         {
             //Assuming you have a method in your BL layer to get bill details by billId
             var billDetails = ibl.GetPaymentRecords(billId);
-            dataGridView1.DataSource = billDetails;
-            dataGridView1.Columns["CompanyId"].Visible = false;
-            dataGridView1.Columns["PaymentId"].Visible = false;
-            dataGridView1.Columns["Status"].Visible = false;
-            dataGridView1.Columns["TotalPrice"].Visible = false;
-            dataGridView1.Columns["Paid"].Visible = false;
-            dataGridView1.Columns["RemainingBalance"].Visible = false;
-            dataGridView1.Columns["CompanyName"].Visible = false;
-            dataGridView1.Columns["BatchName"].Visible = false;
-            var batchesdetails=ibl.getrecord(billId);
+            dataGridView1.DataSource = billDetails.Select(p => new { p.Amount, p.PaymentDate}).ToList();
+
+
+            var batchesdetails =ibl.getrecord(billId);
             dataGridView2.DataSource = batchesdetails;
             dataGridView2.Columns["CompanyId"].Visible = false;
             dataGridView2.Columns["PaymentId"].Visible = false;
             dataGridView2.Columns["RemainingBalance"].Visible = false;
             dataGridView2.Columns["CompanyName"].Visible = false;
-
+            dataGridView2.Columns["Status"].Visible = false;
+            dataGridView2.Columns["BatchId"].Visible = false;
         }
         private void LoadHeaderInfo()
         {

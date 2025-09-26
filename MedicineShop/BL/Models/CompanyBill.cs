@@ -30,6 +30,8 @@ namespace MedicineShop.BL.Models
             public decimal RemainingBalance { get; set; }
             public string CompanyName { get; set; }
         public string BatchName { get; set; }
+        public int BatchId { get; internal set; }
+        public decimal AllocatedAmount { get; internal set; }
     }
 
     

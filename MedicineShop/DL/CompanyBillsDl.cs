@@ -225,62 +225,102 @@ namespace MedicineShop.DL
         public List<PaymentRecord> GetCompanyPaymentRecords(int companyId)
         {
             var records = new List<PaymentRecord>();
+
             try
             {
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                    SELECT 
-                        pr.payment_id,
-                        pr.company_id,
-                        pb.BatchName,
-                        pr.payment_date,
-                        pr.amount,
-                        pb.status,
-                        pb.total_price,
-                        pb.paid,
-                        (pb.total_price - pb.paid) AS remaining_balance
-                    FROM payment_records pr
-                    JOIN purchase_batches pb ON pr.company_id = pb.company_id
-                    WHERE pr.company_id = @CompanyId
-                    ORDER BY pr.payment_date DESC;
-                ";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    // 1. Get all payments for this company (oldest first)
+                    var payments = new List<(int PaymentId, DateTime Date, decimal Amount)>();
+                    string paymentQuery = @"SELECT payment_id, payment_date, amount
+                                    FROM payment_records
+                                    WHERE company_id = @CompanyId
+                                    ORDER BY payment_date ASC, payment_id ASC";
+                    using (var cmd = new MySqlCommand(paymentQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@CompanyId", companyId);
-
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                var record = new PaymentRecord
-                                {
-                                    PaymentId = reader.GetInt32("payment_id"),
-                                    CompanyId = reader.GetInt32("company_id"),
-                                    BatchName = reader.GetString("BatchName"),
-                                    PaymentDate = reader.GetDateTime("payment_date"),
-                                    Amount = reader.GetDecimal("amount"),
-                                    Status = reader.GetString("status"),
-                                    TotalPrice = reader.GetDecimal("total_price"),
-                                    Paid = reader.GetDecimal("paid"),
-                                  
-                                    RemainingBalance = reader.GetDecimal("remaining_balance")
-                                };
-                                records.Add(record);
+                                payments.Add((
+                                    reader.GetInt32("payment_id"),
+                                    reader.GetDateTime("payment_date"),
+                                    reader.GetDecimal("amount")
+                                ));
                             }
+                        }
+                    }
+
+                    // 2. Get all batches (oldest first)
+                    var batches = new List<(int BatchId, string BatchName, decimal Total)>();
+                    string batchQuery = @"SELECT purchase_batch_id, BatchName, total_price
+                                  FROM purchase_batches
+                                  WHERE company_id = @CompanyId
+                                  ORDER BY purchase_date ASC, purchase_batch_id ASC";
+                    using (var cmd = new MySqlCommand(batchQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CompanyId", companyId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                batches.Add((
+                                    reader.GetInt32("purchase_batch_id"),
+                                    reader.GetString("BatchName"),
+                                    reader.GetDecimal("total_price")
+                                ));
+                            }
+                        }
+                    }
+
+                    // 3. Simulate allocation (replay AddCompanyPayment logic)
+                    var batchPaidTracker = batches.ToDictionary(b => b.BatchId, b => 0m);
+
+                    foreach (var p in payments)
+                    {
+                        decimal remainingPayment = p.Amount;
+
+                        foreach (var b in batches)
+                        {
+                            if (remainingPayment <= 0) break;
+
+                            decimal alreadyPaid = batchPaidTracker[b.BatchId];
+                            decimal batchRemaining = b.Total - alreadyPaid;
+                            if (batchRemaining <= 0) continue;
+
+                            decimal toPay = Math.Min(remainingPayment, batchRemaining);
+
+                            records.Add(new PaymentRecord
+                            {
+                                PaymentId = p.PaymentId,
+                                CompanyId = companyId,
+                                BatchId = b.BatchId,
+                                BatchName = b.BatchName,
+                                PaymentDate = p.Date,
+                                Amount = p.Amount,               // total payment value
+                                AllocatedAmount = toPay,         // part applied to this batch
+                                TotalPrice = b.Total,
+                                Paid = alreadyPaid + toPay,      // cumulative paid for this batch
+                                RemainingBalance = b.Total - (alreadyPaid + toPay)
+                            });
+
+                            batchPaidTracker[b.BatchId] += toPay;
+                            remainingPayment -= toPay;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error fetching payment records: " + ex.Message);
+                throw new Exception("Error calculating company payment allocations: " + ex.Message);
             }
 
             return records;
         }
+
     }
 
 }
