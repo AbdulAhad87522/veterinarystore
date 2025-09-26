@@ -47,9 +47,11 @@
             this.panel1.Controls.Add(this.toplbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1439, 84);
+            this.panel1.Size = new System.Drawing.Size(1619, 105);
             this.panel1.TabIndex = 205;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // toplbl
             // 
@@ -57,9 +59,9 @@
             this.toplbl.AutoSize = true;
             this.toplbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toplbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.toplbl.Location = new System.Drawing.Point(601, 26);
+            this.toplbl.Location = new System.Drawing.Point(676, 32);
             this.toplbl.Name = "toplbl";
-            this.toplbl.Size = new System.Drawing.Size(281, 38);
+            this.toplbl.Size = new System.Drawing.Size(339, 46);
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = "Company Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -80,13 +82,13 @@
             this.dataGridView1.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dataGridView1.Location = new System.Drawing.Point(81, 287);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView1.Location = new System.Drawing.Point(91, 359);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(1267, 500);
+            this.dataGridView1.Size = new System.Drawing.Size(1425, 625);
             this.dataGridView1.TabIndex = 204;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.s);
             // 
@@ -106,9 +108,10 @@
             this.btnDelete.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnDelete.IconSize = 35;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(1144, 220);
+            this.btnDelete.Location = new System.Drawing.Point(1287, 275);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(204, 51);
+            this.btnDelete.Size = new System.Drawing.Size(230, 64);
             this.btnDelete.TabIndex = 203;
             this.btnDelete.Text = "Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -132,9 +135,10 @@
             this.btnEdit.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnEdit.IconSize = 35;
             this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.Location = new System.Drawing.Point(922, 220);
+            this.btnEdit.Location = new System.Drawing.Point(1037, 275);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(216, 51);
+            this.btnEdit.Size = new System.Drawing.Size(243, 64);
             this.btnEdit.TabIndex = 202;
             this.btnEdit.Text = "Edit ";
             this.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -158,9 +162,10 @@
             this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnAdd.IconSize = 35;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(685, 220);
+            this.btnAdd.Location = new System.Drawing.Point(771, 275);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(231, 51);
+            this.btnAdd.Size = new System.Drawing.Size(260, 64);
             this.btnAdd.TabIndex = 201;
             this.btnAdd.Text = "Add";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -174,9 +179,9 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Baskerville Old Face", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.label1.Location = new System.Drawing.Point(74, 98);
+            this.label1.Location = new System.Drawing.Point(83, 122);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(352, 32);
+            this.label1.Size = new System.Drawing.Size(407, 38);
             this.label1.TabIndex = 206;
             this.label1.Text = "Search Company by Name :";
             // 
@@ -185,10 +190,11 @@
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(81, 139);
+            this.txtSearch.Location = new System.Drawing.Point(91, 174);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtSearch.Multiline = true;
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(1267, 56);
+            this.txtSearch.Size = new System.Drawing.Size(1425, 69);
             this.txtSearch.TabIndex = 207;
             this.txtSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSearch.Click += new System.EventHandler(this.txtSearch_TextChanged);
@@ -196,9 +202,9 @@
             // 
             // CompanyMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1439, 809);
+            this.ClientSize = new System.Drawing.Size(1619, 1011);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
@@ -206,6 +212,7 @@
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "CompanyMain";
             this.Text = "CompanyMain";
             this.Load += new System.EventHandler(this.CompanyMain_Load);

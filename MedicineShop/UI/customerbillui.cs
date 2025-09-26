@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using MedicineShop.BL.Bl;
 using TechStore.UI;
 
@@ -24,6 +25,26 @@ namespace MedicineShop.UI
             panelbill.Visible = false;
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtpayement.Focused)
+                    {
+                        iconButton5.PerformClick();
+                        return true;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -112,6 +133,11 @@ namespace MedicineShop.UI
         }
 
         private void customerbillui_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelbill_Paint(object sender, PaintEventArgs e)
         {
 
         }

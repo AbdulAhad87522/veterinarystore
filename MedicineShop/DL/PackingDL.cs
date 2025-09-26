@@ -11,7 +11,7 @@ namespace MedicineShop.DL
 
         public int AddPacking(Packing packing)
         {
-            string query = "INSERT INTO packings (packing_name) VALUES (@name)";
+            string query = "INSERT INTO packing (packing_name) VALUES (@name)";
             MySqlParameter[] parameters =
             {
                 new MySqlParameter("@name", packing.PackingName)

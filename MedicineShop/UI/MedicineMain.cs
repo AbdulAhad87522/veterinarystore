@@ -18,6 +18,35 @@ namespace MedicineShop
             CustomizeGrid();
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == (Keys.Control | Keys.A))
+                {
+                    btnAdd.PerformClick();
+                    return true;
+                }
+                else if (keyData == (Keys.Control | Keys.E))
+                {
+                    btnEdit.PerformClick();
+                    return true;
+                }
+
+                else if (keyData == Keys.Delete)
+                {
+                    btnDelete.PerformClick();
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void LoadMedicines()
         {
             dataGridView1.DataSource = _medicineBL.GetMedicines();

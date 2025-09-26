@@ -16,7 +16,7 @@ namespace MedicineShop.DL
 
         public DataTable GetAllCustomers(string search = "")
         {
-            string query = "SELECT * FROM customers WHERE full_name LIKE @search";
+            string query = "SELECT * FROM customers WHERE full_name LIKE @search and customer_id != 1";
             var parameters = new[]
             {
                 new MySqlParameter("@search", "%" + search + "%")

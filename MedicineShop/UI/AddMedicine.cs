@@ -21,6 +21,58 @@ namespace MedicineShop.UI
         private readonly bool _isEdit;
         private List<string> _allProductNames;
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtName.Focused)
+                    {
+                        pckcmb.Focus();
+                        return true;
+                    }
+
+                    else if (pckcmb.Focused)
+                    {
+                        txtPrice.Focus();
+                        return true;
+
+                    }
+
+                    else if (txtPrice.Focused)
+                    {
+                        cmbCategory.Focus();
+                        return true;
+
+                    }
+
+                    else if (cmbCategory.Focused)
+                    {
+                        cmbCompany.Focus();
+                        return true;
+
+                    }
+                    else if (cmbCompany.Focused)
+                    {
+                        txtDesc.Focus();
+                        return true;
+
+                    }
+                    else if (txtDesc.Focused)
+                    {
+                        txtDesc.Focus();
+                        return true;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         public AddMedicine(Medicine med = null)
         {
@@ -183,6 +235,11 @@ namespace MedicineShop.UI
         }
 
         private void pckcmb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint_1(object sender, PaintEventArgs e)
         {
 
         }

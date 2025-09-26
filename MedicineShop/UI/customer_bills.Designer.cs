@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.button9 = new System.Windows.Forms.Button();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -41,6 +41,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtamount = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txttotaldue = new System.Windows.Forms.TextBox();
             this.paneledit = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.btncancle1 = new FontAwesome.Sharp.IconButton();
@@ -53,8 +55,6 @@
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.toplbl = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txttotaldue = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             this.panel2.SuspendLayout();
             this.paneledit.SuspendLayout();
@@ -146,6 +146,7 @@
             this.txtdate.Name = "txtdate";
             this.txtdate.Size = new System.Drawing.Size(352, 43);
             this.txtdate.TabIndex = 159;
+            this.txtdate.TextChanged += new System.EventHandler(this.txtdate_TextChanged_1);
             // 
             // label3
             // 
@@ -212,6 +213,25 @@
             this.panel2.Size = new System.Drawing.Size(1783, 864);
             this.panel2.TabIndex = 17;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint_1);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(1489, 26);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(78, 20);
+            this.label7.TabIndex = 157;
+            this.label7.Text = "Total Due";
+            // 
+            // txttotaldue
+            // 
+            this.txttotaldue.Location = new System.Drawing.Point(1493, 50);
+            this.txttotaldue.Multiline = true;
+            this.txttotaldue.Name = "txttotaldue";
+            this.txttotaldue.ReadOnly = true;
+            this.txttotaldue.Size = new System.Drawing.Size(134, 48);
+            this.txttotaldue.TabIndex = 155;
+            this.txttotaldue.TextChanged += new System.EventHandler(this.txttotaldue_TextChanged);
             // 
             // paneledit
             // 
@@ -367,11 +387,11 @@
             // dataGridView2
             // 
             this.dataGridView2.AllowUserToAddRows = false;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.GhostWhite;
-            this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AntiqueWhite;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.GhostWhite;
+            this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -414,25 +434,6 @@
             this.panel1.Size = new System.Drawing.Size(1783, 105);
             this.panel1.TabIndex = 16;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
-            // 
-            // txttotaldue
-            // 
-            this.txttotaldue.Location = new System.Drawing.Point(1493, 50);
-            this.txttotaldue.Multiline = true;
-            this.txttotaldue.Name = "txttotaldue";
-            this.txttotaldue.ReadOnly = true;
-            this.txttotaldue.Size = new System.Drawing.Size(134, 48);
-            this.txttotaldue.TabIndex = 155;
-            this.txttotaldue.TextChanged += new System.EventHandler(this.txttotaldue_TextChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(1489, 26);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(78, 20);
-            this.label7.TabIndex = 157;
-            this.label7.Text = "Total Due";
             // 
             // customer_bills
             // 

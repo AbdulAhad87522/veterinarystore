@@ -47,8 +47,9 @@
             this.panel1.Controls.Add(this.toplbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1656, 84);
+            this.panel1.Size = new System.Drawing.Size(1863, 105);
             this.panel1.TabIndex = 212;
             // 
             // toplbl
@@ -57,9 +58,9 @@
             this.toplbl.AutoSize = true;
             this.toplbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toplbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.toplbl.Location = new System.Drawing.Point(709, 26);
+            this.toplbl.Location = new System.Drawing.Point(798, 32);
             this.toplbl.Name = "toplbl";
-            this.toplbl.Size = new System.Drawing.Size(277, 38);
+            this.toplbl.Size = new System.Drawing.Size(334, 46);
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = "customer Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -80,22 +81,24 @@
             this.dataGridView1.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dataGridView1.Location = new System.Drawing.Point(81, 348);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView1.Location = new System.Drawing.Point(91, 435);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(1485, 500);
+            this.dataGridView1.Size = new System.Drawing.Size(1671, 625);
             this.dataGridView1.TabIndex = 211;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(81, 200);
+            this.txtSearch.Location = new System.Drawing.Point(91, 250);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtSearch.Multiline = true;
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(308, 52);
+            this.txtSearch.Size = new System.Drawing.Size(346, 64);
             this.txtSearch.TabIndex = 214;
             this.txtSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
@@ -105,9 +108,9 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Baskerville Old Face", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.label1.Location = new System.Drawing.Point(74, 158);
+            this.label1.Location = new System.Drawing.Point(83, 198);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(295, 26);
+            this.label1.Size = new System.Drawing.Size(353, 32);
             this.label1.TabIndex = 213;
             this.label1.Text = "Search Customer by Name :";
             // 
@@ -127,9 +130,10 @@
             this.btnDelete.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnDelete.IconSize = 35;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(1362, 281);
+            this.btnDelete.Location = new System.Drawing.Point(1532, 351);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(204, 51);
+            this.btnDelete.Size = new System.Drawing.Size(230, 64);
             this.btnDelete.TabIndex = 210;
             this.btnDelete.Text = "Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -153,9 +157,10 @@
             this.btnEdit.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnEdit.IconSize = 35;
             this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.Location = new System.Drawing.Point(1140, 281);
+            this.btnEdit.Location = new System.Drawing.Point(1282, 351);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(216, 51);
+            this.btnEdit.Size = new System.Drawing.Size(243, 64);
             this.btnEdit.TabIndex = 209;
             this.btnEdit.Text = "Edit ";
             this.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -179,9 +184,10 @@
             this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnAdd.IconSize = 35;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(903, 281);
+            this.btnAdd.Location = new System.Drawing.Point(1016, 351);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(231, 51);
+            this.btnAdd.Size = new System.Drawing.Size(260, 64);
             this.btnAdd.TabIndex = 208;
             this.btnAdd.Text = "Add";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -191,9 +197,9 @@
             // 
             // Customermain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1656, 909);
+            this.ClientSize = new System.Drawing.Size(1863, 1136);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.txtSearch);
