@@ -77,7 +77,7 @@ namespace MedicineShop.DL
             }
         }
 
-        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid)
+        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid , decimal totaldiscount)
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
@@ -92,9 +92,10 @@ namespace MedicineShop.DL
                     page.Content().Column(column =>
                     {
                         // --- Logo + Header ---
-                        column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
-                        column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
-                        column.Item().AlignCenter().Text("office # 39 & 40, 1st floor Gallery 3, Rex city, Sitiana Road");
+                        //column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
+                        column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(16);
+                        //column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
+                        column.Item().AlignCenter().Text("main jalsai bazar, Tehsil Lahor district Swabi");
                         column.Item().AlignCenter().Text("Phone: 0300-6634245");
                         column.Item().PaddingBottom(5).LineHorizontal(0.5f);
 
@@ -151,7 +152,7 @@ namespace MedicineShop.DL
                         // --- Summary ---
                         column.Item().Text("----------------------------------------");
                         column.Item().Text($"SUBTOTAL:    Rs. {subTotal + totalDiscount:N0}");
-                        column.Item().Text($"DISCOUNT:    Rs. {totalDiscount:N0}");
+                        column.Item().Text($"DISCOUNT:    Rs. {totaldiscount:N0}");
                         column.Item().Text($"TOTAL:       Rs. {total:N0}");
                         column.Item().Text($"PAID:        Rs. {paid:N0}");
                         column.Item().Text($"BALANCE:     Rs. {(total - paid):N0}");
@@ -161,18 +162,20 @@ namespace MedicineShop.DL
                         column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold();
                         column.Item().PaddingTop(5).LineHorizontal(0.5f);
                         column.Item().AlignCenter().Text("** SPECIAL OFFERS **").Bold();
-                        column.Item().AlignCenter().Text("Free diagnostics with any repair");
-                        column.Item().AlignCenter().Text("10% discount on next purchase");
-                        column.Item().AlignCenter().Text("Ask about our warranty plans!");
+                        column.Item().AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
+                        column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
+                        column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
                         column.Item().AlignCenter().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
                         column.Item().PaddingTop(5).AlignCenter().Text("Developed By:");
                         column.Item().PaddingTop(5).AlignCenter().Text("abdulahad18022@gmail.com");
+                        column.Item().PaddingTop(5).AlignCenter().Text("03477048001");
+
                     });
                 });
             }).GeneratePdf(filePath);
         }
 
-        public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid)
+        public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             PrintDocument printDocument = new PrintDocument();
 
@@ -224,7 +227,7 @@ namespace MedicineShop.DL
                 // --- Header with Double Line Big Font ---
                 DrawCenteredText("ALI VETERINARY", headerFont);
                 DrawCenteredText("CLINIC", headerFont);
-                DrawCenteredText("office # 39 & 40, 1st floor Gallery 3, Rex city, Sitiana Road");
+                DrawCenteredText("main jalsai bazar, Tehsil Lahor district Swabi");
                 DrawCenteredText("Phone: 0300-6634245");
                 DrawLine();
 
@@ -275,7 +278,7 @@ namespace MedicineShop.DL
                 // --- Summary ---
                 DrawCenteredText("----------------------------------------");
                 DrawLeftRight($"SUBTOTAL:", $"Rs. {(subTotal + totalDiscount):N0}");
-                DrawLeftRight($"DISCOUNT:", $"Rs. {totalDiscount:N0}");
+                DrawLeftRight($"DISCOUNT:", $"Rs. {totaldiscount:N0}");
                 DrawLeftRight($"TOTAL:", $"Rs. {total:N0}");
                 DrawLeftRight($"PAID:", $"Rs. {paid:N0}");
                 DrawLeftRight($"BALANCE:", $"Rs. {(total - paid):N0}");
@@ -286,13 +289,15 @@ namespace MedicineShop.DL
                 DrawCenteredText("Thank you for your shopping here!", boldFont);
                 DrawLine();
                 DrawCenteredText("** SPECIAL OFFERS **", boldFont);
-                DrawCenteredText("Free diagnostics with any repair");
-                DrawCenteredText("10% discount on next purchase");
-                DrawCenteredText("Ask about our warranty plans!");
+                DrawCenteredText("بل کے بغیر واپسی نہیں ہوگی");
+                DrawCenteredText("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
+                DrawCenteredText("آپ کے اعتماد کا شکریہ");
                 DrawCenteredText($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
                 currentY += 3;
                 DrawCenteredText("Developed By:");
                 DrawCenteredText("abdulahad18022@gmail.com");
+                DrawCenteredText("03477048001");
+
             };
 
             // Show print dialog and print

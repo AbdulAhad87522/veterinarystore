@@ -62,6 +62,54 @@ namespace MedicineShop.UI
             this.FormClosing += AddBatchdetailsform_FormClosing;
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            try
+            {
+                if (keyData == Keys.Enter)
+                {
+                    if (txtBnames.Focused)
+                    {
+                        txtcompany.Focus();
+                    }
+                    else if(txtcompany.Focused)
+                    {
+                        txttotalamont.Focus();
+                    }
+                    else if (txttotalamont.Focused)
+                    {
+                        txtpaid.Focus();
+                    }
+                    else if(txtpaid.Focused)
+                    {
+                        iconButton1.PerformClick();
+                    }
+                    else if(txtproduct.Focused)
+                    {
+                        txtquantity.Focus();
+                    }
+                    else if(txtquantity.Focused)
+                    {
+                        txtcost.Focus();
+                    }
+                    else if(txtcost.Focused)
+                    {
+                        txtsaleprice.Focus();
+                    }
+                    else if( txtsaleprice.Focused)
+                    {
+                        iconButton2.PerformClick();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("error in event listener", ex.Message);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+
         private void OnUnsavedChangesChanged(object sender, bool hasChanges)
         {
             // Auto-save session when changes occur
@@ -1327,6 +1375,16 @@ namespace MedicineShop.UI
         {
             var f= Program.ServiceProvider.GetRequiredService<AddMedicine>();
             f.ShowDialog(this);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toplbl_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

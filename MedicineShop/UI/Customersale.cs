@@ -124,7 +124,7 @@ namespace fertilizesop.UI
                     {
                         if (string.IsNullOrEmpty(txtcustsearch.Text))
                         {
-                            MessageBox.Show("Please select atleast one product.", "Product not selected", (MessageBoxButtons)MessageBoxIcon.Warning);
+                            MessageBox.Show("Please select atleast one customer.", "customer not selected", (MessageBoxButtons)MessageBoxIcon.Warning);
                             dgvcustomersearch.Visible = false;
                             return false;
                         }
@@ -712,7 +712,7 @@ namespace fertilizesop.UI
                 {
                     MessageBox.Show("Data saved successfully");
                     SavehthermalPdfInvoice();
-                    Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
+                    Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
                     clearallfields();
 
                     string tempFile = GetTempSaleFilePath();
@@ -742,7 +742,7 @@ namespace fertilizesop.UI
                 {
                     try
                     {
-                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text));
+                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text) , Convert.ToDecimal(txtfinaldiscount.Text));
                         MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
@@ -867,7 +867,14 @@ namespace fertilizesop.UI
         {
             try
             {
-                txtfinalprice.Text = (int.Parse(totalwithoutdisc.Text) - int.Parse(txtfinaldiscount.Text)).ToString();
+                if (string.IsNullOrEmpty(txtfinaldiscount.Text))
+                {
+                    txtfinalprice.Text = (int.Parse(totalwithoutdisc.Text)).ToString();
+                }
+                else
+                {
+                    txtfinalprice.Text = (int.Parse(totalwithoutdisc.Text) - int.Parse(txtfinaldiscount.Text)).ToString();
+                }
             }
             catch
             {

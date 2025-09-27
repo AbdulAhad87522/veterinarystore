@@ -117,7 +117,7 @@ namespace MedicineShop.UI
 
             lblWelcome = new Label
             {
-                Text = "Pharmacy Management Dashboard",
+                Text = "Ali Veterinary Clinic",
                 Font = new Font("Segoe UI", 24F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(44, 62, 80),
                 AutoSize = true,
