@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MedicineShop.BL;
-using MedicineShop.DL;
 using MedicineShop.Models;
-using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace MedicineShop.UI
 {
@@ -19,60 +13,6 @@ namespace MedicineShop.UI
         private readonly MedicineBL _medicineBL = new MedicineBL();
         private readonly Medicine _medicine;
         private readonly bool _isEdit;
-        private List<string> _allProductNames;
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            try
-            {
-                if (keyData == Keys.Enter)
-                {
-                    if (txtName.Focused)
-                    {
-                        pckcmb.Focus();
-                        return true;
-                    }
-
-                    else if (pckcmb.Focused)
-                    {
-                        txtPrice.Focus();
-                        return true;
-
-                    }
-
-                    else if (txtPrice.Focused)
-                    {
-                        cmbCategory.Focus();
-                        return true;
-
-                    }
-
-                    else if (cmbCategory.Focused)
-                    {
-                        cmbCompany.Focus();
-                        return true;
-
-                    }
-                    else if (cmbCompany.Focused)
-                    {
-                        txtDesc.Focus();
-                        return true;
-
-                    }
-                    else if (txtDesc.Focused)
-                    {
-                        txtDesc.Focus();
-                        return true;
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("error in event listener", ex.Message);
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
 
         public AddMedicine(Medicine med = null)
         {
@@ -91,8 +31,6 @@ namespace MedicineShop.UI
                 _isEdit = true;
                 btnAdd.Visible = false;
                 btnUpdate.Visible = true;
-
-                // Fill form immediately after data binding
                 FillForm();
             }
             else
@@ -104,38 +42,47 @@ namespace MedicineShop.UI
             }
         }
 
-        // Remove the FillForm call from Load event
-        private void AddMedicine_Load(object sender, EventArgs e)
+        // Allow Enter to move focus
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            // Remove the if (_isEdit) block from here
+            if (keyData == Keys.Enter)
+            {
+                if (txtName.Focused) { pckcmb.Focus(); return true; }
+                if (pckcmb.Focused) { txtPrice.Focus(); return true; }
+                if (txtPrice.Focused) { cmbCategory.Focus(); return true; }
+                if (cmbCategory.Focused) { cmbCompany.Focus(); return true; }
+                if (cmbCompany.Focused) { txtDesc.Focus(); return true; }
+                if (txtDesc.Focused) { btnAdd.Focus(); return true; }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
-
-        private void BindCompanies()
+        private void BindCompanies(string search = "")
         {
-            var list = _medicineBL.GetCompanyList(""); // full list
-            cmbCompany.DisplayMember = "CompanyName";
-            cmbCompany.ValueMember = "CompanyId";
+            var list = _medicineBL.GetCompanyList(search);
+            cmbCompany.DisplayMember = "Name";
+            cmbCompany.ValueMember = "Id";
             cmbCompany.DataSource = list;
+            cmbCompany.SelectedIndex = -1;
         }
 
-        private void BindCategories()
+        private void BindCategories(string search = "")
         {
-            var list = _medicineBL.GetCategoryList("");
-            cmbCategory.DisplayMember = "CategoryName";
-            cmbCategory.ValueMember = "CategoryId";
+            var list = _medicineBL.GetCategoryList(search);
+            cmbCategory.DisplayMember = "Name";
+            cmbCategory.ValueMember = "Id";
             cmbCategory.DataSource = list;
+            cmbCategory.SelectedIndex = -1;
         }
 
-        private void BindPackings()
+        private void BindPackings(string search = "")
         {
-            var list = _medicineBL.GetPackingList("");
-            pckcmb.DisplayMember = "PackingName";
-            pckcmb.ValueMember = "PackingId";
+            var list = _medicineBL.GetPackingList(search);
+            pckcmb.DisplayMember = "Name";
+            pckcmb.ValueMember = "Id";
             pckcmb.DataSource = list;
+            pckcmb.SelectedIndex = -1;
         }
-
-
 
         private void FillForm()
         {
@@ -148,143 +95,303 @@ namespace MedicineShop.UI
             pckcmb.SelectedValue = _medicine.PackingId;
         }
 
-        //private void BindSearchableCombo<T>(
-        //ComboBox combo,
-        //List<T> list,
-        //string displayMember,
-        //string valueMember,
-        //string typedText)
-        //{
-        //    string oldText = typedText;
-
-        //    combo.BeginUpdate();
-        //    combo.DataSource = null;
-
-        //    if (list.Count > 0)
-        //    {
-        //        combo.DisplayMember = displayMember;
-        //        combo.ValueMember = valueMember;
-        //        combo.DataSource = list;
-
-        //        combo.DroppedDown = true;
-
-        //        // Restore typed text + cursor
-        //        combo.Text = oldText;
-        //        combo.SelectionStart = oldText.Length;
-        //        combo.SelectionLength = 0;
-
-               
-        //    }
-        //    else
-        //    {
-        //        combo.DroppedDown = false;
-        //    }
-
-        //    combo.EndUpdate();
-        //}
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            SetMedicineFromForm();
-            if (_medicineBL.AddMedicine(_medicine) > 0)
-            {
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            SetMedicineFromForm();
-            if (_medicineBL.UpdateMedicine(_medicine) > 0)
-            {
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
         private void SetMedicineFromForm()
         {
             _medicine.Name = txtName.Text.Trim();
             _medicine.Description = txtDesc.Text.Trim();
             _medicine.SalePrice = decimal.TryParse(txtPrice.Text, out decimal price) ? price : 0;
 
-            if (cmbCompany.SelectedItem is Company selectedCompany)
-                _medicine.CompanyId = selectedCompany.CompanyId;
-
-            if (cmbCategory.SelectedItem is Category selectedCategory)
-                _medicine.CategoryId = selectedCategory.CategoryId;
-
-            if (pckcmb.SelectedItem is Packing selectedPacking)
-                _medicine.PackingId = selectedPacking.PackingId;
+            // Simplified parsing for combo values
+            _medicine.CompanyId = GetComboValue(cmbCompany);
+            _medicine.CategoryId = GetComboValue(cmbCategory);
+            _medicine.PackingId = GetComboValue(pckcmb);
         }
 
-
-        // For searchable combobox (optional)
-        private void cmbCompany_TextChanged(object sender, EventArgs e)
+        private int GetComboValue(ComboBox combo)
         {
-            
+            // First try to get selected value directly
+            if (combo.SelectedValue != null && int.TryParse(combo.SelectedValue.ToString(), out int selectedId))
+            {
+                return selectedId;
+            }
+
+            // If no selected value, try to find matching item by text
+            if (!string.IsNullOrWhiteSpace(combo.Text) && combo.DataSource != null)
+            {
+                var dataSource = combo.DataSource as System.Collections.IList;
+                if (dataSource != null)
+                {
+                    foreach (var item in dataSource)
+                    {
+                        // Use reflection to get Name property (since ComboItem has Name property)
+                        var displayValue = item.GetType().GetProperty("Name")?.GetValue(item)?.ToString();
+                        if (string.Equals(displayValue, combo.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            var idValue = item.GetType().GetProperty("Id")?.GetValue(item);
+                            if (idValue != null && int.TryParse(idValue.ToString(), out int foundId))
+                            {
+                                return foundId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return 0; // Return 0 if no valid selection found
         }
 
-
-        private void comboCategory_TextChanged(object sender, EventArgs e)
+        private bool ValidateForm()
         {
-            
+            var errors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+                errors.Add("Medicine name is required");
+
+            if (string.IsNullOrWhiteSpace(txtPrice.Text) || !decimal.TryParse(txtPrice.Text, out _))
+                errors.Add("Valid price is required");
+
+            if (GetComboValue(cmbCompany) == 0)
+                errors.Add("Please select a valid company");
+
+            if (GetComboValue(cmbCategory) == 0)
+                errors.Add("Please select a valid category");
+
+            if (GetComboValue(pckcmb) == 0)
+                errors.Add("Please select a valid packing");
+
+            if (errors.Any())
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
         }
 
-        //private void cmbCategory_TextUpdate(object sender, EventArgs e)
-        //{
-        //    string text = cmbCategory.Text.Trim();
-        //    var list = _medicineBL.GetCategoryList(text); // List<Category>
-
-        //    BindSearchableCombo(cmbCategory, list, "CategoryName", "CategoryId", text);
-        //}
-
-
-        private void comboPacking_TextChanged(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-           
+            if (!ValidateForm()) return;
+
+            SetMedicineFromForm();
+            try
+            {
+                if (_medicineBL.AddMedicine(_medicine) > 0)
+                {
+                    MessageBox.Show("Medicine added successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add medicine. Please try again.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding medicine: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
+        private void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (!ValidateForm()) return;
 
+            SetMedicineFromForm();
+            try
+            {
+                if (_medicineBL.UpdateMedicine(_medicine) > 0)
+                {
+                    MessageBox.Show("Medicine updated successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update medicine. Please try again.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating medicine: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        //private void AddMedicine_Load(object sender, EventArgs e)
-        //{
-        //    if (_isEdit)
-        //    {
-        //        FillForm();
-        //    }
-        //}
-        
-
-        //private void cmbCompany_TextUpdate(object sender, EventArgs e)
-        //{
-        //    string text = cmbCompany.Text.Trim();
-        //    var list = _medicineBL.GetCompanyList(text); // List<Company>
-
-        //    BindSearchableCombo(cmbCompany, list, "CompanyName", "CompanyId", text);
-        //}
-
-        //private void pckcmb_TextUpdate(object sender, EventArgs e)
-        //{
-        //    string text = pckcmb.Text.Trim();
-        //    var list = _medicineBL.GetPackingList(text); // List<Packing>
-
-        //    BindSearchableCombo(pckcmb, list, "PackingName", "PackingId", text);
-        //}
-
-        private void pckcmb_SelectedIndexChanged(object sender, EventArgs e)
+        // Improved Universal reusable searchable combo binder
+        private void BindSearchableCombo<T>(
+            ComboBox combo,
+            List<T> list,
+            string displayMember,
+            string valueMember,
+            string typedText)
         {
+            try
+            {
+                combo.BeginUpdate();
 
+                // Store current selection if any
+                var previousSelection = combo.SelectedValue;
+
+                // Always bind, even if empty list
+                combo.DisplayMember = displayMember;
+                combo.ValueMember = valueMember;
+                combo.DataSource = list;
+
+                // Try to restore previous selection if it still exists
+                if (previousSelection != null && list.Count > 0)
+                {
+                    combo.SelectedValue = previousSelection;
+                }
+
+                // If list has results, show them
+                if (list.Count > 0)
+                {
+                    combo.DroppedDown = true;
+                }
+
+                // Restore typed text and cursor position
+                combo.Text = typedText;
+                combo.SelectionStart = typedText.Length;
+                combo.SelectionLength = 0;
+
+                combo.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                // Log error or handle gracefully
+                combo.EndUpdate();
+                MessageBox.Show($"Error in combo binding: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
-        private void panel2_Paint_1(object sender, PaintEventArgs e)
+        // Searchable events with improved error handling
+        private void cmbCompany_TextUpdate(object sender, EventArgs e)
         {
+            try
+            {
+                string text = cmbCompany.Text.Trim();
+                var list = _medicineBL.GetCompanyList(text);
+                BindSearchableCombo(cmbCompany, list, "Name", "Id", text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching companies: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
+        private void cmbCategory_TextUpdate(object sender, EventArgs e)
+        {
+            try
+            {
+                string text = cmbCategory.Text.Trim();
+                var list = _medicineBL.GetCategoryList(text);
+                BindSearchableCombo(cmbCategory, list, "Name", "Id", text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching categories: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void pckcmb_TextUpdate(object sender, EventArgs e)
+        {
+            try
+            {
+                string text = pckcmb.Text.Trim();
+                var list = _medicineBL.GetPackingList(text);
+                BindSearchableCombo(pckcmb, list, "Name", "Id", text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching packing: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        // Additional event handlers for better UX
+        private void cmbCompany_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            // This ensures the selection is properly committed
+            var combo = sender as ComboBox;
+            if (combo?.SelectedValue != null)
+            {
+                // Selection is confirmed
+                combo.DroppedDown = false;
+            }
+        }
+
+        private void cmbCategory_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo?.SelectedValue != null)
+            {
+                combo.DroppedDown = false;
+            }
+        }
+
+        private void pckcmb_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo?.SelectedValue != null)
+            {
+                combo.DroppedDown = false;
+            }
+        }
+
+        // Handle Leave events to ensure proper selection
+        private void cmbCompany_Leave(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo != null && GetComboValue(combo) == 0 && !string.IsNullOrWhiteSpace(combo.Text))
+            {
+                combo.BackColor = System.Drawing.Color.LightPink;
+            }
+            else
+            {
+                combo.BackColor = System.Drawing.SystemColors.Window;
+            }
+        }
+
+        private void cmbCategory_Leave(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo != null && GetComboValue(combo) == 0 && !string.IsNullOrWhiteSpace(combo.Text))
+            {
+                combo.BackColor = System.Drawing.Color.LightPink;
+            }
+            else
+            {
+                combo.BackColor = System.Drawing.SystemColors.Window;
+            }
+        }
+
+        private void pckcmb_Leave(object sender, EventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo != null && GetComboValue(combo) == 0 && !string.IsNullOrWhiteSpace(combo.Text))
+            {
+                combo.BackColor = System.Drawing.Color.LightPink;
+            }
+            else
+            {
+                combo.BackColor = System.Drawing.SystemColors.Window;
+            }
+        }
+
+        // Clean up method for form closing
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            // Any cleanup code if needed
         }
     }
 }
