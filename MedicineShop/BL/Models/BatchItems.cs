@@ -15,5 +15,6 @@ namespace MedicineShop.BL.Models
 
         // Optional join fields
         public string MedicineName { get; set; }
+        public string CompanyName { get;  set; }
     }
 }

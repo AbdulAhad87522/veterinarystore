@@ -66,6 +66,7 @@ namespace MedicineShop
             services.AddTransient<AddCompany>();
             services.AddTransient<AddMedicine>();
             services.AddTransient<AddPacking>();
+            services.AddTransient<BatchDetailsform>();
 
 
 

@@ -18,6 +18,7 @@ namespace MedicineShop
     {
         IBatchesBl bl;
         private int SelectedId;
+        int batchid;
 
         // Constructor with no parameters
         public Batchform(IBatchesBl bl)
@@ -44,6 +45,7 @@ namespace MedicineShop
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
+            UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
 
         }
 
@@ -64,6 +66,7 @@ namespace MedicineShop
 
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
+            UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 load();
@@ -89,6 +92,13 @@ namespace MedicineShop
             }
             else if (columnName == "Details")
             {
+                var selectedBatch = dataGridView2.Rows[e.RowIndex].DataBoundItem as Batches;
+                if (selectedBatch != null)
+                {
+                    var detailsForm = Program.ServiceProvider.GetRequiredService<BatchDetailsform>();
+                    detailsForm.BatchId = selectedBatch.PurchaseBatchID; 
+                    detailsForm.ShowDialog(this);
+                }
             }
         }
 

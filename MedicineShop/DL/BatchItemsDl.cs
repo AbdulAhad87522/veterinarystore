@@ -162,7 +162,127 @@ namespace MedicineShop.DL
             }
             return list;
         }
+        public static List<BatchItems> SearchBatchDetails(int batch_id, string searchText)
+        {
+            var list = new List<BatchItems>();
+            try
+            {
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    bi.batch_item_id,
+                    pb.BatchName,
+                    p.product_id,
+                    p.name AS ProductName,
+                    c.company_name,
+                    bi.purchase_price,
+                    p.sale_price,
+                    bi.quantity_received,
+                    bi.expiry_date
+                FROM 
+                    batch_items bi
+                JOIN purchase_batches pb ON bi.purchase_batch_id = pb.purchase_batch_id
+                JOIN medicines p ON bi.product_id = p.product_id
+                JOIN company c ON pb.company_id = c.company_id
+                WHERE bi.purchase_batch_id = @batch_id 
+                  AND (pb.BatchName LIKE @search OR p.name LIKE @search);";
 
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@batch_id", batch_id);
+                        cmd.Parameters.AddWithValue("@search", $"%{searchText}%");
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var item = new BatchItems
+                                {
+                                    BatchItemID = reader.GetInt32("batch_item_id"),
+                                    BatchID = batch_id,
+                                    batchname = reader.GetString("BatchName"),
+                                    MedicineID = reader.GetInt32("product_id"),
+                                    MedicineName = reader.GetString("ProductName"),
+                                    PurchasePrice = reader.GetDecimal("purchase_price"),
+                                    SalePrice = reader.GetDecimal("sale_price"),
+                                    Quantity = reader.GetInt32("quantity_received"),
+                                    ExpiryDate = reader.GetDateTime("expiry_date")
+                                };
+                                list.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error searching batch details: " + ex.Message);
+            }
+
+            return list;
+        }
+        // ✅ Get all batch items by batch ID (purchase_batch_id)
+        // ✅ Get all batch items by batch ID (purchase_batch_id)
+        public static List<BatchItems> GetBatchItemsByBatchId(int batchId)
+        {
+            List<BatchItems> list = new List<BatchItems>();
+            try
+            {
+                string query = @"
+            SELECT 
+                bi.batch_item_id,
+                bi.purchase_batch_id,
+                bi.product_id,
+                pb.BatchName,
+                m.name AS MedicineName,
+                c.company_name AS CompanyName,
+                bi.quantity_received,
+                bi.purchase_price,
+                m.sale_price,
+                bi.expiry_date
+            FROM batch_items bi 
+            JOIN medicines m ON bi.product_id = m.product_id
+            JOIN purchase_batches pb ON bi.purchase_batch_id = pb.purchase_batch_id
+            JOIN company c ON pb.company_id = c.company_id
+            WHERE bi.purchase_batch_id = @BatchId";
+
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BatchId", batchId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var item = new BatchItems
+                                {
+                                    BatchItemID = reader.GetInt32("batch_item_id"),
+                                    BatchID = reader.GetInt32("purchase_batch_id"),
+                                    MedicineID = reader.GetInt32("product_id"),
+                                    batchname = reader.GetString("BatchName"),
+                                    MedicineName = reader.GetString("MedicineName"),
+                                    CompanyName = reader.GetString("CompanyName"),
+                                    Quantity = reader.GetInt32("quantity_received"),
+                                    PurchasePrice = reader.GetDecimal("purchase_price"),
+                                    SalePrice = reader.GetDecimal("sale_price"),
+                                    ExpiryDate = reader.GetDateTime("expiry_date")
+                                };
+                                list.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error while getting batch items by batch ID.", ex);
+            }
+            return list;
+        }
         // ✅ Update batch item
         public bool UpdateBatchItem(BatchItems b)
         {

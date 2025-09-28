@@ -8,27 +8,61 @@ namespace MedicineShop.DL
 {
     public class BatchesDl : IBatchesDl
     {
-        // ✅ Add
+        // ✅ Add - Updated to include payment record
         public bool AddBatch(Batches batch)
         {
             try
             {
-                string query = @"INSERT INTO purchase_batches 
-                                (company_id, Purchase_date, total_price, paid, BatchName) 
-                                VALUES (@CompanyID, @PurchaseDate, @TotalPrice, @Paid, @BatchName)";
-
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (var transaction = conn.BeginTransaction())
                     {
-                        cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
-                        cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
-                        cmd.Parameters.AddWithValue("@BatchName", batch.BatchName);
-                        cmd.Parameters.AddWithValue("@TotalPrice", batch.TotalPrice);
-                        cmd.Parameters.AddWithValue("@Paid", batch.Paid);
+                        try
+                        {
+                            // Insert batch
+                            string batchQuery = @"INSERT INTO purchase_batches 
+                                                (company_id, Purchase_date, total_price, paid, BatchName) 
+                                                VALUES (@CompanyID, @PurchaseDate, @TotalPrice, @Paid, @BatchName)";
 
-                        return cmd.ExecuteNonQuery() > 0;
+                            using (MySqlCommand cmd = new MySqlCommand(batchQuery, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
+                                cmd.Parameters.AddWithValue("@PurchaseDate", batch.PurchaseDate);
+                                cmd.Parameters.AddWithValue("@BatchName", batch.BatchName);
+                                cmd.Parameters.AddWithValue("@TotalPrice", batch.TotalPrice);
+                                cmd.Parameters.AddWithValue("@Paid", batch.Paid);
+
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // Insert payment record only if there's an initial payment (paid > 0)
+                            if (batch.Paid > 0)
+                            {
+                                string paymentQuery = @"INSERT INTO payment_records 
+                                                      (company_id, amount, payment_date, notes) 
+                                                      VALUES (@CompanyID, @Amount, @PaymentDate, @Notes)";
+
+                                using (MySqlCommand paymentCmd = new MySqlCommand(paymentQuery, conn, transaction))
+                                {
+                                    paymentCmd.Parameters.AddWithValue("@CompanyID", batch.CompanyID);
+                                    paymentCmd.Parameters.AddWithValue("@Amount", batch.Paid);
+                                    paymentCmd.Parameters.AddWithValue("@PaymentDate", batch.PurchaseDate);
+                                    paymentCmd.Parameters.AddWithValue("@Notes", "Initial Payment");
+
+                                    paymentCmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            Console.WriteLine($"Error in AddBatch transaction: {ex.Message}");
+                            throw;
+                        }
                     }
                 }
             }
@@ -81,6 +115,7 @@ namespace MedicineShop.DL
             }
             return batches;
         }
+
         public DataTable GetMedicines()
         {
             DataTable dt = new DataTable();
@@ -91,7 +126,7 @@ namespace MedicineShop.DL
                 {
                     string query = @"SELECT 
                                     m.product_id,
-m.name,
+                                    m.name,
                                     m.company_id,
                                     m.category_id,
                                     m.packing_id,

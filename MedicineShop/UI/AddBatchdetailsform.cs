@@ -36,6 +36,9 @@ namespace MedicineShop.UI
             this.batchItemsBl = batchItemsBl;
             dbHelper = DatabaseHelper.Instance;
 
+            // Enable keyboard shortcuts
+            this.KeyPreview = true;
+
             // Initialize session manager with error handling
             try
             {
@@ -54,12 +57,44 @@ namespace MedicineShop.UI
             UIHelper.StyleGridView(dgvbatches);
             UIHelper.StyleGridView(dgvcompany);
             UIHelper.StyleGridView(dgvmedicines);
+
             // Initialize in-memory batch items table
             InitializeBatchItemsTable();
 
             // Setup form event handlers
             this.Load += AddBatchdetailsform_Load;
             this.FormClosing += AddBatchdetailsform_FormClosing;
+        }
+        private void UpdateShortcutStatus()
+        {
+            try
+            {
+                string statusText = "";
+
+                if (!paneldetails.Visible || !batchSavedToDatabase)
+                {
+                    statusText = "Ctrl+A: Add Batch | ";
+                }
+                else
+                {
+                    statusText = "Ctrl+A: Add Product | Ctrl+S: Save Items | ";
+                }
+
+                statusText += "Ctrl+N: New | Esc: Cancel Edit";
+
+                // If you have a status label, update it
+                // lblStatus.Text = statusText;
+
+                // Or update form title to include shortcuts
+                if (!this.Text.Contains(" - Shortcuts:"))
+                {
+                    this.Text += " - Shortcuts: " + statusText;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating shortcut status: {ex.Message}");
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -286,203 +321,15 @@ namespace MedicineShop.UI
 
         private void iconButton1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Validation code
-                if (string.IsNullOrWhiteSpace(txtBnames.Text))
-                {
-                    MessageBox.Show("Please enter batch name.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (selectedCompanyId == 0)
-                {
-                    MessageBox.Show("Please select a company.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (!decimal.TryParse(txttotalamont.Text, out decimal totalAmount) || totalAmount <= 0)
-                {
-                    MessageBox.Show("Please enter valid total amount.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                decimal paidAmount = 0; // default
-
-                if (!string.IsNullOrWhiteSpace(txtpaid.Text))
-                {
-                    if (!decimal.TryParse(txtpaid.Text, out paidAmount) || paidAmount < 0)
-                    {
-                        MessageBox.Show("Please enter valid paid amount.", "Validation Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-                }
-
-                // Create batch object
-                var batch = new Batches
-                {
-                    BatchName = txtBnames.Text.Trim(),
-                    CompanyID = selectedCompanyId,
-                    TotalPrice = totalAmount,
-                    Paid = paidAmount,
-                    PurchaseDate = DateTime.Now,
-                    Status = "Active"
-                };
-
-                // Add batch to database
-                bool success = batchesBl.AddBatch(batch);
-
-                if (success)
-                {
-                    currentBatchName = batch.BatchName;
-                    // Mark as saved to database
-                    batchSavedToDatabase = true;
-
-                    // Make details panel visible
-                    paneldetails.Visible = true;
-
-                    // Disable batch form fields
-                    SetBatchFormEnabled(false);
-
-                    // Initialize fresh batch items table for this batch
-                    InitializeBatchItemsTable();
-                    RefreshBatchItemsGrid();
-
-                    // Auto-save session
-                    if (sessionManager != null)
-                    {
-                        var sessionData = CreateCurrentSessionData();
-                        if (sessionData != null)
-                        {
-                            sessionManager.SaveSession(sessionData);
-                        }
-                    }
-
-                    // Set focus to product search
-                    txtproduct.Focus();
-                }
-                else
-                {
-                    MessageBox.Show("Failed to add batch. Please try again.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error adding batch: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            AddBatch();
         }
 
         // Add/Update Product - Only add to grid, not database
+
         private void iconButton2_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Validation
-                if (selectedProductId == 0)
-                {
-                    MessageBox.Show("Please select a product.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (!int.TryParse(txtquantity.Text, out int quantity) || quantity <= 0)
-                {
-                    MessageBox.Show("Please enter valid quantity.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (!decimal.TryParse(txtcost.Text, out decimal costPrice) || costPrice <= 0)
-                {
-                    MessageBox.Show("Please enter valid cost price.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (!decimal.TryParse(txtsaleprice.Text, out decimal salePrice) || salePrice <= 0)
-                {
-                    MessageBox.Show("Please enter valid sale price.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (dateTimePicker1.Value <= DateTime.Now)
-                {
-                    MessageBox.Show("Expiry date must be in the future.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Get medicine name for display
-                string medicineName = txtproduct.Text;
-
-                if (isEditing)
-                {
-                    // Update existing item in grid
-                    DataRow rowToEdit = batchItemsTable.Rows[editingBatchItemId];
-                    rowToEdit["MedicineID"] = selectedProductId;
-                    rowToEdit["MedicineName"] = medicineName;
-                    rowToEdit["Quantity"] = quantity;
-                    rowToEdit["PurchasePrice"] = costPrice;
-                    rowToEdit["SalePrice"] = salePrice;
-                    rowToEdit["ExpiryDate"] = dateTimePicker1.Value;
-                    rowToEdit["TotalCost"] = quantity * costPrice;
-
-                    // Reset editing mode
-                    isEditing = false;
-                    editingBatchItemId = 0;
-                    iconButton2.Text = "Add Product";
-                    iconButton2.IconChar = FontAwesome.Sharp.IconChar.Plus;
-                    ResetEditingVisuals();
-                }
-                else
-                {
-                    // Add new item to grid
-                    DataRow newRow = batchItemsTable.NewRow();
-                    newRow["BatchItemID"] = batchItemsTable.Rows.Count + 1; // Temporary ID
-                    newRow["BatchID"] = 0; // Will be set when saving to database
-                    newRow["MedicineID"] = selectedProductId;
-                    newRow["MedicineName"] = medicineName;
-                    newRow["Quantity"] = quantity;
-                    newRow["PurchasePrice"] = costPrice;
-                    newRow["SalePrice"] = salePrice;
-                    newRow["ExpiryDate"] = dateTimePicker1.Value;
-                    newRow["TotalCost"] = quantity * costPrice;
-
-                    batchItemsTable.Rows.Add(newRow);
-                }
-
-                // Refresh grid display
-                RefreshBatchItemsGrid();
-
-                // Clear form
-                ClearProductForm();
-
-                // Set focus back to product search
-                txtproduct.Focus();
-
-                // Auto-save session
-                if (sessionManager != null)
-                {
-                    var sessionData = CreateCurrentSessionData();
-                    if (sessionData != null)
-                    {
-                        sessionManager.SaveSession(sessionData);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error processing product: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            AddBatchItem();
         }
-
         private void CancelEdit()
         {
             // Reset editing mode
@@ -507,78 +354,11 @@ namespace MedicineShop.UI
         }
 
         // Save Button - Save all data to database at once
+
         private void iconButton3_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Validate that there are items to save
-                if (batchItemsTable == null || batchItemsTable.Rows.Count == 0)
-                {
-                    MessageBox.Show("Please add at least one product to the batch.", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Get the batch ID from database
-                int batchId = DatabaseHelper.Instance.getbatchid(currentBatchName);
-                if (batchId == 0)
-                {
-                    MessageBox.Show("Batch not found. Please create batch first.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Save all batch items to database
-                int savedCount = 0;
-                foreach (DataRow row in batchItemsTable.Rows)
-                {
-                    var batchItem = new BatchItems
-                    {
-                        BatchID = batchId,
-                        MedicineID = Convert.ToInt32(row["MedicineID"]),
-                        Quantity = Convert.ToInt32(row["Quantity"]),
-                        PurchasePrice = Convert.ToDecimal(row["PurchasePrice"]),
-                        SalePrice = Convert.ToDecimal(row["SalePrice"]),
-                        ExpiryDate = Convert.ToDateTime(row["ExpiryDate"])
-                    };
-
-                    bool success = batchItemsBl.AddBatchItem(batchItem);
-                    if (success)
-                    {
-                        savedCount++;
-                    }
-                }
-
-                if (savedCount == batchItemsTable.Rows.Count)
-                {
-                    MessageBox.Show($"Batch saved successfully! {savedCount} products added to database.", "Success",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Mark as saved to database
-                    batchSavedToDatabase = true;
-
-                    // Clear session since batch is now finalized
-                    if (sessionManager != null)
-                    {
-                        sessionManager.ClearSession();
-                    }
-
-                    // Reset for new batch
-                    ResetForm();
-                }
-                else
-                {
-                    MessageBox.Show($"Partially saved: {savedCount} out of {batchItemsTable.Rows.Count} products were saved.",
-                        "Partial Save", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error saving batch: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            SaveBatchItems();
         }
-
         #region Helper Methods
 
         private void InitializeBatchItemsTable()
@@ -844,23 +624,469 @@ namespace MedicineShop.UI
             dgvcompany.KeyDown += DgvCompany_KeyDown;
             dgvmedicines.KeyDown += DgvMedicines_KeyDown;
 
-            // Add form-level keyboard handler for escape key to cancel edits
+            // Add form-level keyboard handler for shortcuts and escape key
             this.KeyPreview = true;
             this.KeyDown += AddBatchdetailsform_KeyDown;
-        }
 
-        private void AddBatchdetailsform_KeyDown(object sender, KeyEventArgs e)
+            // Add tooltips for keyboard shortcuts
+            SetupKeyboardShortcutTooltips();
+        }
+        private void SetupKeyboardShortcutTooltips()
         {
-            // Press Escape to cancel edit mode
-            if (e.KeyCode == Keys.Escape && isEditing)
+            try
             {
-                CancelEdit();
-                ClearProductForm();
-                txtproduct.Focus();
-                e.Handled = true;
+                ToolTip tooltip = new ToolTip();
+                tooltip.SetToolTip(iconButton1, "Add Batch (Ctrl+A when batch form is active)");
+                tooltip.SetToolTip(iconButton2, "Add Product (Ctrl+A when product form is active)");
+                tooltip.SetToolTip(iconButton3, "Save Batch Items (Ctrl+S)");
+
+                // Optional: Add tooltip to form itself
+                tooltip.SetToolTip(this, "Shortcuts: Ctrl+A (Add), Ctrl+S (Save), Ctrl+N (New), Esc (Cancel Edit)");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error setting up tooltips: {ex.Message}");
+            }
+        }
+        private bool ValidateBatchForm()
+        {
+            try
+            {
+                // Check if batch form is properly filled
+                if (string.IsNullOrWhiteSpace(txtBnames.Text))
+                {
+                    MessageBox.Show("Please enter batch name before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtBnames.Focus();
+                    return false;
+                }
+
+                if (selectedCompanyId == 0)
+                {
+                    MessageBox.Show("Please select a company before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtcompany.Focus();
+                    return false;
+                }
+
+                if (!decimal.TryParse(txttotalamont.Text, out decimal totalAmount) || totalAmount <= 0)
+                {
+                    MessageBox.Show("Please enter valid total amount before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txttotalamont.Focus();
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error validating batch form: {ex.Message}");
+                return false;
             }
         }
 
+        private bool ValidateBatchItemForm()
+        {
+            try
+            {
+                // Check if batch item form is properly filled
+                if (selectedProductId == 0)
+                {
+                    MessageBox.Show("Please select a product before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtproduct.Focus();
+                    return false;
+                }
+
+                if (!int.TryParse(txtquantity.Text, out int quantity) || quantity <= 0)
+                {
+                    MessageBox.Show("Please enter valid quantity before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtquantity.Focus();
+                    return false;
+                }
+
+                if (!decimal.TryParse(txtcost.Text, out decimal costPrice) || costPrice <= 0)
+                {
+                    MessageBox.Show("Please enter valid cost price before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtcost.Focus();
+                    return false;
+                }
+
+                if (!decimal.TryParse(txtsaleprice.Text, out decimal salePrice) || salePrice <= 0)
+                {
+                    MessageBox.Show("Please enter valid sale price before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtsaleprice.Focus();
+                    return false;
+                }
+
+                if (dateTimePicker1.Value <= DateTime.Now)
+                {
+                    MessageBox.Show("Please set expiry date in the future before using Ctrl+A.", "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    dateTimePicker1.Focus();
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error validating batch item form: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        // Replace the AddBatchdetailsform_KeyDown method to avoid duplicate validation:
+
+        private void AddBatchdetailsform_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                // Handle keyboard shortcuts
+                if (e.Control)
+                {
+                    switch (e.KeyCode)
+                    {
+                        case Keys.A:
+                            // Ctrl+A: Add Batch or Add Batch Item depending on current state
+                            if (!paneldetails.Visible || !batchSavedToDatabase)
+                            {
+                                // If batch form is visible and not saved, add batch
+                                // Call the method directly instead of PerformClick to avoid double validation
+                                AddBatch();
+                            }
+                            else
+                            {
+                                // If batch is saved and details panel is visible, add batch item
+                                // Call the method directly instead of PerformClick to avoid double validation
+                                AddBatchItem();
+                            }
+                            e.Handled = true;
+                            break;
+
+                        case Keys.S:
+                            // Ctrl+S: Save Batch Items to database
+                            if (paneldetails.Visible && batchSavedToDatabase)
+                            {
+                                SaveBatchItems(); // Call method directly
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please create a batch first before saving items.", "Info",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            e.Handled = true;
+                            break;
+
+                        case Keys.N:
+                            // Ctrl+N: New/Reset Form (bonus shortcut)
+                            ResetForm();
+                            e.Handled = true;
+                            break;
+                    }
+                }
+                else if (e.KeyCode == Keys.Escape)
+                {
+                    // Press Escape to cancel edit mode
+                    if (isEditing)
+                    {
+                        CancelEdit();
+                        ClearProductForm();
+                        txtproduct.Focus();
+                        e.Handled = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error handling keyboard shortcut: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void AddBatch()
+        {
+            try
+            {
+                // Validation code
+                if (string.IsNullOrWhiteSpace(txtBnames.Text))
+                {
+                    MessageBox.Show("Please enter batch name.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtBnames.Focus();
+                    return;
+                }
+
+                if (selectedCompanyId == 0)
+                {
+                    MessageBox.Show("Please select a company.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtcompany.Focus();
+                    return;
+                }
+
+                if (!decimal.TryParse(txttotalamont.Text, out decimal totalAmount) || totalAmount <= 0)
+                {
+                    MessageBox.Show("Please enter valid total amount.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txttotalamont.Focus();
+                    return;
+                }
+
+                decimal paidAmount = 0; // default
+
+                if (!string.IsNullOrWhiteSpace(txtpaid.Text))
+                {
+                    if (!decimal.TryParse(txtpaid.Text, out paidAmount) || paidAmount < 0)
+                    {
+                        MessageBox.Show("Please enter valid paid amount.", "Validation Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtpaid.Focus();
+                        return;
+                    }
+                }
+
+                // Create batch object
+                var batch = new Batches
+                {
+                    BatchName = txtBnames.Text.Trim(),
+                    CompanyID = selectedCompanyId,
+                    TotalPrice = totalAmount,
+                    Paid = paidAmount,
+                    PurchaseDate = DateTime.Now,
+                    Status = "Active"
+                };
+
+                // Add batch to database
+                bool success = batchesBl.AddBatch(batch);
+
+                if (success)
+                {
+                    currentBatchName = batch.BatchName;
+                    // Mark as saved to database
+                    batchSavedToDatabase = true;
+
+                    // Make details panel visible
+                    paneldetails.Visible = true;
+
+                    // Disable batch form fields
+                    SetBatchFormEnabled(false);
+
+                    // Initialize fresh batch items table for this batch
+                    InitializeBatchItemsTable();
+                    RefreshBatchItemsGrid();
+
+                    // Auto-save session
+                    if (sessionManager != null)
+                    {
+                        var sessionData = CreateCurrentSessionData();
+                        if (sessionData != null)
+                        {
+                            sessionManager.SaveSession(sessionData);
+                        }
+                    }
+
+                    // Set focus to product search
+                    txtproduct.Focus();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add batch. Please try again.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding batch: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddBatchItem()
+        {
+            try
+            {
+                // Validation
+                if (selectedProductId == 0)
+                {
+                    MessageBox.Show("Please select a product.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtproduct.Focus();
+                    return;
+                }
+
+                if (!int.TryParse(txtquantity.Text, out int quantity) || quantity <= 0)
+                {
+                    MessageBox.Show("Please enter valid quantity.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtquantity.Focus();
+                    return;
+                }
+
+                if (!decimal.TryParse(txtcost.Text, out decimal costPrice) || costPrice <= 0)
+                {
+                    MessageBox.Show("Please enter valid cost price.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtcost.Focus();
+                    return;
+                }
+
+                if (!decimal.TryParse(txtsaleprice.Text, out decimal salePrice) || salePrice <= 0)
+                {
+                    MessageBox.Show("Please enter valid sale price.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtsaleprice.Focus();
+                    return;
+                }
+
+                if (dateTimePicker1.Value <= DateTime.Now)
+                {
+                    MessageBox.Show("Expiry date must be in the future.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    dateTimePicker1.Focus();
+                    return;
+                }
+
+                // Get medicine name for display
+                string medicineName = txtproduct.Text;
+
+                if (isEditing)
+                {
+                    // Update existing item in grid
+                    DataRow rowToEdit = batchItemsTable.Rows[editingBatchItemId];
+                    rowToEdit["MedicineID"] = selectedProductId;
+                    rowToEdit["MedicineName"] = medicineName;
+                    rowToEdit["Quantity"] = quantity;
+                    rowToEdit["PurchasePrice"] = costPrice;
+                    rowToEdit["SalePrice"] = salePrice;
+                    rowToEdit["ExpiryDate"] = dateTimePicker1.Value;
+                    rowToEdit["TotalCost"] = quantity * costPrice;
+
+                    // Reset editing mode
+                    isEditing = false;
+                    editingBatchItemId = 0;
+                    iconButton2.Text = "Add Product";
+                    iconButton2.IconChar = FontAwesome.Sharp.IconChar.Plus;
+                    ResetEditingVisuals();
+                }
+                else
+                {
+                    // Add new item to grid
+                    DataRow newRow = batchItemsTable.NewRow();
+                    newRow["BatchItemID"] = batchItemsTable.Rows.Count + 1; // Temporary ID
+                    newRow["BatchID"] = 0; // Will be set when saving to database
+                    newRow["MedicineID"] = selectedProductId;
+                    newRow["MedicineName"] = medicineName;
+                    newRow["Quantity"] = quantity;
+                    newRow["PurchasePrice"] = costPrice;
+                    newRow["SalePrice"] = salePrice;
+                    newRow["ExpiryDate"] = dateTimePicker1.Value;
+                    newRow["TotalCost"] = quantity * costPrice;
+
+                    batchItemsTable.Rows.Add(newRow);
+                }
+
+                // Refresh grid display
+                RefreshBatchItemsGrid();
+
+                // Clear form
+                ClearProductForm();
+
+                // Set focus back to product search
+                txtproduct.Focus();
+
+                // Auto-save session
+                if (sessionManager != null)
+                {
+                    var sessionData = CreateCurrentSessionData();
+                    if (sessionData != null)
+                    {
+                        sessionManager.SaveSession(sessionData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error processing product: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveBatchItems()
+        {
+            try
+            {
+                // Validate that there are items to save
+                if (batchItemsTable == null || batchItemsTable.Rows.Count == 0)
+                {
+                    MessageBox.Show("Please add at least one product to the batch.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Get the batch ID from database
+                int batchId = DatabaseHelper.Instance.getbatchid(currentBatchName);
+                if (batchId == 0)
+                {
+                    MessageBox.Show("Batch not found. Please create batch first.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Save all batch items to database
+                int savedCount = 0;
+                foreach (DataRow row in batchItemsTable.Rows)
+                {
+                    var batchItem = new BatchItems
+                    {
+                        BatchID = batchId,
+                        MedicineID = Convert.ToInt32(row["MedicineID"]),
+                        Quantity = Convert.ToInt32(row["Quantity"]),
+                        PurchasePrice = Convert.ToDecimal(row["PurchasePrice"]),
+                        SalePrice = Convert.ToDecimal(row["SalePrice"]),
+                        ExpiryDate = Convert.ToDateTime(row["ExpiryDate"])
+                    };
+
+                    bool success = batchItemsBl.AddBatchItem(batchItem);
+                    if (success)
+                    {
+                        savedCount++;
+                    }
+                }
+
+                if (savedCount == batchItemsTable.Rows.Count)
+                {
+                    MessageBox.Show($"Batch saved successfully! {savedCount} products added to database.", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Mark as saved to database
+                    batchSavedToDatabase = true;
+
+                    // Clear session since batch is now finalized
+                    if (sessionManager != null)
+                    {
+                        sessionManager.ClearSession();
+                    }
+
+                    // Reset for new batch
+                    ResetForm();
+                }
+                else
+                {
+                    MessageBox.Show($"Partially saved: {savedCount} out of {batchItemsTable.Rows.Count} products were saved.",
+                        "Partial Save", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving batch: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #region Company Search and Keyboard Handling
 
         private void TxtCompany_TextChanged(object sender, EventArgs e)

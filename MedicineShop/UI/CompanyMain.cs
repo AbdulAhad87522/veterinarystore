@@ -88,7 +88,7 @@ namespace MedicineShop.UI
             try
             {
                 dataGridView1.DataSource = companyBL.GetAllCompanies(search);
-                UIHelper.AddButtonColumn(dataGridView1, "Details", "Details", "Details");
+                //UIHelper.AddButtonColumn(dataGridView1, "Details", "Details", "Details");
             }
             catch (Exception ex)
             {
