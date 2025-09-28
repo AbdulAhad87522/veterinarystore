@@ -204,6 +204,8 @@ namespace fertilizesop.DL
             return dt;
         }
 
+      
+
         public DataTable GetPaymentHistory(int billId)
         {
             DataTable dt = new DataTable();
@@ -243,6 +245,7 @@ namespace fertilizesop.DL
 
             return dt;
         }
+
         public static bool AddRecord(Customerrecord s)
         {
             int customerId = DatabaseHelper.Instance.getcustid(s.name);

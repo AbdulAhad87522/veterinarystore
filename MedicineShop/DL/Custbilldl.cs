@@ -307,5 +307,133 @@ namespace MedicineShop.DL
 
             return records;
         }
+        public static List<CustomerSale> GetCustomerSales(int customerId)
+        {
+            var sales = new List<CustomerSale>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT DISTINCT
+                    s.sale_id,
+                    s.sale_date,
+                    s.total_amount,
+                    s.paid_amount,
+                    (s.total_amount - s.paid_amount) as remaining_amount,
+                    CASE 
+                        WHEN s.paid_amount >= s.total_amount THEN 'Paid'
+                        WHEN s.paid_amount > 0 THEN 'Partial'
+                        ELSE 'Unpaid'
+                    END as status,
+                    c.full_name as customer_name
+                FROM sales s
+                JOIN customers c ON s.customer_id = c.customer_id
+                WHERE s.customer_id = @CustomerId
+                ORDER BY s.sale_date DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CustomerId", customerId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                sales.Add(new CustomerSale
+                                {
+                                    SaleId = reader.GetInt32("sale_id"),
+                                    SaleDate = reader.GetDateTime("sale_date"),
+                                    TotalAmount = reader.GetDecimal("total_amount"),
+                                    PaidAmount = reader.GetDecimal("paid_amount"),
+                                    RemainingAmount = reader.GetDecimal("remaining_amount"),
+                                    Status = reader.GetString("status"),
+                                    CustomerName = reader.GetString("customer_name")
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error loading customer sales: " + ex.Message);
+            }
+
+            return sales;
+        }
+
+        public static List<CustomerSale> SearchCustomerSales(int customerId, string searchText)
+        {
+            var sales = new List<CustomerSale>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.Instance.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT DISTINCT
+                    s.sale_id,
+                    s.sale_date,
+                    s.total_amount,
+                    s.paid_amount,
+                    (s.total_amount - s.paid_amount) as remaining_amount,
+                    CASE 
+                        WHEN s.paid_amount >= s.total_amount THEN 'Paid'
+                        WHEN s.paid_amount > 0 THEN 'Partial'
+                        ELSE 'Unpaid'
+                    END as status,
+                    c.full_name as customer_name
+                FROM sales s
+                JOIN customers c ON s.customer_id = c.customer_id
+                WHERE s.customer_id = @CustomerId 
+                  AND (s.sale_id LIKE @search OR s.total_amount LIKE @search OR c.full_name LIKE @search)
+                ORDER BY s.sale_date DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CustomerId", customerId);
+                        cmd.Parameters.AddWithValue("@search", $"%{searchText}%");
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                sales.Add(new CustomerSale
+                                {
+                                    SaleId = reader.GetInt32("sale_id"),
+                                    SaleDate = reader.GetDateTime("sale_date"),
+                                    TotalAmount = reader.GetDecimal("total_amount"),
+                                    PaidAmount = reader.GetDecimal("paid_amount"),
+                                    RemainingAmount = reader.GetDecimal("remaining_amount"),
+                                    Status = reader.GetString("status"),
+                                    CustomerName = reader.GetString("customer_name")
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error searching customer sales: " + ex.Message);
+            }
+
+            return sales;
+        }
+
+        // Helper class for customer sales
+        public class CustomerSale
+        {
+            public int SaleId { get; set; }
+            public DateTime SaleDate { get; set; }
+            public decimal TotalAmount { get; set; }
+            public decimal PaidAmount { get; set; }
+            public decimal RemainingAmount { get; set; }
+            public string Status { get; set; }
+            public string CustomerName { get; set; }
+        }
     }
 }
