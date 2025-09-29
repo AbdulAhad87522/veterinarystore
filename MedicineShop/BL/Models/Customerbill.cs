@@ -47,4 +47,5 @@ namespace fertilizesop.BL.Models
         public string status { get; set; }
 
     }
+
 }

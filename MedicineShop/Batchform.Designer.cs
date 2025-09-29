@@ -147,6 +147,7 @@
             this.txtSupplierName.Location = new System.Drawing.Point(73, 163);
             this.txtSupplierName.Multiline = true;
             this.txtSupplierName.Name = "txtSupplierName";
+            this.txtSupplierName.ReadOnly = true;
             this.txtSupplierName.Size = new System.Drawing.Size(313, 37);
             this.txtSupplierName.TabIndex = 157;
             // 

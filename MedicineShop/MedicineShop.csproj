@@ -320,6 +320,12 @@
     <Compile Include="UI\MedicineMain.Designer.cs">
       <DependentUpon>MedicineMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\SaleDetailsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SaleDetailsform.Designer.cs">
+      <DependentUpon>SaleDetailsform.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Sample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -402,6 +408,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MedicineMain.resx">
       <DependentUpon>MedicineMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SaleDetailsform.resx">
+      <DependentUpon>SaleDetailsform.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Sample.resx">
       <DependentUpon>Sample.cs</DependentUpon>

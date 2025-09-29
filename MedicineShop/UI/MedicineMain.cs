@@ -71,28 +71,28 @@ namespace MedicineShop
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow == null)
-            {
-                MessageBox.Show("Select a medicine to edit.");
-                return;
-            }
+            //if (dataGridView1.CurrentRow == null)
+            //{
+            //    MessageBox.Show("Select a medicine to edit.");
+            //    return;
+            //}
 
-            Medicine med = new Medicine
-            {
-                ProductId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["product_id"].Value),
-                Name = dataGridView1.CurrentRow.Cells["name"].Value.ToString(),
-                Description = dataGridView1.CurrentRow.Cells["description"].Value.ToString(),
-                PackingId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["packing_id"].Value),
-                SalePrice = Convert.ToDecimal(dataGridView1.CurrentRow.Cells["sale_price"].Value),
-                CategoryId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Category_id"].Value)
+            //Medicine med = new Medicine
+            //{
+            //    ProductId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["product_id"].Value),
+            //    Name = dataGridView1.CurrentRow.Cells["name"].Value.ToString(),
+            //    Description = dataGridView1.CurrentRow.Cells["description"].Value.ToString(),
+            //    PackingId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["packing_id"].Value),
+            //    SalePrice = Convert.ToDecimal(dataGridView1.CurrentRow.Cells["sale_price"].Value),
+            //    CategoryId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Category_id"].Value)
 
-            };
+            //};
 
-            AddMedicine form = new AddMedicine(med);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                LoadMedicines();
-            }
+            //AddMedicine form = new AddMedicine(med);
+            //if (form.ShowDialog() == DialogResult.OK)
+            //{
+            //    LoadMedicines();
+            //}
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
