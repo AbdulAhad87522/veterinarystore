@@ -22,7 +22,7 @@ namespace TechStore.UI
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Font = SystemFonts.DefaultFont; // ✅ ensures scaling matches
+            this.Font = SystemFonts.DefaultFont;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
