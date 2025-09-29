@@ -177,15 +177,12 @@ namespace MedicineShop.UI
                     try
                     {
                         // Get the SaleId from the selected row
-                        // Since SaleId column is hidden, we need to access it by name
                         var saleId = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells["SaleId"].Value);
 
-                        // Create and show the SaleDetailsform
+                        // Create and show the SaleDetailsform with the specific sale ID
                         var saleDetailsForm = new SaleDetailsform();
-                        saleDetailsForm.CustomerId = customerId;
-
-                        // Load the customer sales in the form
-                        saleDetailsForm.LoadCustomerSales();
+                        saleDetailsForm.SaleId = saleId;  // Pass the sale ID instead of customer ID
+                        saleDetailsForm.LoadSaleItems();   // Load items for this specific sale
 
                         saleDetailsForm.ShowDialog();
                     }
