@@ -485,7 +485,7 @@ namespace fertilizesop.UI
                 {
                     //customername = txtcustsearch.Text ?? "",
                     //productname = txtproductsearch.Text ?? "",
-                    totaldiscount = int.TryParse(txtfinaldiscount.Text, out var discount) ? discount : 0,
+                    totaldiscount = decimal.TryParse(txtfinaldiscount.Text, out var discount) ? discount : 0,
                     finalpriceafterdisc = decimal.TryParse(txtfinalprice.Text, out var finalprice) ? finalprice : 0,
                     totalprice = decimal.TryParse(totalwithoutdisc.Text, out var total) ? total : 0,
                     date = dateTimePicker1.Value,
@@ -495,12 +495,12 @@ namespace fertilizesop.UI
                         .Select(r => new saleitems
                         {
                             productname = r.Cells["name"]?.Value?.ToString() ?? "",
-                            unitprice = ConvertToIntSafe(r.Cells["sale_price"]?.Value),
+                            unitprice = ConvertToDecimalSafe(r.Cells["sale_price"]?.Value),
                             expiry_date = Convert.ToDateTime(r.Cells["expiry_date"]?.Value),
                             quantity = ConvertToIntSafe(r.Cells["quantity"]?.Value),
-                            discount = ConvertToIntSafe(r.Cells["discount"]?.Value),
-                            total = ConvertToIntSafe(r.Cells["total"]?.Value),
-                            finalprice = ConvertToIntSafe(r.Cells["final"]?.Value)
+                            discount = ConvertToDecimalSafe(r.Cells["discount"]?.Value),
+                            total = ConvertToDecimalSafe(r.Cells["total"]?.Value),
+                            finalprice = ConvertToDecimalSafe(r.Cells["final"]?.Value)
                         })
                         .ToList()
                 };
@@ -677,9 +677,10 @@ namespace fertilizesop.UI
             }
         }
 
-        public static decimal ConvertToDecimalSafe(string input, decimal defaultValue = 0)
+        public static decimal ConvertToDecimalSafe(object value, decimal defaultValue = 0)
         {
-            if (decimal.TryParse(input, out decimal result))
+            if (value == null) return defaultValue;
+            if (decimal.TryParse(value.ToString(), out decimal result))
                 return result;
             return defaultValue;
         }

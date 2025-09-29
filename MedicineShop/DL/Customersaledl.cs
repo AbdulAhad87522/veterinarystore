@@ -194,7 +194,7 @@ namespace MedicineShop.DL
                         // --- Header Section ---
                         column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
                         column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
-                        column.Item().AlignCenter().Text("Phone: 0300-6634245").FontSize(12);
+                        column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
                         column.Item().PaddingVertical(10).LineHorizontal(1);
 
                         // --- Invoice Info Section ---
@@ -362,7 +362,7 @@ namespace MedicineShop.DL
                             // --- Header Section ---
                             column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
                             column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
-                            column.Item().AlignCenter().Text("Phone: 0300-6634245").FontSize(12);
+                            column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
                             column.Item().PaddingVertical(10).LineHorizontal(1);
 
                             // --- Invoice Info Section ---
