@@ -24,24 +24,19 @@ namespace MedicineShop.UI
             InitializeComponent();
             UIHelper.StyleGridView(dataGridView2);
 
-            // Add search functionality if you have a search textbox
             if (this.Controls.Find("textBox1", true).FirstOrDefault() is TextBox searchBox)
             {
                 searchBox.TextChanged += TextBox1_TextChanged;
             }
         }
 
-        // New method to load sale items for a specific sale
         public void LoadSaleItems()
         {
             try
             {
                 var saleItems = GetSaleItems(SaleId);
 
-                // Get sale header information
                 var saleInfo = GetSaleInfo(SaleId);
-
-                // Create a DataTable for display
                 var displayTable = new DataTable();
                 displayTable.Columns.Add("Product Name", typeof(string));
                 displayTable.Columns.Add("Quantity", typeof(int));

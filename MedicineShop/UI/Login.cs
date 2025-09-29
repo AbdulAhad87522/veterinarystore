@@ -76,14 +76,10 @@ namespace TechStore.UI
                 MessageBox.Show("Invalid credentials.");
                 return;
             }
-            else
-            {
-                var f = Program.ServiceProvider.GetRequiredService<Dashboard>();
-                Dashboard.Instance.LoadFormIntoPanel(f);
-            }
 
-                this.DialogResult = DialogResult.OK;
-            this.Close(); // Closes the modal and triggers Application.Run for Dashboard
+            // Just set DialogResult and close - Dashboard will be shown by Program.cs
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
 
