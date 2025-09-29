@@ -59,7 +59,6 @@ namespace fertilizesop.UI
             this.txtfinalprice = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnadd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -171,7 +170,6 @@ namespace fertilizesop.UI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.panel1.Controls.Add(this.btnadd);
             this.panel1.Controls.Add(this.iconButton4);
             this.panel1.Controls.Add(this.txtcustsearch);
             this.panel1.Controls.Add(this.walking_in);
@@ -405,16 +403,6 @@ namespace fertilizesop.UI
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // btnadd
-            // 
-            this.btnadd.Location = new System.Drawing.Point(358, 136);
-            this.btnadd.Name = "btnadd";
-            this.btnadd.Size = new System.Drawing.Size(75, 23);
-            this.btnadd.TabIndex = 200;
-            this.btnadd.Text = "button1";
-            this.btnadd.UseVisualStyleBackColor = true;
-            this.btnadd.Click += new System.EventHandler(this.btnadd_Click);
-            // 
             // Customersale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -467,6 +455,5 @@ namespace fertilizesop.UI
         private RadioButton walking_in;
         private RadioButton regular;
         private FontAwesome.Sharp.IconButton iconButton4;
-        private Button btnadd;
     }
 }

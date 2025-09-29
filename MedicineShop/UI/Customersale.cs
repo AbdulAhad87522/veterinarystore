@@ -606,6 +606,12 @@ namespace fertilizesop.UI
                     return;
                 }
 
+                if(string.IsNullOrEmpty(txtpaidamount.Text))
+                {
+                    MessageBox.Show("please enter some amount.");
+                    return;
+                }
+
                 decimal paid = decimal.Parse(txtpaidamount.Text.Trim());
                 decimal finalprice = decimal.Parse(txtfinalprice.Text.Trim());
 
