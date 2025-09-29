@@ -41,7 +41,7 @@ namespace MedicineShop.UI
                 displayTable.Columns.Add("Product Name", typeof(string));
                 displayTable.Columns.Add("Quantity", typeof(int));
                 displayTable.Columns.Add("Unit Price", typeof(decimal));
-                displayTable.Columns.Add("Discount %", typeof(decimal));
+                displayTable.Columns.Add("Discount", typeof(decimal));
                 displayTable.Columns.Add("Subtotal", typeof(decimal));
 
                 decimal grandTotal = 0;

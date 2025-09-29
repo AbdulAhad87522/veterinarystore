@@ -268,9 +268,9 @@ namespace MedicineShop.DL
 
                                 table.Cell().Padding(5).Text(name);
                                 table.Cell().Padding(5).AlignRight().Text(qty);
-                                table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N0}");
-                                table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N0}");
-                                table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N0}").Bold();
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N2}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N2}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N2}").Bold();
                             });
 
                             // Add subtle separator between items
@@ -290,19 +290,19 @@ namespace MedicineShop.DL
                             });
 
                             summaryTable.Cell().Padding(3).AlignRight().Text("Subtotal:");
-                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N0}");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N2}");
 
                             summaryTable.Cell().Padding(3).AlignRight().Text("Total Discount:");
-                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N0}");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N2}");
 
                             summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text("TOTAL:").Bold();
-                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N0}").Bold().FontSize(12);
+                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N2}").Bold().FontSize(12);
 
                             summaryTable.Cell().Padding(3).AlignRight().Text("Amount Paid:");
-                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N0}");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N2}");
 
                             summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text("BALANCE:").Bold();
-                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N0}").Bold();
+                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N2}").Bold();
                         });
 
                         column.Item().PaddingVertical(15).LineHorizontal(1);
@@ -415,9 +415,9 @@ namespace MedicineShop.DL
 
                                 string name = row.Cells["name"].Value?.ToString() ?? "";
                                 string qty = row.Cells["quantity"].Value?.ToString() ?? "0";
-                                decimal price = Convert.ToDecimal(row.Cells["sale_price"].Value ?? 0);
-                                decimal discount = Convert.ToDecimal(row.Cells["discount"].Value ?? 0);
-                                decimal itemTotal = Convert.ToDecimal(row.Cells["final"].Value ?? 0);
+                                decimal price = ConvertToDecimalSafe(row.Cells["sale_price"].Value);
+                                decimal discount = ConvertToDecimalSafe(row.Cells["discount"].Value);
+                                decimal itemTotal = ConvertToDecimalSafe(row.Cells["final"].Value);
 
                                 totalDiscount += discount * Convert.ToInt32(qty);
                                 subTotal += itemTotal;

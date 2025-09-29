@@ -20,6 +20,9 @@ namespace TechStore.UI
         public Login()
         {
             InitializeComponent();
+            txtpassword.PasswordChar = '*';
+            txtpassword.UseSystemPasswordChar = true; // hides password
+            this.WindowState = FormWindowState.Maximized;   
             this.AutoScaleMode = AutoScaleMode.Dpi;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Font = SystemFonts.DefaultFont;
@@ -96,6 +99,12 @@ namespace TechStore.UI
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+        private bool passwordVisible = false;
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            passwordVisible = !passwordVisible;
+            txtpassword.UseSystemPasswordChar = !passwordVisible;
         }
     }
   
