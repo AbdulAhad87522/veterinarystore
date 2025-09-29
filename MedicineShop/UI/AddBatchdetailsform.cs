@@ -1121,6 +1121,8 @@ namespace MedicineShop.UI
         {
             if (dgvcompany.Visible && dgvcompany.Rows.Count > 0)
             {
+                int firstVisibleCol = GetFirstVisibleColumnIndex(dgvcompany);
+
                 switch (e.KeyCode)
                 {
                     case Keys.Down:
@@ -1128,21 +1130,14 @@ namespace MedicineShop.UI
                             int currentRow = dgvcompany.CurrentCell?.RowIndex ?? -1;
                             int nextRow = currentRow + 1;
 
-                            if (currentRow == -1) // nothing selected yet
-                                nextRow = 0;
-
                             if (nextRow < dgvcompany.Rows.Count)
                             {
                                 dgvcompany.ClearSelection();
-
-                                int firstVisibleColIndex = dgvcompany.Columns
-                                    .Cast<DataGridViewColumn>()
-                                    .First(c => c.Visible).Index;
-
+                                dgvcompany.CurrentCell = dgvcompany.Rows[nextRow].Cells[firstVisibleCol];
                                 dgvcompany.Rows[nextRow].Selected = true;
-                                dgvcompany.CurrentCell = dgvcompany.Rows[nextRow].Cells[firstVisibleColIndex];
                             }
                             e.Handled = true;
+                            e.SuppressKeyPress = true; // Prevent default behavior
                             break;
                         }
 
@@ -1154,36 +1149,31 @@ namespace MedicineShop.UI
                             if (prevRow >= 0)
                             {
                                 dgvcompany.ClearSelection();
-
-                                int firstVisibleColIndex = dgvcompany.Columns
-                                    .Cast<DataGridViewColumn>()
-                                    .First(c => c.Visible).Index;
-
+                                dgvcompany.CurrentCell = dgvcompany.Rows[prevRow].Cells[firstVisibleCol];
                                 dgvcompany.Rows[prevRow].Selected = true;
-                                dgvcompany.CurrentCell = dgvcompany.Rows[prevRow].Cells[firstVisibleColIndex];
                             }
                             e.Handled = true;
+                            e.SuppressKeyPress = true;
                             break;
                         }
 
-
-
                     case Keys.Enter:
-                        if (dgvcompany.SelectedRows.Count > 0)
+                        if (dgvcompany.CurrentRow != null)
                         {
-                            SelectCompanyFromGrid(dgvcompany.SelectedRows[0]);
+                            SelectCompanyFromGrid(dgvcompany.CurrentRow);
                             e.Handled = true;
+                            e.SuppressKeyPress = true;
                         }
                         break;
 
                     case Keys.Escape:
                         dgvcompany.Visible = false;
                         e.Handled = true;
+                        e.SuppressKeyPress = true;
                         break;
                 }
             }
         }
-
         private void TxtCompany_Leave(object sender, EventArgs e)
         {
             // Small delay to allow clicking on the grid
@@ -1249,16 +1239,20 @@ namespace MedicineShop.UI
         {
             try
             {
+                // Skip if suppressed (when programmatically setting text)
+                if (suppressTextChanged) return;
+
                 string searchTerm = txtproduct.Text.Trim();
 
                 if (!string.IsNullOrEmpty(searchTerm) && paneldetails.Visible)
                 {
-                    // Filter medicines based on search term
-                    DataTable medicines = ((DataTable)dgvmedicines.DataSource).Copy();
-                    DataView dv = medicines.DefaultView;
+                    // IMPORTANT: Reload the full medicines list first
+                    var batchesDl = new BatchesDl();
+                    DataTable medicines = batchesDl.GetMedicines();
 
-                    // Search in multiple columns (adjust column names as per your data)
-                    dv.RowFilter = $"company_name LIKE '%{searchTerm}%' OR category_name LIKE '%{searchTerm}%' OR packing_name LIKE '%{searchTerm}%' OR name LIKE '%{searchTerm}%' ";
+                    // Now filter
+                    DataView dv = medicines.DefaultView;
+                    dv.RowFilter = $"company_name LIKE '%{searchTerm}%' OR category_name LIKE '%{searchTerm}%' OR packing_name LIKE '%{searchTerm}%' OR name LIKE '%{searchTerm}%'";
 
                     if (dv.Count > 0)
                     {
@@ -1286,7 +1280,6 @@ namespace MedicineShop.UI
                 System.Diagnostics.Debug.WriteLine($"Error searching medicines: {ex.Message}");
             }
         }
-
         private void TxtProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (dgvmedicines.Visible && dgvmedicines.Rows.Count > 0)
@@ -1298,30 +1291,41 @@ namespace MedicineShop.UI
                     case Keys.Down:
                         {
                             int currentRow = dgvmedicines.CurrentCell?.RowIndex ?? -1;
-                            int nextRow = (currentRow < dgvmedicines.Rows.Count - 1) ? currentRow + 1 : 0;
+                            int nextRow = currentRow + 1;
 
-                            dgvmedicines.CurrentCell = dgvmedicines.Rows[nextRow].Cells[firstVisibleCol];
-                            dgvmedicines.Rows[nextRow].Selected = true;
+                            if (nextRow < dgvmedicines.Rows.Count)
+                            {
+                                dgvmedicines.ClearSelection();
+                                dgvmedicines.CurrentCell = dgvmedicines.Rows[nextRow].Cells[firstVisibleCol];
+                                dgvmedicines.Rows[nextRow].Selected = true;
+                            }
+                            e.Handled = true;
+                            e.SuppressKeyPress = true;
+                            break;
                         }
-                        e.Handled = true;
-                        break;
 
                     case Keys.Up:
                         {
-                            int currentRow = dgvmedicines.CurrentCell?.RowIndex ?? 0;
-                            int prevRow = (currentRow > 0) ? currentRow - 1 : dgvmedicines.Rows.Count - 1;
+                            int currentRow = dgvmedicines.CurrentCell?.RowIndex ?? -1;
+                            int prevRow = currentRow - 1;
 
-                            dgvmedicines.CurrentCell = dgvmedicines.Rows[prevRow].Cells[firstVisibleCol];
-                            dgvmedicines.Rows[prevRow].Selected = true;
+                            if (prevRow >= 0)
+                            {
+                                dgvmedicines.ClearSelection();
+                                dgvmedicines.CurrentCell = dgvmedicines.Rows[prevRow].Cells[firstVisibleCol];
+                                dgvmedicines.Rows[prevRow].Selected = true;
+                            }
+                            e.Handled = true;
+                            e.SuppressKeyPress = true;
+                            break;
                         }
-                        e.Handled = true;
-                        break;
 
                     case Keys.Enter:
                         if (dgvmedicines.CurrentRow != null)
                         {
                             SelectMedicineFromGrid(dgvmedicines.CurrentRow);
                             e.Handled = true;
+                            e.SuppressKeyPress = true;
                         }
                         break;
 
@@ -1329,6 +1333,7 @@ namespace MedicineShop.UI
                         dgvmedicines.Visible = false;
                         txtproduct.Focus();
                         e.Handled = true;
+                        e.SuppressKeyPress = true;
                         break;
                 }
             }
