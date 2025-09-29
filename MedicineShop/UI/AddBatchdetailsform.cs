@@ -31,6 +31,8 @@ namespace MedicineShop.UI
 
         public AddBatchdetailsform(IBatchItemsBl batchItemsBl, IBatchesBl batchesBl)
         {
+            this.AutoScaleMode = AutoScaleMode.Dpi; // or AutoScaleMode.Font
+
             InitializeComponent();
             this.batchesBl = batchesBl;
             this.batchItemsBl = batchItemsBl;
@@ -1508,9 +1510,22 @@ namespace MedicineShop.UI
 
         private void PositionGridBelowControl(DataGridView grid, Control control)
         {
-            // Position the grid right below the control
+            // Get control location in form coordinates
             Point controlLocation = this.PointToClient(control.Parent.PointToScreen(control.Location));
-            grid.Location = new Point(controlLocation.X, controlLocation.Y + control.Height + 2);
+
+            // Calculate desired position
+            int desiredX = controlLocation.X;
+            int desiredY = controlLocation.Y + control.Height + 2;
+
+            // Ensure grid stays within form bounds
+            int maxWidth = this.ClientSize.Width - desiredX - 20; // 20px margin
+            int maxHeight = this.ClientSize.Height - desiredY - 20;
+
+            // Apply position with bounds checking
+            grid.Location = new Point(desiredX, desiredY);
+            grid.Width = Math.Min(grid.Width, Math.Max(200, maxWidth));
+            grid.Height = Math.Min(300, Math.Max(100, maxHeight)); // Max 300px height
+
             grid.BringToFront();
         }
 
