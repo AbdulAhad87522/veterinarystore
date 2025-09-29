@@ -10,7 +10,7 @@ namespace MedicineShop.BL.Models
     {
         public string customername { get; set; }
         public string productname { get; set; }
-        public int totaldiscount { get; set; }
+        public decimal totaldiscount { get; set; }
         public decimal finalpriceafterdisc { get; set; }
         public decimal totalprice { get; set; }
         public DateTime date { get; set; }
@@ -20,11 +20,11 @@ namespace MedicineShop.BL.Models
     public class saleitems
     {
         public string productname { get; set; }
-        public int unitprice { get; set; }
+        public decimal unitprice { get; set; }
         public DateTime expiry_date { get; set; }
         public int quantity { get; set; }
-        public int discount { get; set; }
-        public int total { get; set; }
+        public decimal discount { get; set; }
+        public decimal total { get; set; }
         public decimal finalprice { get; set; }
     }
 }
