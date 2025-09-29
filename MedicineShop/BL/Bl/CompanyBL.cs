@@ -12,11 +12,11 @@ namespace MedicineShop.BL
     {
         private readonly CompanyDL companyDL = new CompanyDL();
 
-        private bool IsValidContact(string contact)
-        {
-            // Format: xxxx-xxxxxxx
-            return Regex.IsMatch(contact, @"^\d{4}-\d{7}$");
-        }
+        //private bool IsValidContact(string contact)
+        //{
+        //    // Format: xxxx-xxxxxxx
+        //    //return Regex.IsMatch(contact, @"^\d{4}-\d{7}$");
+        //}
 
         public DataTable GetAllCompanies(string search = "")
         {
@@ -27,8 +27,8 @@ namespace MedicineShop.BL
         {
             if (string.IsNullOrWhiteSpace(company.CompanyName))
                 throw new Exception("Company name is required.");
-            if (!IsValidContact(company.Contact))
-                throw new Exception("Contact must be in xxxx-xxxxxxx format.");
+            //if (!IsValidContact(company.Contact))
+            //    throw new Exception("Contact must be in xxxx-xxxxxxx format.");
             if (string.IsNullOrWhiteSpace(company.Address))
                 throw new Exception("Address is required.");
 
@@ -41,8 +41,8 @@ namespace MedicineShop.BL
                 throw new Exception("Invalid company ID.");
             if (string.IsNullOrWhiteSpace(company.CompanyName))
                 throw new Exception("Company name is required.");
-            if (!IsValidContact(company.Contact))
-                throw new Exception("Contact must be in xxxx-xxxxxxx format.");
+            //if (!IsValidContact(company.Contact))
+            //    throw new Exception("Contact must be in xxxx-xxxxxxx format.");
             if (string.IsNullOrWhiteSpace(company.Address))
                 throw new Exception("Address is required.");
 

@@ -89,13 +89,13 @@ namespace MedicineShop.UI
             if (dataGridView2.Columns["PurchasePrice"] != null)
             {
                 dataGridView2.Columns["PurchasePrice"].HeaderText = "Purchase Price";
-                dataGridView2.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["PurchasePrice"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["SalePrice"] != null)
             {
                 dataGridView2.Columns["SalePrice"].HeaderText = "Sale Price";
-                dataGridView2.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["SalePrice"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["ExpiryDate"] != null)
@@ -152,6 +152,11 @@ namespace MedicineShop.UI
         }
 
         private void BatchDetailsform_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }

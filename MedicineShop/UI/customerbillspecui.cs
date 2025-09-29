@@ -78,19 +78,19 @@ namespace MedicineShop.UI
             if (dataGridView2.Columns["TotalAmount"] != null)
             {
                 dataGridView2.Columns["TotalAmount"].HeaderText = "Total Amount";
-                dataGridView2.Columns["TotalAmount"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["TotalAmount"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["PaidAmount"] != null)
             {
                 dataGridView2.Columns["PaidAmount"].HeaderText = "Paid Amount";
-                dataGridView2.Columns["PaidAmount"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["PaidAmount"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["RemainingAmount"] != null)
             {
                 dataGridView2.Columns["RemainingAmount"].HeaderText = "Remaining";
-                dataGridView2.Columns["RemainingAmount"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["RemainingAmount"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["Status"] != null)

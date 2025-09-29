@@ -76,13 +76,13 @@ namespace MedicineShop.UI
             if (dataGridView2.Columns["TotalPrice"] != null)
             {
                 dataGridView2.Columns["TotalPrice"].HeaderText = "Total Price";
-                dataGridView2.Columns["TotalPrice"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["TotalPrice"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["Paid"] != null)
             {
                 dataGridView2.Columns["Paid"].HeaderText = "Paid Amount";
-                dataGridView2.Columns["Paid"].DefaultCellStyle.Format = "C2";
+                dataGridView2.Columns["Paid"].DefaultCellStyle.Format = "N2";
             }
 
             if (dataGridView2.Columns["Status"] != null)
@@ -209,6 +209,11 @@ namespace MedicineShop.UI
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
