@@ -247,9 +247,9 @@ namespace MedicineShop.DL
 
                             string name = row.Cells["name"].Value?.ToString() ?? "";
                             string qty = row.Cells["quantity"].Value?.ToString() ?? "0";
-                            decimal price = Convert.ToDecimal(row.Cells["sale_price"].Value ?? 0);
-                            decimal discount = Convert.ToDecimal(row.Cells["discount"].Value ?? 0);
-                            decimal itemTotal = Convert.ToDecimal(row.Cells["final"].Value ?? 0);
+                            decimal price = ConvertToDecimalSafe(row.Cells["sale_price"].Value ?? 0);
+                            decimal discount = ConvertToDecimalSafe(row.Cells["discount"].Value ?? 0);
+                            decimal itemTotal = ConvertToDecimalSafe(row.Cells["final"].Value ?? 0);
 
                             totalDiscount += discount * Convert.ToInt32(qty);
                             subTotal += itemTotal;
@@ -329,6 +329,15 @@ namespace MedicineShop.DL
                 });
             }).GeneratePdf(filePath);
         }
+
+        public static decimal ConvertToDecimalSafe(object value, decimal defaultValue = 0)
+        {
+            if (value == null) return defaultValue;
+            if (decimal.TryParse(value.ToString(), out decimal result))
+                return result;
+            return defaultValue;
+        }
+
 
         public static void PrintA4ReceiptDirectly(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
@@ -706,7 +715,7 @@ namespace MedicineShop.DL
             return dt;
         }
 
-        public bool SaveDataToDatabase(int? id, DateTime? date, int? total_amount, int? paid_amount, DataGridView d)
+        public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
         {
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
@@ -773,20 +782,20 @@ namespace MedicineShop.DL
                                     if (reader.Read())
                                     {
                                         productid = reader.GetInt32("product_id");
-                                        int salePrice = reader.GetInt32("sale_price");
+                                        decimal salePrice = reader.GetDecimal("sale_price");
                                         reader.Close();
 
                                         // Parse and validate quantity
-                                        if (!int.TryParse(row.Cells["quantity"]?.Value?.ToString(), out int qty) || qty <= 0)
+                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal qty) || qty <= 0)
                                         {
                                             throw new Exception($"Invalid quantity for product: {name}");
                                         }
 
                                         // Parse discount
-                                        int discount = 0;
+                                        decimal discount = 0;
                                         if (row.Cells["discount"]?.Value != null)
                                         {
-                                            if (!int.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
+                                            if (!decimal.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
                                             {
                                                 throw new Exception($"Invalid discount for product: {name}");
                                             }

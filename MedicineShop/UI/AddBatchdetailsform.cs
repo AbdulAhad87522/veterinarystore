@@ -843,7 +843,7 @@ namespace MedicineShop.UI
                 {
                     if (!decimal.TryParse(txtpaid.Text, out paidAmount) || paidAmount < 0)
                     {
-                        MessageBox.Show("Please enter valid paid amount.", "Validation Error",
+                        MessageBox.Show("Please enter valid paid amount (0 or more).", "Validation Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         txtpaid.Focus();
                         return;

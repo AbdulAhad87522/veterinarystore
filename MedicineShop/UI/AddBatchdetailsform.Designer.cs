@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toplbl = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.paneldetails = new System.Windows.Forms.Panel();
+            this.dgvcompany = new System.Windows.Forms.DataGridView();
             this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.dgvmedicines = new System.Windows.Forms.DataGridView();
@@ -52,7 +53,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.dgvcompany = new System.Windows.Forms.DataGridView();
             this.iconButton4 = new FontAwesome.Sharp.IconButton();
             this.iconButton1 = new FontAwesome.Sharp.IconButton();
             this.txtpaid = new System.Windows.Forms.TextBox();
@@ -67,10 +67,10 @@
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.paneldetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvcompany)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvmedicines)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvbatches)).BeginInit();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvcompany)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -112,7 +112,6 @@
             // 
             // paneldetails
             // 
-            this.paneldetails.Controls.Add(this.dgvcompany);
             this.paneldetails.Controls.Add(this.iconButton5);
             this.paneldetails.Controls.Add(this.dateTimePicker1);
             this.paneldetails.Controls.Add(this.dgvmedicines);
@@ -130,11 +129,36 @@
             this.paneldetails.Controls.Add(this.label10);
             this.paneldetails.Controls.Add(this.label11);
             this.paneldetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.paneldetails.Location = new System.Drawing.Point(0, 177);
+            this.paneldetails.Location = new System.Drawing.Point(0, 336);
             this.paneldetails.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.paneldetails.Name = "paneldetails";
-            this.paneldetails.Size = new System.Drawing.Size(1667, 888);
+            this.paneldetails.Size = new System.Drawing.Size(1667, 729);
             this.paneldetails.TabIndex = 1;
+            // 
+            // dgvcompany
+            // 
+            this.dgvcompany.AllowUserToAddRows = false;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AntiqueWhite;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.OldLace;
+            this.dgvcompany.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvcompany.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvcompany.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvcompany.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvcompany.BackgroundColor = System.Drawing.Color.AliceBlue;
+            this.dgvcompany.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvcompany.GridColor = System.Drawing.SystemColors.AppWorkspace;
+            this.dgvcompany.Location = new System.Drawing.Point(240, 9);
+            this.dgvcompany.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dgvcompany.Name = "dgvcompany";
+            this.dgvcompany.ReadOnly = true;
+            this.dgvcompany.RowHeadersWidth = 51;
+            this.dgvcompany.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dgvcompany.Size = new System.Drawing.Size(856, 288);
+            this.dgvcompany.TabIndex = 202;
             // 
             // iconButton5
             // 
@@ -172,11 +196,11 @@
             // dgvmedicines
             // 
             this.dgvmedicines.AllowUserToAddRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.OldLace;
-            this.dgvmedicines.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AntiqueWhite;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.OldLace;
+            this.dgvmedicines.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvmedicines.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -185,24 +209,24 @@
             this.dgvmedicines.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dgvmedicines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvmedicines.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgvmedicines.Location = new System.Drawing.Point(520, 330);
+            this.dgvmedicines.Location = new System.Drawing.Point(240, 15);
             this.dgvmedicines.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvmedicines.Name = "dgvmedicines";
             this.dgvmedicines.ReadOnly = true;
             this.dgvmedicines.RowHeadersWidth = 51;
             this.dgvmedicines.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvmedicines.Size = new System.Drawing.Size(856, 475);
+            this.dgvmedicines.Size = new System.Drawing.Size(856, 316);
             this.dgvmedicines.TabIndex = 202;
             this.dgvmedicines.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMedicines_CellClick);
             // 
             // dgvbatches
             // 
             this.dgvbatches.AllowUserToAddRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.OldLace;
-            this.dgvbatches.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.AntiqueWhite;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.OldLace;
+            this.dgvbatches.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvbatches.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -217,7 +241,7 @@
             this.dgvbatches.ReadOnly = true;
             this.dgvbatches.RowHeadersWidth = 51;
             this.dgvbatches.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvbatches.Size = new System.Drawing.Size(1385, 578);
+            this.dgvbatches.Size = new System.Drawing.Size(1385, 419);
             this.dgvbatches.TabIndex = 200;
             // 
             // iconButton3
@@ -372,6 +396,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.dgvcompany);
             this.panel3.Controls.Add(this.iconButton4);
             this.panel3.Controls.Add(this.iconButton1);
             this.panel3.Controls.Add(this.txtpaid);
@@ -387,33 +412,8 @@
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1667, 177);
+            this.panel3.Size = new System.Drawing.Size(1667, 336);
             this.panel3.TabIndex = 0;
-            // 
-            // dgvcompany
-            // 
-            this.dgvcompany.AllowUserToAddRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.OldLace;
-            this.dgvcompany.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvcompany.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvcompany.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvcompany.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dgvcompany.BackgroundColor = System.Drawing.Color.AliceBlue;
-            this.dgvcompany.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvcompany.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgvcompany.Location = new System.Drawing.Point(316, 9);
-            this.dgvcompany.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.dgvcompany.Name = "dgvcompany";
-            this.dgvcompany.ReadOnly = true;
-            this.dgvcompany.RowHeadersWidth = 51;
-            this.dgvcompany.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dgvcompany.Size = new System.Drawing.Size(856, 302);
-            this.dgvcompany.TabIndex = 202;
             // 
             // iconButton4
             // 
@@ -571,11 +571,11 @@
             this.panel2.ResumeLayout(false);
             this.paneldetails.ResumeLayout(false);
             this.paneldetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvcompany)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvmedicines)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvbatches)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvcompany)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -110,7 +110,7 @@ namespace fertilizesop.UI
 
                             // Get values from the row
                             string name = selectedRow.Cells["name"].Value.ToString();
-                            int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
+                            decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
                             DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
                             expiry = expiry.Date;
                             dataGridView1.Rows.Add(name, saleprice , expiry);
@@ -251,11 +251,6 @@ namespace fertilizesop.UI
                 return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-           
-        }
-
         private void setupcustomersearch()
         {
             dgvcustomersearch.Visible = false;
@@ -293,7 +288,7 @@ namespace fertilizesop.UI
                 // Get values from the row
                 string name = selectedRow.Cells["name"].Value.ToString();
                 //string description = selectedRow.Cells["description"].Value.ToString();
-                int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
+                decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
                 DateTime expiryDate = DateTime.Parse(selectedRow.Cells["expiry_date"].Value.ToString());
                 expiryDate = expiryDate.Date;
                 dataGridView1.Rows.Add(name, saleprice, expiryDate);
@@ -328,9 +323,9 @@ namespace fertilizesop.UI
                 DataGridViewRow row = dataGridView1.Rows[rowIndex];
 
                 // Get cell values
-                int salePrice = Convert.ToInt32(row.Cells["sale_price"].Value ?? 0);
-                int discount = Convert.ToInt32(row.Cells["discount"].Value ?? 0);
-                int quantity = Convert.ToInt32(row.Cells["quantity"].Value ?? 0);
+                decimal salePrice = Convert.ToDecimal(row.Cells["sale_price"].Value ?? 0);
+                decimal discount = Convert.ToDecimal(row.Cells["discount"].Value ?? 0);
+                decimal quantity = Convert.ToDecimal(row.Cells["quantity"].Value ?? 0);
 
                 // Validation
                 if (discount < 0 || discount > salePrice)
@@ -341,9 +336,9 @@ namespace fertilizesop.UI
                 }
 
                 // Calculate total
-                int discountedPrice = salePrice - discount;
-                int total = discountedPrice * quantity;
-                int finaltotal = salePrice * quantity;
+                decimal discountedPrice = salePrice - discount;
+                decimal total = discountedPrice * quantity;
+                decimal finaltotal = salePrice * quantity;
 
                 // Set total cell value
                 row.Cells["total"].Value = total;
@@ -442,7 +437,7 @@ namespace fertilizesop.UI
 
                 // Get values from the row
                 string name = selectedRow.Cells["name"].Value.ToString();
-                int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
+                decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
 
 
                 dataGridView1.Rows.Add(name, saleprice);
@@ -452,9 +447,9 @@ namespace fertilizesop.UI
         }
         private void totalprice()
         {
-            int totalprice = 0;
-            int discountedprice = 0;
-            int finalprice = 0;
+            decimal totalprice = 0;
+            decimal discountedprice = 0;
+            decimal finalprice = 0;
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
@@ -462,9 +457,9 @@ namespace fertilizesop.UI
                     continue;
 
                 // Safe parsing with fallback to 0
-                int total = ConvertToIntSafe(row.Cells["final"]?.Value);
-                int disc = ConvertToIntSafe(row.Cells["discount"]?.Value);
-                int quantity = ConvertToIntSafe(row.Cells["quantity"]?.Value);
+                decimal total = Convert.ToDecimal(row.Cells["final"]?.Value);
+                decimal disc = Convert.ToDecimal(row.Cells["discount"]?.Value);
+                decimal quantity = Convert.ToDecimal(row.Cells["quantity"]?.Value);
 
                 discountedprice += (disc * quantity);
                 totalprice += total;
@@ -601,71 +596,6 @@ namespace fertilizesop.UI
             }
         }
 
-        //private void iconButton1_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(txtcustsearch.Text) && !(walking_in.Checked))
-        //        {
-        //            MessageBox.Show("Please enter the name of customer");
-        //            return;
-        //        }
-
-        //        if (dataGridView1.Rows.Count == 0)
-        //        {
-        //            MessageBox.Show("Please select some product first");
-        //            return;
-        //        }
-
-        //        if (string.IsNullOrEmpty(txtpaidamount.Text))
-        //        {
-        //            DialogResult result1 = MessageBox.Show("Don't you want to enter the paid amount?",
-        //                "Payment not entered", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-
-        //            if (result1 == DialogResult.Yes)
-        //            {
-        //                txtpaidamount.Text = "0";
-        //            }
-        //            else
-        //            {
-        //                return;
-        //            }
-        //        }
-
-        //        int id;
-        //        if( walking_in.Checked && !(regular.Checked))
-        //        {
-        //            id = 0001;
-        //        }
-        //        else
-        //        {
-        //            id = _customersaledl.getcustomerid(txtcustsearch.Text);
-        //        }
-        //            bool result = _customersaledl.SaveDataToDatabase(id, dateTimePicker1.Value,
-        //                Convert.ToInt32(txtfinalprice.Text), Convert.ToInt32(txtpaidamount.Text), dataGridView1);
-
-        //        //SavehthermalPdfInvoice();
-
-        //        if (result)
-        //        {
-        //            MessageBox.Show("Data saved successfully");
-        //            clearallfields();
-
-        //            string tempFile = GetTempSaleFilePath();
-        //            if (File.Exists(tempFile))
-        //                File.Delete(tempFile);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Data not saved to the database");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error in saving the data to database: " + ex.Message);
-        //    }
-        //}
-
         private void iconButton1_Click(object sender, EventArgs e)
         {
             try
@@ -676,8 +606,8 @@ namespace fertilizesop.UI
                     return;
                 }
 
-                int paid = int.Parse(txtpaidamount.Text.Trim());
-                int finalprice = int.Parse(txtfinalprice.Text.Trim());
+                decimal paid = decimal.Parse(txtpaidamount.Text.Trim());
+                decimal finalprice = decimal.Parse(txtfinalprice.Text.Trim());
 
                 if (walking_in.Checked && (finalprice!= paid))
                 {
@@ -706,12 +636,14 @@ namespace fertilizesop.UI
                         return;
                     }
                 }
+                decimal finalPrice = ConvertToDecimalSafe(txtfinalprice.Text);
+
 
                 bool result = _customersaledl.SaveDataToDatabase(
                     id,
                     dateTimePicker1.Value,
-                    ConvertToIntSafe(txtfinalprice.Text),
-                    ConvertToIntSafe(txtpaidamount.Text),
+                    Convert.ToDecimal(txtfinalprice.Text),
+                    Convert.ToDecimal(txtpaidamount.Text),
                     dataGridView1
                 );
 
@@ -738,6 +670,14 @@ namespace fertilizesop.UI
                 MessageBox.Show("Error in saving the data to database: " + ex.Message);
             }
         }
+
+        public static decimal ConvertToDecimalSafe(string input, decimal defaultValue = 0)
+        {
+            if (decimal.TryParse(input, out decimal result))
+                return result;
+            return defaultValue;
+        }
+
 
         private void SavehthermalPdfInvoice()
         {
