@@ -43,7 +43,6 @@ namespace fertilizesop.UI
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.iconButton4 = new FontAwesome.Sharp.IconButton();
-            this.button3 = new System.Windows.Forms.Button();
             this.txtcustsearch = new System.Windows.Forms.TextBox();
             this.walking_in = new System.Windows.Forms.RadioButton();
             this.regular = new System.Windows.Forms.RadioButton();
@@ -58,10 +57,9 @@ namespace fertilizesop.UI
             this.totalwithoutdisc = new System.Windows.Forms.TextBox();
             this.txtfinaldiscount = new System.Windows.Forms.TextBox();
             this.txtfinalprice = new System.Windows.Forms.TextBox();
-            this.delete = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnadd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -173,8 +171,8 @@ namespace fertilizesop.UI
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.btnadd);
             this.panel1.Controls.Add(this.iconButton4);
-            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.txtcustsearch);
             this.panel1.Controls.Add(this.walking_in);
             this.panel1.Controls.Add(this.regular);
@@ -189,8 +187,6 @@ namespace fertilizesop.UI
             this.panel1.Controls.Add(this.totalwithoutdisc);
             this.panel1.Controls.Add(this.txtfinaldiscount);
             this.panel1.Controls.Add(this.txtfinalprice);
-            this.panel1.Controls.Add(this.delete);
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.panel2);
@@ -228,17 +224,6 @@ namespace fertilizesop.UI
             this.iconButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.iconButton4.UseVisualStyleBackColor = false;
             this.iconButton4.Click += new System.EventHandler(this.iconButton4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(1020, 142);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(54, 34);
-            this.button3.TabIndex = 23;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // txtcustsearch
             // 
@@ -399,28 +384,6 @@ namespace fertilizesop.UI
             this.txtfinalprice.TabIndex = 7;
             this.txtfinalprice.TextChanged += new System.EventHandler(this.txtfinalprice_TextChanged);
             // 
-            // delete
-            // 
-            this.delete.Location = new System.Drawing.Point(358, 181);
-            this.delete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.delete.Name = "delete";
-            this.delete.Size = new System.Drawing.Size(75, 45);
-            this.delete.TabIndex = 6;
-            this.delete.Text = "delete";
-            this.delete.UseVisualStyleBackColor = true;
-            this.delete.Click += new System.EventHandler(this.delete_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(358, 134);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 42);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Enter";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -441,6 +404,16 @@ namespace fertilizesop.UI
             this.panel2.Size = new System.Drawing.Size(1583, 100);
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // btnadd
+            // 
+            this.btnadd.Location = new System.Drawing.Point(358, 136);
+            this.btnadd.Name = "btnadd";
+            this.btnadd.Size = new System.Drawing.Size(75, 23);
+            this.btnadd.TabIndex = 200;
+            this.btnadd.Text = "button1";
+            this.btnadd.UseVisualStyleBackColor = true;
+            this.btnadd.Click += new System.EventHandler(this.btnadd_Click);
             // 
             // Customersale
             // 
@@ -472,8 +445,6 @@ namespace fertilizesop.UI
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button delete;
         private System.Windows.Forms.TextBox txtfinalprice;
         private System.Windows.Forms.TextBox txtfinaldiscount;
         private System.Windows.Forms.TextBox totalwithoutdisc;
@@ -495,7 +466,7 @@ namespace fertilizesop.UI
         private TextBox txtcustsearch;
         private RadioButton walking_in;
         private RadioButton regular;
-        private Button button3;
         private FontAwesome.Sharp.IconButton iconButton4;
+        private Button btnadd;
     }
 }

@@ -13,6 +13,8 @@ using QuestPDF.Helpers;
 using System.Xml.Linq;
 using System.Drawing.Printing;
 using System.Drawing;
+using System.Diagnostics;
+using System.Threading;
 
 namespace MedicineShop.DL
 {
@@ -77,7 +79,105 @@ namespace MedicineShop.DL
             }
         }
 
-        public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid , decimal totaldiscount)
+        //public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid , decimal totaldiscount)
+        //{
+        //    QuestPDF.Settings.License = LicenseType.Community;
+
+        //    Document.Create(container =>
+        //    {
+        //        container.Page(page =>
+        //        {
+        //            page.Size(226, PageSizes.A4.Height, Unit.Point); // 80mm width
+        //            page.Margin(5);
+        //            page.DefaultTextStyle(x => x.FontFamily("Consolas").FontSize(9));
+
+        //            page.Content().Column(column =>
+        //            {
+        //                // --- Logo + Header ---
+        //                //column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
+        //                column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(16);
+        //                //column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
+        //                column.Item().AlignCenter().Text("main jalsai bazar, Tehsil Lahor district Swabi");
+        //                column.Item().AlignCenter().Text("Phone: 0300-6634245");
+        //                column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+
+        //                // --- Invoice Info ---
+        //                column.Item().Row(row =>
+        //                {
+        //                    row.RelativeItem().Text($"Customer: {customerName}");
+        //                    row.RelativeItem().AlignRight().Text($"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
+        //                });
+
+        //                column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+
+        //                // --- Table Header ---
+        //                column.Item().Text("----------------------------------------");
+        //                column.Item().Text("MEDIC         QTY PRICE DISC TOTAL");
+        //                column.Item().Text("----------------------------------------");
+
+        //                // --- Cart Items ---
+        //                decimal totalDiscount = 0;
+        //                decimal subTotal = 0;
+
+        //                foreach (DataGridViewRow row in cart.Rows)
+        //                {
+        //                    if (row.IsNewRow) continue;
+
+        //                    string name = row.Cells["name"].Value?.ToString() ?? "";
+        //                    string qty = row.Cells["quantity"].Value?.ToString()?.PadLeft(2);
+        //                    //string war = Truncate(row.Cells["Warranty"]?.Value?.ToString(), 3).PadRight(3);
+        //                    string price = row.Cells["sale_price"].Value?.ToString()?.PadLeft(5);
+        //                    string discount = row.Cells["discount"].Value?.ToString()?.PadLeft(3);
+        //                    string totalPrice = row.Cells["final"].Value?.ToString()?.PadLeft(6);
+
+        //                    if (decimal.TryParse(row.Cells["discount"].Value?.ToString(), out decimal discVal))
+        //                        totalDiscount += discVal * Convert.ToInt32(row.Cells["quantity"].Value);
+        //                    if (decimal.TryParse(row.Cells["final"].Value?.ToString(), out decimal itemTotal))
+        //                        subTotal += itemTotal;
+
+        //                    // Split name across lines
+        //                    string[] nameParts = name.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
+        //                    string firstWord = nameParts.Length > 0 ? nameParts[0] : name;
+        //                    string[] remainingWords = nameParts.Skip(1).ToArray();
+
+        //                    // First line with first word and all data
+        //                    string firstLine = $"{firstWord,-12}{qty} {price} {discount} {totalPrice}";
+        //                    column.Item().Text(firstLine);
+
+        //                    // Remaining words as new lines
+        //                    foreach (var word in remainingWords)
+        //                    {
+        //                        column.Item().PaddingLeft(10).Text(word);
+        //                    }
+        //                }
+
+        //                // --- Summary ---
+        //                column.Item().Text("----------------------------------------");
+        //                column.Item().Text($"SUBTOTAL:    Rs. {subTotal + totalDiscount:N0}");
+        //                column.Item().Text($"DISCOUNT:    Rs. {totaldiscount:N0}");
+        //                column.Item().Text($"TOTAL:       Rs. {total:N0}");
+        //                column.Item().Text($"PAID:        Rs. {paid:N0}");
+        //                column.Item().Text($"BALANCE:     Rs. {(total - paid):N0}");
+        //                column.Item().Text("----------------------------------------");
+
+        //                // --- Footer ---
+        //                column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold();
+        //                column.Item().PaddingTop(5).LineHorizontal(0.5f);
+        //                column.Item().AlignCenter().Text("** SPECIAL OFFERS **").Bold();
+        //                column.Item().AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
+        //                column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
+        //                column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
+        //                column.Item().AlignCenter().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
+        //                column.Item().PaddingTop(5).AlignCenter().Text("Developed By:");
+        //                column.Item().PaddingTop(5).AlignCenter().Text("abdulahad18022@gmail.com");
+        //                column.Item().PaddingTop(5).AlignCenter().Text("03477048001");
+
+        //            });
+        //        });
+        //    }).GeneratePdf(filePath);
+        //}
+
+        public static void CreateA4ReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
@@ -85,95 +185,370 @@ namespace MedicineShop.DL
             {
                 container.Page(page =>
                 {
-                    page.Size(226, PageSizes.A4.Height, Unit.Point); // 80mm width
-                    page.Margin(5);
-                    page.DefaultTextStyle(x => x.FontFamily("Consolas").FontSize(9));
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(11));
 
                     page.Content().Column(column =>
                     {
-                        // --- Logo + Header ---
-                        //column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
-                        column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(16);
-                        //column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
-                        column.Item().AlignCenter().Text("main jalsai bazar, Tehsil Lahor district Swabi");
-                        column.Item().AlignCenter().Text("Phone: 0300-6634245");
-                        column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+                        // --- Header Section ---
+                        column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
+                        column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
+                        column.Item().AlignCenter().Text("Phone: 0300-6634245").FontSize(12);
+                        column.Item().PaddingVertical(10).LineHorizontal(1);
 
-                        // --- Invoice Info ---
-                        column.Item().Row(row =>
+                        // --- Invoice Info Section ---
+                        column.Item().PaddingBottom(10).Row(row =>
                         {
-                            row.RelativeItem().Text($"Customer: {customerName}");
-                            row.RelativeItem().AlignRight().Text($"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
+                            row.RelativeItem().Column(infoCol =>
+                            {
+                                infoCol.Item().Text($"Customer: {customerName}").Bold();
+                                infoCol.Item().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
+                            });
+                            row.RelativeItem().AlignRight().Column(dateCol =>
+                            {
+                                dateCol.Item().Text($"Date: {DateTime.Now:dd-MMM-yyyy}");
+                                dateCol.Item().Text($"Time: {DateTime.Now:hh:mm tt}");
+                            });
                         });
 
-                        column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+                        column.Item().PaddingBottom(15).LineHorizontal(0.5f);
 
                         // --- Table Header ---
-                        column.Item().Text("----------------------------------------");
-                        column.Item().Text("MEDIC         QTY PRICE DISC TOTAL");
-                        column.Item().Text("----------------------------------------");
+                        column.Item().PaddingBottom(5).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(3); // Medicine Name
+                                columns.ConstantColumn(60); // Qty
+                                columns.ConstantColumn(70); // Price
+                                columns.ConstantColumn(60); // Discount
+                                columns.ConstantColumn(80); // Total
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().Padding(5).Background("#f0f0f0").Text("Medicine").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Qty").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Price").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Discount").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Total").Bold();
+                            });
+                        });
 
                         // --- Cart Items ---
                         decimal totalDiscount = 0;
                         decimal subTotal = 0;
+                        int itemCount = 0;
 
                         foreach (DataGridViewRow row in cart.Rows)
                         {
                             if (row.IsNewRow) continue;
 
                             string name = row.Cells["name"].Value?.ToString() ?? "";
-                            string qty = row.Cells["quantity"].Value?.ToString()?.PadLeft(2);
-                            //string war = Truncate(row.Cells["Warranty"]?.Value?.ToString(), 3).PadRight(3);
-                            string price = row.Cells["sale_price"].Value?.ToString()?.PadLeft(5);
-                            string discount = row.Cells["discount"].Value?.ToString()?.PadLeft(3);
-                            string totalPrice = row.Cells["final"].Value?.ToString()?.PadLeft(6);
+                            string qty = row.Cells["quantity"].Value?.ToString() ?? "0";
+                            decimal price = Convert.ToDecimal(row.Cells["sale_price"].Value ?? 0);
+                            decimal discount = Convert.ToDecimal(row.Cells["discount"].Value ?? 0);
+                            decimal itemTotal = Convert.ToDecimal(row.Cells["final"].Value ?? 0);
 
-                            if (decimal.TryParse(row.Cells["discount"].Value?.ToString(), out decimal discVal))
-                                totalDiscount += discVal * Convert.ToInt32(row.Cells["quantity"].Value);
-                            if (decimal.TryParse(row.Cells["final"].Value?.ToString(), out decimal itemTotal))
-                                subTotal += itemTotal;
+                            totalDiscount += discount * Convert.ToInt32(qty);
+                            subTotal += itemTotal;
+                            itemCount++;
 
-                            // Split name across lines
-                            string[] nameParts = name.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
-                            string firstWord = nameParts.Length > 0 ? nameParts[0] : name;
-                            string[] remainingWords = nameParts.Skip(1).ToArray();
-
-                            // First line with first word and all data
-                            string firstLine = $"{firstWord,-12}{qty} {price} {discount} {totalPrice}";
-                            column.Item().Text(firstLine);
-
-                            // Remaining words as new lines
-                            foreach (var word in remainingWords)
+                            column.Item().Table(table =>
                             {
-                                column.Item().PaddingLeft(10).Text(word);
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(3); // Medicine Name
+                                    columns.ConstantColumn(60); // Qty
+                                    columns.ConstantColumn(70); // Price
+                                    columns.ConstantColumn(60); // Discount
+                                    columns.ConstantColumn(80); // Total
+                                });
+
+                                table.Cell().Padding(5).Text(name);
+                                table.Cell().Padding(5).AlignRight().Text(qty);
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N0}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N0}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N0}").Bold();
+                            });
+
+                            // Add subtle separator between items
+                            if (itemCount < cart.Rows.Count - 1)
+                            {
+                                column.Item().PaddingHorizontal(10).LineHorizontal(0.2f);
                             }
                         }
 
-                        // --- Summary ---
-                        column.Item().Text("----------------------------------------");
-                        column.Item().Text($"SUBTOTAL:    Rs. {subTotal + totalDiscount:N0}");
-                        column.Item().Text($"DISCOUNT:    Rs. {totaldiscount:N0}");
-                        column.Item().Text($"TOTAL:       Rs. {total:N0}");
-                        column.Item().Text($"PAID:        Rs. {paid:N0}");
-                        column.Item().Text($"BALANCE:     Rs. {(total - paid):N0}");
-                        column.Item().Text("----------------------------------------");
+                        // --- Summary Section ---
+                        column.Item().PaddingTop(20).Table(summaryTable =>
+                        {
+                            summaryTable.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn();
+                                columns.ConstantColumn(150);
+                            });
 
-                        // --- Footer ---
-                        column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold();
-                        column.Item().PaddingTop(5).LineHorizontal(0.5f);
-                        column.Item().AlignCenter().Text("** SPECIAL OFFERS **").Bold();
-                        column.Item().AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Subtotal:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N0}");
+
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Total Discount:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N0}");
+
+                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text("TOTAL:").Bold();
+                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N0}").Bold().FontSize(12);
+
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Amount Paid:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N0}");
+
+                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text("BALANCE:").Bold();
+                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N0}").Bold();
+                        });
+
+                        column.Item().PaddingVertical(15).LineHorizontal(1);
+
+                        // --- Footer Section ---
+                        column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold().FontSize(14);
+
+                        //column.Item().PaddingVertical(10).AlignCenter().Text("** SPECIAL OFFERS **").Bold().FontSize(12);
+
+                        column.Item().PaddingVertical(5).AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
                         column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
                         column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
-                        column.Item().AlignCenter().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
-                        column.Item().PaddingTop(5).AlignCenter().Text("Developed By:");
-                        column.Item().PaddingTop(5).AlignCenter().Text("abdulahad18022@gmail.com");
-                        column.Item().PaddingTop(5).AlignCenter().Text("03477048001");
 
+                        column.Item().PaddingVertical(15).AlignCenter().Text("Terms & Conditions:").SemiBold();
+                        column.Item().AlignCenter().Text("• Goods once sold cannot be returned or exchanged");
+                        column.Item().AlignCenter().Text("• Medicines cannot be returned after use");
+                        column.Item().AlignCenter().Text("• Please check items at the time of purchase");
+
+                        column.Item().PaddingVertical(20).LineHorizontal(0.5f);
+
+                        column.Item().AlignCenter().Text("Developed By: abdulahad18022@gmail.com | 03477048001").FontSize(9);
+                        column.Item().AlignCenter().Text($"Printed on: {DateTime.Now:dd-MMM-yyyy hh:mm tt}").FontSize(9);
                     });
                 });
             }).GeneratePdf(filePath);
         }
+
+        public static void PrintA4ReceiptDirectly(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
+        {
+            try
+            {
+                QuestPDF.Settings.License = LicenseType.Community;
+
+                // Create a temporary file path for printing
+                string tempFilePath = Path.Combine(Path.GetTempPath(), $"Receipt_{DateTime.Now:yyyyMMddHHmmss}.pdf");
+
+                // Generate the PDF
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4);
+                        page.Margin(40);
+                        page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(11));
+
+                        page.Content().Column(column =>
+                        {
+                            // --- Header Section ---
+                            column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
+                            column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
+                            column.Item().AlignCenter().Text("Phone: 0300-6634245").FontSize(12);
+                            column.Item().PaddingVertical(10).LineHorizontal(1);
+
+                            // --- Invoice Info Section ---
+                            column.Item().PaddingBottom(10).Row(row =>
+                            {
+                                row.RelativeItem().Column(infoCol =>
+                                {
+                                    infoCol.Item().Text($"Customer: {customerName}").Bold();
+                                    infoCol.Item().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
+                                });
+                                row.RelativeItem().AlignRight().Column(dateCol =>
+                                {
+                                    dateCol.Item().Text($"Date: {DateTime.Now:dd-MMM-yyyy}");
+                                    dateCol.Item().Text($"Time: {DateTime.Now:hh:mm tt}");
+                                });
+                            });
+
+                            column.Item().PaddingBottom(15).LineHorizontal(0.5f);
+
+                            // --- Table Header ---
+                            column.Item().PaddingBottom(5).Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(3); // Medicine Name
+                                    columns.ConstantColumn(60); // Qty
+                                    columns.ConstantColumn(70); // Price
+                                    columns.ConstantColumn(60); // Discount
+                                    columns.ConstantColumn(80); // Total
+                                });
+
+                                table.Header(header =>
+                                {
+                                    header.Cell().Padding(5).Background("#f0f0f0").Text("Medicine").Bold();
+                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Qty").Bold();
+                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Price").Bold();
+                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Discount").Bold();
+                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Total").Bold();
+                                });
+                            });
+
+                            // --- Cart Items ---
+                            decimal totalDiscount = 0;
+                            decimal subTotal = 0;
+                            int itemCount = 0;
+
+                            foreach (DataGridViewRow row in cart.Rows)
+                            {
+                                if (row.IsNewRow) continue;
+
+                                string name = row.Cells["name"].Value?.ToString() ?? "";
+                                string qty = row.Cells["quantity"].Value?.ToString() ?? "0";
+                                decimal price = Convert.ToDecimal(row.Cells["sale_price"].Value ?? 0);
+                                decimal discount = Convert.ToDecimal(row.Cells["discount"].Value ?? 0);
+                                decimal itemTotal = Convert.ToDecimal(row.Cells["final"].Value ?? 0);
+
+                                totalDiscount += discount * Convert.ToInt32(qty);
+                                subTotal += itemTotal;
+                                itemCount++;
+
+                                column.Item().Table(table =>
+                                {
+                                    table.ColumnsDefinition(columns =>
+                                    {
+                                        columns.RelativeColumn(3); // Medicine Name
+                                        columns.ConstantColumn(60); // Qty
+                                        columns.ConstantColumn(70); // Price
+                                        columns.ConstantColumn(60); // Discount
+                                        columns.ConstantColumn(80); // Total
+                                    });
+
+                                    table.Cell().Padding(5).Text(name);
+                                    table.Cell().Padding(5).AlignRight().Text(qty);
+                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N0}");
+                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N0}");
+                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N0}").Bold();
+                                });
+
+                                // Add subtle separator between items
+                                if (itemCount < cart.Rows.Count - 1)
+                                {
+                                    column.Item().PaddingHorizontal(10).LineHorizontal(0.2f);
+                                }
+                            }
+
+                            // --- Summary Section ---
+                            column.Item().PaddingTop(20).Table(summaryTable =>
+                            {
+                                summaryTable.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn();
+                                    columns.ConstantColumn(150);
+                                });
+
+                                summaryTable.Cell().Padding(3).AlignRight().Text("Subtotal:");
+                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N0}");
+
+                                summaryTable.Cell().Padding(3).AlignRight().Text("Total Discount:");
+                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N0}");
+
+                                summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text("TOTAL:").Bold();
+                                summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N0}").Bold().FontSize(12);
+
+                                summaryTable.Cell().Padding(3).AlignRight().Text("Amount Paid:");
+                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N0}");
+
+                                summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text("BALANCE:").Bold();
+                                summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N0}").Bold();
+                            });
+
+                            column.Item().PaddingVertical(15).LineHorizontal(1);
+
+                            // --- Footer Section ---
+                            column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold().FontSize(14);
+
+                            //column.Item().PaddingVertical(10).AlignCenter().Text("** SPECIAL OFFERS **").Bold().FontSize(12);
+
+                            column.Item().PaddingVertical(5).AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
+                            column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
+                            column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
+
+                            column.Item().PaddingVertical(15).AlignCenter().Text("Terms & Conditions:").SemiBold();
+                            column.Item().AlignCenter().Text("• Goods once sold cannot be returned or exchanged");
+                            column.Item().AlignCenter().Text("• Medicines cannot be returned after use");
+                            column.Item().AlignCenter().Text("• Please check items at the time of purchase");
+
+                            column.Item().PaddingVertical(20).LineHorizontal(0.5f);
+
+                            column.Item().AlignCenter().Text("Developed By: abdulahad18022@gmail.com | 03477048001").FontSize(9);
+                            column.Item().AlignCenter().Text($"Printed on: {DateTime.Now:dd-MMM-yyyy hh:mm tt}").FontSize(9);
+                        });
+                    });
+                }).GeneratePdf(tempFilePath);
+
+                // Print the PDF directly
+                PrintPdfToPrinter(tempFilePath);
+
+                // Clean up - delete temporary file after printing
+                // File.Delete(tempFilePath);
+
+                MessageBox.Show("Receipt sent to printer successfully!", "Print Success",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Printing failed: {ex.Message}", "Print Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void PrintPdfToPrinter(string filePath)
+        {
+            using (PrintDialog printDialog = new PrintDialog())
+            {
+                printDialog.AllowSomePages = false;
+                printDialog.AllowSelection = false;
+
+                // Show printer selection dialog
+                if (printDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (Process process = new Process())
+                    {
+                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        {
+                            Verb = "printto", // "printto" lets us specify the printer
+                            FileName = filePath,
+                            Arguments = $"\"{printDialog.PrinterSettings.PrinterName}\"",
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            CreateNoWindow = true,
+                            UseShellExecute = true
+                        };
+
+                        process.StartInfo = startInfo;
+                        process.Start();
+
+                        // Wait for the print job to be sent to the printer
+                        process.WaitForInputIdle();
+                        Thread.Sleep(3000); // Give time for spooler
+
+                        // Close the process if still running
+                        if (!process.HasExited)
+                        {
+                            process.CloseMainWindow();
+                            process.Close();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Printing cancelled.", "Print Cancelled",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
 
         public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {

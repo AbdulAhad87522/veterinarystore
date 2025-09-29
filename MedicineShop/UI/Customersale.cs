@@ -253,20 +253,7 @@ namespace fertilizesop.UI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (dgvproductsearch.SelectedRows.Count > 0)
-            {
-                // Access selected row
-                DataGridViewRow selectedRow = dgvproductsearch.SelectedRows[0];
-
-                // Get values from the row
-                string name = selectedRow.Cells["name"].Value.ToString();
-                int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
-
-
-                dataGridView1.Rows.Add(name, saleprice);
-                dgvproductsearch.Visible = false;
-                clearfields();
-            }
+           
         }
 
         private void setupcustomersearch()
@@ -446,6 +433,23 @@ namespace fertilizesop.UI
 
         }
 
+        private void btnadd_Click(object sender, EventArgs e)
+        {
+            if (dgvproductsearch.SelectedRows.Count > 0)
+            {
+                // Access selected row
+                DataGridViewRow selectedRow = dgvproductsearch.SelectedRows[0];
+
+                // Get values from the row
+                string name = selectedRow.Cells["name"].Value.ToString();
+                int saleprice = Convert.ToInt32(selectedRow.Cells["sale_price"].Value.ToString());
+
+
+                dataGridView1.Rows.Add(name, saleprice);
+                dgvproductsearch.Visible = false;
+                clearfields();
+            }
+        }
         private void totalprice()
         {
             int totalprice = 0;
@@ -672,7 +676,10 @@ namespace fertilizesop.UI
                     return;
                 }
 
-                if(walking_in.Checked && (txtfinalprice.Text != txtpaidamount.Text))
+                int paid = int.Parse(txtpaidamount.Text.Trim());
+                int finalprice = int.Parse(txtfinalprice.Text.Trim());
+
+                if (walking_in.Checked && (finalprice!= paid))
                 {
                     MessageBox.Show("Walkin customers should pay full amount");
                     return;
@@ -712,7 +719,9 @@ namespace fertilizesop.UI
                 {
                     MessageBox.Show("Data saved successfully");
                     SavehthermalPdfInvoice();
-                    Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+                    //Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+                    Customersaledl.PrintA4ReceiptDirectly(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+
                     clearallfields();
 
                     string tempFile = GetTempSaleFilePath();
@@ -742,7 +751,9 @@ namespace fertilizesop.UI
                 {
                     try
                     {
-                        Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text) , Convert.ToDecimal(txtfinaldiscount.Text));
+                        Customersaledl.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+
+                        //Customersaledl.CreateThermalReceiptPdf(dataGridView1, saveDialog.FileName, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text) , Convert.ToDecimal(txtfinaldiscount.Text));
                         MessageBox.Show("PDF saved successfully!", "PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
@@ -892,5 +903,6 @@ namespace fertilizesop.UI
             var f = Program.ServiceProvider.GetRequiredService<Addcustomer>();
             f.ShowDialog(this);
         }
+
     }
 }
