@@ -1389,9 +1389,10 @@ namespace MedicineShop.UI
                 string companyName = row.Cells["company_name"].Value.ToString();
                 string categoryName = row.Cells["category_name"].Value.ToString();
                 string packingName = row.Cells["packing_name"].Value.ToString();
+                string ProductName = row.Cells["name"].Value.ToString();
 
                 suppressTextChanged = true;
-                txtproduct.Text = $"{companyName} - {categoryName} - {packingName}";
+                txtproduct.Text = $"{ProductName}-{companyName} - {categoryName} - {packingName}";
                 suppressTextChanged = false;
 
                 dgvmedicines.Visible = false;
