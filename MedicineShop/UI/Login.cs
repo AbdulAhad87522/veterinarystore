@@ -21,7 +21,7 @@ namespace TechStore.UI
         {
             InitializeComponent();
             txtpassword.PasswordChar = '*';
-            txtpassword.UseSystemPasswordChar = true; // hides password
+            //txtpassword.UseSystemPasswordChar = true; // hides password
             this.WindowState = FormWindowState.Maximized;   
             this.AutoScaleMode = AutoScaleMode.Dpi;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -104,7 +104,21 @@ namespace TechStore.UI
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             passwordVisible = !passwordVisible;
-            txtpassword.UseSystemPasswordChar = !passwordVisible;
+
+            if (passwordVisible)
+            {
+                // Show password
+                txtpassword.PasswordChar = '\0'; // Show characters
+                                                 // OR if using system password char:
+                                                 // txtpassword.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                // Hide password
+                txtpassword.PasswordChar = '*'; // Hide with asterisks
+                                                // OR if using system password char:
+                                                // txtpassword.UseSystemPasswordChar = true;
+            }
         }
     }
   
