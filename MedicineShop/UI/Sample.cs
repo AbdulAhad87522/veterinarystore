@@ -43,5 +43,6 @@ namespace MedicineShop.UI
             //dataGridView2.Columns["PurchaseBatchID"].Visible = false;
 
         }
+
     }
 }

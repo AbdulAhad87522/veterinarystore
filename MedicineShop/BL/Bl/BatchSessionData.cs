@@ -1,38 +1,61 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace MedicineShop.UI
 {
-    // Serializable class for batch persistence
     [Serializable]
     public class BatchSessionData
     {
-        public string BatchName { get; set; } = "";
+        public string BatchName { get; set; }
         public int CompanyID { get; set; }
-        public string CompanyName { get; set; } = "";
+        public string CompanyName { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal PaidAmount { get; set; }
         public bool BatchSaved { get; set; }
         public bool DetailsPanelVisible { get; set; }
         public DateTime SessionDate { get; set; }
+        public List<BatchItemData> BatchItems { get; set; }
 
-        // Add parameterless constructor for XML serialization
         public BatchSessionData()
         {
+            BatchName = "";
+            CompanyName = "";
             SessionDate = DateTime.Now;
+            BatchItems = new List<BatchItemData>();
         }
     }
 
-    public class BatchSessionManager
+    [Serializable]
+    public class BatchItemData
+    {
+        public int BatchItemID { get; set; }
+        public int BatchID { get; set; }
+        public int MedicineID { get; set; }
+        public string MedicineName { get; set; }
+        public int Quantity { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public decimal SalePrice { get; set; }
+        public DateTime ExpiryDate { get; set; }
+        public decimal TotalCost { get; set; }
+
+        public BatchItemData()
+        {
+            MedicineName = "";
+        }
+    }
+
+
+public class BatchSessionManager
     {
         private string sessionFilePath;
         private Timer autoSaveTimer;
         private bool hasUnsavedChanges = false;
 
-        // Events to notify the form about session changes
         public event EventHandler<bool> UnsavedChangesChanged;
+        public event EventHandler AutoSaveRequested;
 
         public BatchSessionManager()
         {
@@ -63,25 +86,23 @@ namespace MedicineShop.UI
                     "Sessions"
                 );
 
-                // Ensure directory exists
                 Directory.CreateDirectory(sessionDirectory);
-
-                // Create unique session file name
                 sessionFilePath = Path.Combine(sessionDirectory, "batch_session.xml");
+
+                System.Diagnostics.Debug.WriteLine($"Session path: {sessionFilePath}");
             }
             catch (Exception ex)
             {
-                // Fallback to temp directory
                 sessionFilePath = Path.Combine(Path.GetTempPath(), "medicine_shop_batch_session.xml");
-                System.Diagnostics.Debug.WriteLine($"Session path initialization warning: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Session path fallback: {sessionFilePath}, Error: {ex.Message}");
             }
         }
 
         private void SetupAutoSaveTimer()
         {
             autoSaveTimer = new Timer();
-            autoSaveTimer.Interval = 30000; // Auto-save every 30 seconds
-            autoSaveTimer.Tick += (s, e) => AutoSave();
+            autoSaveTimer.Interval = 30000;
+            autoSaveTimer.Tick += (s, e) => AutoSaveRequested?.Invoke(this, EventArgs.Empty);
             autoSaveTimer.Start();
         }
 
@@ -95,31 +116,30 @@ namespace MedicineShop.UI
             HasUnsavedChanges = false;
         }
 
-        private void AutoSave()
-        {
-            // This will be called by the auto-save timer
-            // The actual save logic will be triggered from the form
-        }
-
         public bool SaveSession(BatchSessionData sessionData)
         {
             try
             {
-                // Only save if there are meaningful changes to save
-                if (!HasUnsavedChanges || string.IsNullOrWhiteSpace(sessionData.BatchName))
+                // REMOVED the HasUnsavedChanges check - always try to save if data is valid
+                if (sessionData == null || string.IsNullOrWhiteSpace(sessionData.BatchName))
+                {
+                    System.Diagnostics.Debug.WriteLine("SaveSession: No valid data to save");
                     return false;
+                }
 
                 sessionData.SessionDate = DateTime.Now;
 
-                // Ensure directory exists
                 string directory = Path.GetDirectoryName(sessionFilePath);
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
-                // Save to temporary file first, then move to avoid corruption
                 string tempFilePath = sessionFilePath + ".tmp";
+
+                System.Diagnostics.Debug.WriteLine($"Saving session to: {tempFilePath}");
+                System.Diagnostics.Debug.WriteLine($"BatchName: {sessionData.BatchName}");
+                System.Diagnostics.Debug.WriteLine($"BatchItems count: {sessionData.BatchItems?.Count ?? 0}");
 
                 using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -127,7 +147,6 @@ namespace MedicineShop.UI
                     serializer.Serialize(fileStream, sessionData);
                 }
 
-                // Move temp file to actual session file
                 if (File.Exists(sessionFilePath))
                 {
                     File.Delete(sessionFilePath);
@@ -135,14 +154,16 @@ namespace MedicineShop.UI
                 File.Move(tempFilePath, sessionFilePath);
 
                 System.Diagnostics.Debug.WriteLine($"Session saved successfully at: {DateTime.Now}");
+                System.Diagnostics.Debug.WriteLine($"File exists: {File.Exists(sessionFilePath)}");
+                System.Diagnostics.Debug.WriteLine($"File size: {new FileInfo(sessionFilePath).Length} bytes");
+
                 return true;
             }
             catch (Exception ex)
             {
-                // Log error but don't show to user to avoid interrupting workflow
-                System.Diagnostics.Debug.WriteLine($"Failed to save session: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"SAVE FAILED: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
 
-                // Clean up temp file if it exists
                 try
                 {
                     string tempFilePath = sessionFilePath + ".tmp";
@@ -161,22 +182,27 @@ namespace MedicineShop.UI
 
             try
             {
+                System.Diagnostics.Debug.WriteLine($"Checking for session file: {sessionFilePath}");
+                System.Diagnostics.Debug.WriteLine($"File exists: {File.Exists(sessionFilePath)}");
+
                 if (!File.Exists(sessionFilePath))
                     return null;
 
-                // Check if session file is older than 24 hours
                 var fileInfo = new FileInfo(sessionFilePath);
+                System.Diagnostics.Debug.WriteLine($"File size: {fileInfo.Length} bytes");
+                System.Diagnostics.Debug.WriteLine($"File age: {DateTime.Now.Subtract(fileInfo.LastWriteTime).TotalHours:F2} hours");
+
                 if (DateTime.Now.Subtract(fileInfo.LastWriteTime).TotalHours > 24)
                 {
-                    // Delete old session file
                     File.Delete(sessionFilePath);
+                    System.Diagnostics.Debug.WriteLine("Session file too old, deleted");
                     return null;
                 }
 
-                // Validate file size (avoid corrupted files)
                 if (fileInfo.Length == 0)
                 {
                     File.Delete(sessionFilePath);
+                    System.Diagnostics.Debug.WriteLine("Session file empty, deleted");
                     return null;
                 }
 
@@ -187,10 +213,13 @@ namespace MedicineShop.UI
                     sessionData = (BatchSessionData)serializer.Deserialize(fileStream);
                 }
 
+                System.Diagnostics.Debug.WriteLine($"Deserialized: BatchName={sessionData?.BatchName}, Items={sessionData?.BatchItems?.Count ?? 0}");
+
                 if (sessionData != null && !string.IsNullOrWhiteSpace(sessionData.BatchName))
                 {
                     DialogResult result = MessageBox.Show(
                         $"Found unsaved batch session: '{sessionData.BatchName}'\n" +
+                        $"Items: {sessionData.BatchItems?.Count ?? 0}\n" +
                         $"Created: {sessionData.SessionDate:yyyy-MM-dd HH:mm}\n\n" +
                         "Would you like to restore this session?",
                         "Restore Session",
@@ -200,12 +229,11 @@ namespace MedicineShop.UI
                     if (result == DialogResult.Yes)
                     {
                         shouldRestore = true;
-                        MarkUnsavedChanges(); // Mark as having changes to track
+                        MarkUnsavedChanges();
                         return sessionData;
                     }
                     else
                     {
-                        // User chose not to restore, delete the session file
                         ClearSession();
                         return null;
                     }
@@ -215,7 +243,9 @@ namespace MedicineShop.UI
             }
             catch (Exception ex)
             {
-                // Silent fail - delete corrupted session file
+                System.Diagnostics.Debug.WriteLine($"RESTORE FAILED: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
                 try
                 {
                     if (File.Exists(sessionFilePath))
@@ -223,9 +253,8 @@ namespace MedicineShop.UI
                 }
                 catch { }
 
-                System.Diagnostics.Debug.WriteLine($"Failed to restore session: {ex.Message}");
-                MessageBox.Show("Session file was corrupted and has been reset.", "Session Restore",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Session file was corrupted and has been reset.\nError: {ex.Message}",
+                    "Session Restore", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return null;
             }
@@ -252,7 +281,6 @@ namespace MedicineShop.UI
         {
             try
             {
-                // Stop the auto-save timer
                 autoSaveTimer?.Stop();
 
                 if (HasUnsavedChanges)
@@ -265,7 +293,6 @@ namespace MedicineShop.UI
                 }
                 else
                 {
-                    // No unsaved changes, clean up session file
                     ClearSession();
                     return DialogResult.No;
                 }
@@ -282,14 +309,5 @@ namespace MedicineShop.UI
             autoSaveTimer?.Stop();
             autoSaveTimer?.Dispose();
         }
-
-        // Method to be called by external auto-save timer
-        public void RequestAutoSave()
-        {
-            // This will trigger the AutoSaveRequested event
-            AutoSaveRequested?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler AutoSaveRequested;
     }
 }
