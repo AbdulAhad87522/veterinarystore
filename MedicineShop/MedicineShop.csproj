@@ -172,6 +172,7 @@
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DashboardRepository.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\expiredproductsdl.cs" />
     <Compile Include="DL\LoginDL.cs" />
     <Compile Include="Interfaces\DLInterfaces\ICategoryDL.cs" />
     <Compile Include="Interfaces\DLInterfaces\ICompanyDL.cs" />
@@ -184,6 +185,12 @@
     </Compile>
     <Compile Include="UI\BatchDetailsform.Designer.cs">
       <DependentUpon>BatchDetailsform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\expired_products.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\expired_products.Designer.cs">
+      <DependentUpon>expired_products.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\GraphicsExtensions.cs" />
     <Compile Include="UI\HomeContentform.cs">
@@ -335,6 +342,9 @@
     <Compile Include="UI\UIHelper.cs" />
     <EmbeddedResource Include="UI\BatchDetailsform.resx">
       <DependentUpon>BatchDetailsform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\expired_products.resx">
+      <DependentUpon>expired_products.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\HomeContentform.resx">
       <DependentUpon>HomeContentform.cs</DependentUpon>

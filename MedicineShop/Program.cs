@@ -30,7 +30,7 @@ namespace MedicineShop
             ServiceProvider = services.BuildServiceProvider();
 
             // Show login first (Modal)
-            var login = ServiceProvider.GetRequiredService<Login>();
+            var login = ServiceProvider.GetRequiredService<Dashboard>();
             var result = login.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -52,6 +52,8 @@ namespace MedicineShop
             services.AddTransient<Batchform>();
             services.AddTransient<AddBatchdetailsform>();
             services.AddTransient<HomeContentform>();
+            services.AddTransient<expired_products>();
+
             services.AddTransient<MedicineMain>();
             services.AddTransient<AddMedicine>();
             services.AddTransient<Customersale>();
