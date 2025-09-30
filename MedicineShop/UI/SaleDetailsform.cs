@@ -35,48 +35,51 @@ namespace MedicineShop.UI
             try
             {
                 var saleItems = GetSaleItems(SaleId);
-
                 var saleInfo = GetSaleInfo(SaleId);
+
                 var displayTable = new DataTable();
                 displayTable.Columns.Add("Product Name", typeof(string));
                 displayTable.Columns.Add("Quantity", typeof(int));
-                displayTable.Columns.Add("Unit Price", typeof(decimal));
+                displayTable.Columns.Add("Price", typeof(decimal));
                 displayTable.Columns.Add("Discount", typeof(decimal));
-                displayTable.Columns.Add("Subtotal", typeof(decimal));
 
                 decimal grandTotal = 0;
                 foreach (var item in saleItems)
                 {
+                    // add only 4 values (no Total)
                     displayTable.Rows.Add(
                         item.ProductName,
                         item.Quantity,
                         item.Price,
-                        item.Discount,
-                        item.Total
+                        item.Discount
                     );
-                    grandTotal += item.Total;
+
+                    // calculate grand total if needed
+                    grandTotal += (item.Price - item.Discount) * item.Quantity;
                 }
 
                 dataGridView2.DataSource = displayTable;
 
-                // Format currency columns
-                if (dataGridView2.Columns["Unit Price"] != null)
-                    dataGridView2.Columns["Unit Price"].DefaultCellStyle.Format = "N2";
+                // ✅ fix wrong column name check
+                if (dataGridView2.Columns["Price"] != null)
+                    dataGridView2.Columns["Price"].DefaultCellStyle.Format = "N2";
+                if (dataGridView2.Columns["Discount"] != null)
+                    dataGridView2.Columns["Discount"].DefaultCellStyle.Format = "N2";
 
-                if (dataGridView2.Columns["Subtotal"] != null)
-                    dataGridView2.Columns["Subtotal"].DefaultCellStyle.Format = "N2";
-
-                // Update form title with sale information
+                // Update form title
                 if (saleInfo != null)
                 {
                     this.Text = $"Sale Details - Sale #{SaleId} - {saleInfo.CustomerName} - {saleInfo.SaleDate:dd/MM/yyyy}";
                 }
 
-                // Hide search textbox if loading specific sale items
+                // Hide search box if showing one sale
                 if (this.Controls.Find("textBox1", true).FirstOrDefault() is TextBox searchBox)
                 {
                     searchBox.Visible = false;
                 }
+
+                // Optionally still show grand total in form title
+                this.Text += $" | Grand Total: {grandTotal:N2}";
             }
             catch (Exception ex)
             {
@@ -84,6 +87,7 @@ namespace MedicineShop.UI
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private SaleHeaderInfo GetSaleInfo(int saleId)
         {
@@ -143,13 +147,12 @@ namespace MedicineShop.UI
                         SELECT 
                             si.sale_item_id,
                             si.quantity,
-                            si.price,
+                            si.price ,
                             si.discount,
                             m.name,
                             c.company_name,
                             cat.category_name,
-                            p.packing_name,
-                            (si.quantity * si.price * (1 - si.discount/100)) as total
+                            p.packing_name
                         FROM sale_items si
                         INNER JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
                         INNER JOIN medicines m ON bi.product_id = m.product_id
@@ -165,7 +168,7 @@ namespace MedicineShop.UI
                         {
                             while (reader.Read())
                             {
-                                string productName = $"{reader.GetString("company_name")} - {reader.GetString("category_name")} - {reader.GetString("packing_name")}";
+                                string productName = $"{reader.GetString("company_name")} - {reader.GetString("name")}";
 
                                 items.Add(new SaleItemInfo
                                 {
@@ -174,7 +177,6 @@ namespace MedicineShop.UI
                                     Quantity = reader.GetInt32("quantity"),
                                     Price = reader.GetDecimal("price"),
                                     Discount = reader.GetDecimal("discount"),
-                                    Total = reader.GetDecimal("total")
                                 });
                             }
                         }

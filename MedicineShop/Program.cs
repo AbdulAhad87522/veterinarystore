@@ -65,6 +65,7 @@ namespace MedicineShop
             services.AddTransient<AddPacking>();
             services.AddTransient<BatchDetailsform>();
 
+
             // Register other dependencies like Bl classes, DbContext, etc.
             services.AddScoped<ICompanyBillsDl, CompanyBillsDl>();
             services.AddScoped<ICompanyBillBl, CompanyBillBl>();

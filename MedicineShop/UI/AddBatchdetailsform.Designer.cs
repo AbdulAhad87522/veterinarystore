@@ -96,7 +96,7 @@
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = " Add Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toplbl.Click += new System.EventHandler(this.toplbl_Click);
+            //this.toplbl.Click += new System.EventHandler(this.toplbl_Click);
             // 
             // panel2
             // 
@@ -218,8 +218,8 @@
             this.dgvbatches.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvbatches.Size = new System.Drawing.Size(1385, 274);
             this.dgvbatches.TabIndex = 200;
-            this.dgvbatches.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvbatches_CellContentClick);
-            this.dgvbatches.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvbatches_DataBindingComplete);
+            //this.dgvbatches.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvbatches_CellContentClick);
+            //this.dgvbatches.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvbatches_DataBindingComplete);
             // 
             // iconButton3
             // 
@@ -417,6 +417,7 @@
             this.dgvcompany.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvcompany.Size = new System.Drawing.Size(856, 306);
             this.dgvcompany.TabIndex = 202;
+            //this.dgvcompany.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvcompany_CellContentClick);
             // 
             // iconButton4
             // 
@@ -555,7 +556,7 @@
             this.label1.TabIndex = 7;
             this.label1.Text = " Add Batch";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            //this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // AddBatchdetailsform
             // 
