@@ -205,5 +205,10 @@ namespace MedicineShop.UI
             public decimal RemainingAmount { get; set; }
             public string Status { get; set; }
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
