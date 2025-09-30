@@ -192,56 +192,124 @@ namespace MedicineShop.UI
                 {
                     System.Diagnostics.Debug.WriteLine("Batch NOT in DB - restoring from temp file");
 
-                    // Clear and recreate table
+                    // Clear grid completely
+                    dgvbatches.SuspendLayout();
                     dgvbatches.DataSource = null;
-                    batchItemsTable.Clear();
+                    dgvbatches.Rows.Clear();
+                    dgvbatches.Columns.Clear();
+
+                    // Recreate the DataTable with correct structure
+                    batchItemsTable = new DataTable();
+                    batchItemsTable.Columns.Add("BatchItemID", typeof(int));
+                    batchItemsTable.Columns.Add("BatchID", typeof(int));
+                    batchItemsTable.Columns.Add("MedicineID", typeof(int));
+                    batchItemsTable.Columns.Add("MedicineName", typeof(string));
+                    batchItemsTable.Columns.Add("Quantity", typeof(int));
+                    batchItemsTable.Columns.Add("PurchasePrice", typeof(decimal));
+                    batchItemsTable.Columns.Add("SalePrice", typeof(decimal));
+                    batchItemsTable.Columns.Add("ExpiryDate", typeof(DateTime));
+                    batchItemsTable.Columns.Add("TotalCost", typeof(decimal));
+
+                    System.Diagnostics.Debug.WriteLine($"DataTable created with {batchItemsTable.Columns.Count} columns");
 
                     // Restore batch items
                     if (data.BatchItems != null && data.BatchItems.Count > 0)
                     {
+                        System.Diagnostics.Debug.WriteLine($"Adding {data.BatchItems.Count} items from JSON...");
+
                         foreach (var item in data.BatchItems)
                         {
-                            DataRow newRow = batchItemsTable.NewRow();
-                            newRow["BatchItemID"] = item.BatchItemID;
-                            newRow["BatchID"] = item.BatchID;
-                            newRow["MedicineID"] = item.MedicineID;
-                            newRow["MedicineName"] = item.MedicineName ?? "Unknown";
-                            newRow["Quantity"] = item.Quantity;
-                            newRow["PurchasePrice"] = item.PurchasePrice;
-                            newRow["SalePrice"] = item.SalePrice;
-                            newRow["ExpiryDate"] = item.ExpiryDate;
-                            newRow["TotalCost"] = item.TotalCost;
-                            batchItemsTable.Rows.Add(newRow);
+                            try
+                            {
+                                DataRow newRow = batchItemsTable.NewRow();
+                                newRow["BatchItemID"] = item.BatchItemID;
+                                newRow["BatchID"] = item.BatchID;
+                                newRow["MedicineID"] = item.MedicineID;
+                                newRow["MedicineName"] = item.MedicineName ?? "Unknown";
+                                newRow["Quantity"] = item.Quantity;
+                                newRow["PurchasePrice"] = item.PurchasePrice;
+                                newRow["SalePrice"] = item.SalePrice;
+                                newRow["ExpiryDate"] = item.ExpiryDate;
+                                newRow["TotalCost"] = item.TotalCost;
+
+                                batchItemsTable.Rows.Add(newRow);
+
+                                System.Diagnostics.Debug.WriteLine($"  ✓ Added: {item.MedicineName} - Qty: {item.Quantity}");
+                            }
+                            catch (Exception itemEx)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"  ✗ Error adding item: {itemEx.Message}");
+                            }
                         }
 
-                        System.Diagnostics.Debug.WriteLine($"Restored {batchItemsTable.Rows.Count} items to table");
+                        System.Diagnostics.Debug.WriteLine($"DataTable now has {batchItemsTable.Rows.Count} rows");
                     }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("No batch items to restore");
+                    }
+
+                    // Accept changes to finalize the table
+                    batchItemsTable.AcceptChanges();
+
+                    // Enable AutoGenerateColumns
+                    dgvbatches.AutoGenerateColumns = true;
 
                     // Bind to grid
                     dgvbatches.DataSource = batchItemsTable;
 
-                    // Hide ID columns
-                    if (dgvbatches.Columns.Contains("BatchItemID"))
-                        dgvbatches.Columns["BatchItemID"].Visible = false;
-                    if (dgvbatches.Columns.Contains("BatchID"))
-                        dgvbatches.Columns["BatchID"].Visible = false;
-                    if (dgvbatches.Columns.Contains("MedicineID"))
-                        dgvbatches.Columns["MedicineID"].Visible = false;
+                    System.Diagnostics.Debug.WriteLine($"After binding - Grid Columns: {dgvbatches.Columns.Count}, Grid Rows: {dgvbatches.Rows.Count}");
 
-                    // Format columns
-                    if (dgvbatches.Columns.Contains("PurchasePrice"))
-                        dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
-                    if (dgvbatches.Columns.Contains("SalePrice"))
-                        dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
-                    if (dgvbatches.Columns.Contains("TotalCost"))
-                        dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
-                    if (dgvbatches.Columns.Contains("ExpiryDate"))
-                        dgvbatches.Columns["ExpiryDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                    // Configure columns only if they were generated
+                    if (dgvbatches.Columns.Count > 0)
+                    {
+                        // Hide ID columns
+                        if (dgvbatches.Columns.Contains("BatchItemID"))
+                            dgvbatches.Columns["BatchItemID"].Visible = false;
+                        if (dgvbatches.Columns.Contains("BatchID"))
+                            dgvbatches.Columns["BatchID"].Visible = false;
+                        if (dgvbatches.Columns.Contains("MedicineID"))
+                            dgvbatches.Columns["MedicineID"].Visible = false;
 
-                    paneldetails.Visible = data.DetailsPanelVisible || data.BatchItems.Count > 0;
+                        // Format currency columns
+                        if (dgvbatches.Columns.Contains("PurchasePrice"))
+                            dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
+                        if (dgvbatches.Columns.Contains("SalePrice"))
+                            dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
+                        if (dgvbatches.Columns.Contains("TotalCost"))
+                            dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
+
+                        // Format date column
+                        if (dgvbatches.Columns.Contains("ExpiryDate"))
+                            dgvbatches.Columns["ExpiryDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
+
+                        System.Diagnostics.Debug.WriteLine("Columns configured successfully");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("⚠️ WARNING: No columns in grid after binding!");
+                    }
+
+                    dgvbatches.ResumeLayout();
+                    dgvbatches.Refresh();
+                    dgvbatches.Update();
+                    Application.DoEvents();
+
+                    // Final verification
+                    System.Diagnostics.Debug.WriteLine($"FINAL STATE:");
+                    System.Diagnostics.Debug.WriteLine($"  - Grid Visible: {dgvbatches.Visible}");
+                    System.Diagnostics.Debug.WriteLine($"  - Grid Columns: {dgvbatches.Columns.Count}");
+                    System.Diagnostics.Debug.WriteLine($"  - Grid Rows: {dgvbatches.Rows.Count}");
+                    System.Diagnostics.Debug.WriteLine($"  - Grid Size: {dgvbatches.Size}");
+                    System.Diagnostics.Debug.WriteLine($"  - Grid Location: {dgvbatches.Location}");
+
+                    paneldetails.Visible = data.DetailsPanelVisible || (data.BatchItems != null && data.BatchItems.Count > 0);
                     SetBatchFormEnabled(!data.BatchSaved);
 
-                    System.Diagnostics.Debug.WriteLine($"Grid now has {dgvbatches.Rows.Count} rows");
+                    if (paneldetails.Visible)
+                    {
+                        txtproduct.Focus();
+                    }
                 }
 
                 this.Text = $"Add Batch Details - Restored ({batchItemsTable.Rows.Count} items)";
@@ -249,11 +317,11 @@ namespace MedicineShop.UI
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading temp batch: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 MessageBox.Show($"Error restoring session: {ex.Message}\n\nStarting with clean form.",
                     "Session Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         private void UpdateShortcutStatus()
         {
             try
@@ -1997,24 +2065,6 @@ namespace MedicineShop.UI
             f.ShowDialog(this);
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toplbl_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dgvbatches_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-
-        }
-
-        private void dgvbatches_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+       
     }
 }

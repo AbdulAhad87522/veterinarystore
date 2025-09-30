@@ -271,5 +271,10 @@ namespace MedicineShop
             }
         }
 
+        private void iconButton5_Click(object sender, EventArgs e)
+        {
+            var f=Program.ServiceProvider.GetRequiredService<expired_products>();   
+            LoadFormIntoPanel(f);
+        }
     }
 }
