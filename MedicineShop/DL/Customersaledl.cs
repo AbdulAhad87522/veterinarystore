@@ -30,6 +30,7 @@ namespace MedicineShop.DL
                                         m.name, 
                                         m.description,
                                         c.company_name, 
+                                        b.purchase_price,
                                         m.sale_price,
                                         b.quantity_remaining,
                                         p.packing_name, 

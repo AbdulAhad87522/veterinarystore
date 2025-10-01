@@ -168,7 +168,7 @@ namespace MedicineShop.UI
                         {
                             while (reader.Read())
                             {
-                                string productName = $"{reader.GetString("company_name")} - {reader.GetString("name")}";
+                                string productName = $"{reader.GetString("name")} - {reader.GetString("company_name")}";
 
                                 items.Add(new SaleItemInfo
                                 {
