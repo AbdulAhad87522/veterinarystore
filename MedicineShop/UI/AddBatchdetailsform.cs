@@ -39,26 +39,23 @@ namespace MedicineShop.UI
             this.batchItemsBl = batchItemsBl;
             dbHelper = DatabaseHelper.Instance;
 
-            // Enable keyboard shortcuts
             this.KeyPreview = true;
-
-            // ✅ REMOVE session manager completely
             sessionManager = null;
 
-            // Initially hide the details panel
-            paneldetails.Visible = false;
+            // ✅ Panel is now always visible since everything is in it
+            paneldetails.Visible = true;
+
             UIHelper.StyleGridView(dgvbatches);
             UIHelper.StyleGridView(dgvcompany);
             UIHelper.StyleGridView(dgvmedicines);
 
-            // Initialize in-memory batch items table
             InitializeBatchItemsTable();
 
-            // Setup form event handlers
             this.Load += AddBatchdetailsform_Load;
             this.FormClosing += AddBatchdetailsform_FormClosing;
             this.VisibleChanged += AddBatchdetailsform_VisibleChanged;
         }
+
         private string GetTempBatchFilePath()
         {
             string folder = Path.Combine(
@@ -153,7 +150,6 @@ namespace MedicineShop.UI
 
                 System.Diagnostics.Debug.WriteLine($"Found temp batch: {data.BatchName} with {data.BatchItems?.Count ?? 0} items");
 
-                // Ask user if they want to restore
                 DialogResult result = MessageBox.Show(
                     $"Found unsaved batch: '{data.BatchName}'\n" +
                     $"Items: {data.BatchItems?.Count ?? 0}\n" +
@@ -178,13 +174,11 @@ namespace MedicineShop.UI
                 currentBatchName = data.BatchName;
                 batchSavedToDatabase = data.BatchSaved;
 
-                // Check if batch exists in database
                 int batchId = DatabaseHelper.Instance.getbatchid(data.BatchName);
 
                 if (batchId > 0)
                 {
                     System.Diagnostics.Debug.WriteLine($"Batch found in DB with ID: {batchId}");
-                    paneldetails.Visible = true;
                     SetBatchFormEnabled(false);
                     LoadBatchItemsFromDatabase(batchId);
                 }
@@ -192,13 +186,11 @@ namespace MedicineShop.UI
                 {
                     System.Diagnostics.Debug.WriteLine("Batch NOT in DB - restoring from temp file");
 
-                    // Clear grid completely
                     dgvbatches.SuspendLayout();
                     dgvbatches.DataSource = null;
                     dgvbatches.Rows.Clear();
                     dgvbatches.Columns.Clear();
 
-                    // Recreate the DataTable with correct structure
                     batchItemsTable = new DataTable();
                     batchItemsTable.Columns.Add("BatchItemID", typeof(int));
                     batchItemsTable.Columns.Add("BatchID", typeof(int));
@@ -210,13 +202,8 @@ namespace MedicineShop.UI
                     batchItemsTable.Columns.Add("ExpiryDate", typeof(DateTime));
                     batchItemsTable.Columns.Add("TotalCost", typeof(decimal));
 
-                    System.Diagnostics.Debug.WriteLine($"DataTable created with {batchItemsTable.Columns.Count} columns");
-
-                    // Restore batch items
                     if (data.BatchItems != null && data.BatchItems.Count > 0)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Adding {data.BatchItems.Count} items from JSON...");
-
                         foreach (var item in data.BatchItems)
                         {
                             try
@@ -231,39 +218,21 @@ namespace MedicineShop.UI
                                 newRow["SalePrice"] = item.SalePrice;
                                 newRow["ExpiryDate"] = item.ExpiryDate;
                                 newRow["TotalCost"] = item.TotalCost;
-
                                 batchItemsTable.Rows.Add(newRow);
-
-                                System.Diagnostics.Debug.WriteLine($"  ✓ Added: {item.MedicineName} - Qty: {item.Quantity}");
                             }
                             catch (Exception itemEx)
                             {
-                                System.Diagnostics.Debug.WriteLine($"  ✗ Error adding item: {itemEx.Message}");
+                                System.Diagnostics.Debug.WriteLine($"Error adding item: {itemEx.Message}");
                             }
                         }
-
-                        System.Diagnostics.Debug.WriteLine($"DataTable now has {batchItemsTable.Rows.Count} rows");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("No batch items to restore");
                     }
 
-                    // Accept changes to finalize the table
                     batchItemsTable.AcceptChanges();
-
-                    // Enable AutoGenerateColumns
                     dgvbatches.AutoGenerateColumns = true;
-
-                    // Bind to grid
                     dgvbatches.DataSource = batchItemsTable;
 
-                    System.Diagnostics.Debug.WriteLine($"After binding - Grid Columns: {dgvbatches.Columns.Count}, Grid Rows: {dgvbatches.Rows.Count}");
-
-                    // Configure columns only if they were generated
                     if (dgvbatches.Columns.Count > 0)
                     {
-                        // Hide ID columns
                         if (dgvbatches.Columns.Contains("BatchItemID"))
                             dgvbatches.Columns["BatchItemID"].Visible = false;
                         if (dgvbatches.Columns.Contains("BatchID"))
@@ -271,44 +240,29 @@ namespace MedicineShop.UI
                         if (dgvbatches.Columns.Contains("MedicineID"))
                             dgvbatches.Columns["MedicineID"].Visible = false;
 
-                        // Format currency columns
                         if (dgvbatches.Columns.Contains("PurchasePrice"))
                             dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
                         if (dgvbatches.Columns.Contains("SalePrice"))
                             dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
                         if (dgvbatches.Columns.Contains("TotalCost"))
                             dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
-
-                        // Format date column
                         if (dgvbatches.Columns.Contains("ExpiryDate"))
                             dgvbatches.Columns["ExpiryDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
-
-                        System.Diagnostics.Debug.WriteLine("Columns configured successfully");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("⚠️ WARNING: No columns in grid after binding!");
                     }
 
                     dgvbatches.ResumeLayout();
                     dgvbatches.Refresh();
-                    dgvbatches.Update();
-                    Application.DoEvents();
 
-                    // Final verification
-                    System.Diagnostics.Debug.WriteLine($"FINAL STATE:");
-                    System.Diagnostics.Debug.WriteLine($"  - Grid Visible: {dgvbatches.Visible}");
-                    System.Diagnostics.Debug.WriteLine($"  - Grid Columns: {dgvbatches.Columns.Count}");
-                    System.Diagnostics.Debug.WriteLine($"  - Grid Rows: {dgvbatches.Rows.Count}");
-                    System.Diagnostics.Debug.WriteLine($"  - Grid Size: {dgvbatches.Size}");
-                    System.Diagnostics.Debug.WriteLine($"  - Grid Location: {dgvbatches.Location}");
-
-                    paneldetails.Visible = data.DetailsPanelVisible || (data.BatchItems != null && data.BatchItems.Count > 0);
                     SetBatchFormEnabled(!data.BatchSaved);
 
-                    if (paneldetails.Visible)
+                    // ✅ Focus on appropriate control
+                    if (data.BatchItems != null && data.BatchItems.Count > 0)
                     {
                         txtproduct.Focus();
+                    }
+                    else
+                    {
+                        txtBnames.Focus();
                     }
                 }
 
@@ -317,40 +271,8 @@ namespace MedicineShop.UI
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading temp batch: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 MessageBox.Show($"Error restoring session: {ex.Message}\n\nStarting with clean form.",
                     "Session Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-        private void UpdateShortcutStatus()
-        {
-            try
-            {
-                string statusText = "";
-
-                if (!paneldetails.Visible || !batchSavedToDatabase)
-                {
-                    statusText = "Ctrl+A: Add Batch | ";
-                }
-                else
-                {
-                    statusText = "Ctrl+A: Add Product | Ctrl+S: Save Items | ";
-                }
-
-                statusText += "Ctrl+N: New | Esc: Cancel Edit";
-
-                // If you have a status label, update it
-                // lblStatus.Text = statusText;
-
-                // Or update form title to include shortcuts
-                if (!this.Text.Contains(" - Shortcuts:"))
-                {
-                    this.Text += " - Shortcuts: " + statusText;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error updating shortcut status: {ex.Message}");
             }
         }
 
@@ -399,29 +321,6 @@ namespace MedicineShop.UI
                 MessageBox.Show("error in event listener", ex.Message);
             }
             return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void OnUnsavedChangesChanged(object sender, bool hasChanges)
-        {
-            if (hasChanges && sessionManager != null)
-            {
-                var sessionData = CreateCurrentSessionData();
-                if (sessionData != null)
-                {
-                    DebugSessionData(sessionData, "Saving Session (OnUnsavedChangesChanged)");
-                    sessionManager.SaveSession(sessionData);
-                }
-            }
-        }
-
-        private void OnAutoSaveRequested(object sender, EventArgs e)
-        {
-            var sessionData = CreateCurrentSessionData();
-            if (sessionData != null && sessionManager != null)
-            {
-                DebugSessionData(sessionData, "Auto-Saving Session");
-                sessionManager.SaveSession(sessionData);
-            }
         }
 
         private BatchSessionData CreateCurrentSessionData()
@@ -481,21 +380,7 @@ namespace MedicineShop.UI
         }
 
 
-        private void SetupChangeTracking()
-        {
-            if (sessionManager == null) return;
-
-            // Track changes in all input controls
-            txtBnames.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtcompany.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txttotalamont.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtpaid.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtproduct.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtquantity.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtcost.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            txtsaleprice.TextChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-            dateTimePicker1.ValueChanged += (s, e) => sessionManager.MarkUnsavedChanges();
-        }
+     
         private void AddBatchdetailsform_Shown(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("=== FORM SHOWN EVENT ===");
@@ -563,10 +448,7 @@ namespace MedicineShop.UI
             try
             {
                 System.Diagnostics.Debug.WriteLine("=== Starting Session Restore ===");
-                System.Diagnostics.Debug.WriteLine($"BatchName: {sessionData.BatchName}");
-                System.Diagnostics.Debug.WriteLine($"BatchItems Count: {sessionData.BatchItems?.Count ?? 0}");
 
-                // Restore basic batch info
                 txtBnames.Text = sessionData.BatchName;
                 txtcompany.Text = sessionData.CompanyName;
                 txttotalamont.Text = sessionData.TotalAmount.ToString("F2");
@@ -574,14 +456,12 @@ namespace MedicineShop.UI
                 selectedCompanyId = sessionData.CompanyID;
                 currentBatchName = sessionData.BatchName;
 
-                // Check if batch exists in database
                 int batchId = DatabaseHelper.Instance.getbatchid(sessionData.BatchName);
 
                 if (batchId > 0)
                 {
                     System.Diagnostics.Debug.WriteLine($"Batch found in database with ID: {batchId}");
                     batchSavedToDatabase = true;
-                    paneldetails.Visible = true;
                     SetBatchFormEnabled(false);
                     LoadBatchItemsFromDatabase(batchId);
                     this.Text = $"Add Batch Details - Restored from DB ({batchItemsTable.Rows.Count} items)";
@@ -594,15 +474,10 @@ namespace MedicineShop.UI
                     batchSavedToDatabase = sessionData.BatchSaved;
                     bool hasBatchItems = sessionData.BatchItems != null && sessionData.BatchItems.Count > 0;
 
-                    System.Diagnostics.Debug.WriteLine($"batchSavedToDatabase: {batchSavedToDatabase}");
-                    System.Diagnostics.Debug.WriteLine($"hasBatchItems: {hasBatchItems}");
-
-                    // ✅ NUCLEAR OPTION: Completely reset the grid
                     dgvbatches.DataSource = null;
                     dgvbatches.Columns.Clear();
                     dgvbatches.Rows.Clear();
 
-                    // ✅ Create FRESH DataTable
                     batchItemsTable = new DataTable();
                     batchItemsTable.Columns.Add("BatchItemID", typeof(int));
                     batchItemsTable.Columns.Add("BatchID", typeof(int));
@@ -616,8 +491,6 @@ namespace MedicineShop.UI
 
                     if (hasBatchItems)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Adding {sessionData.BatchItems.Count} items to table...");
-
                         foreach (var item in sessionData.BatchItems)
                         {
                             try
@@ -633,29 +506,19 @@ namespace MedicineShop.UI
                                 newRow["ExpiryDate"] = item.ExpiryDate;
                                 newRow["TotalCost"] = item.TotalCost;
                                 batchItemsTable.Rows.Add(newRow);
-
-                                System.Diagnostics.Debug.WriteLine($"  ✓ Added: {item.MedicineName} - Qty: {item.Quantity}");
                             }
                             catch (Exception itemEx)
                             {
-                                System.Diagnostics.Debug.WriteLine($"  ✗ Failed to add item: {itemEx.Message}");
+                                System.Diagnostics.Debug.WriteLine($"Failed to add item: {itemEx.Message}");
                             }
                         }
-
-                        System.Diagnostics.Debug.WriteLine($"Table now has {batchItemsTable.Rows.Count} rows");
                     }
 
-                    // ✅ BIND with AutoGenerateColumns
                     dgvbatches.AutoGenerateColumns = true;
                     dgvbatches.DataSource = batchItemsTable;
 
-                    System.Diagnostics.Debug.WriteLine($"After binding - Grid columns: {dgvbatches.Columns.Count}");
-                    System.Diagnostics.Debug.WriteLine($"After binding - Grid rows: {dgvbatches.Rows.Count}");
-
-                    // ✅ Configure columns AFTER binding
                     if (dgvbatches.Columns.Count > 0)
                     {
-                        // Hide ID columns
                         if (dgvbatches.Columns.Contains("BatchItemID"))
                             dgvbatches.Columns["BatchItemID"].Visible = false;
                         if (dgvbatches.Columns.Contains("BatchID"))
@@ -663,38 +526,23 @@ namespace MedicineShop.UI
                         if (dgvbatches.Columns.Contains("MedicineID"))
                             dgvbatches.Columns["MedicineID"].Visible = false;
 
-                        // Format currency columns
                         if (dgvbatches.Columns.Contains("PurchasePrice"))
                             dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
                         if (dgvbatches.Columns.Contains("SalePrice"))
                             dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
                         if (dgvbatches.Columns.Contains("TotalCost"))
                             dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
-
-                        // Format date column
                         if (dgvbatches.Columns.Contains("ExpiryDate"))
                             dgvbatches.Columns["ExpiryDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
                     }
 
-                    // ✅ Force visual updates
-                    dgvbatches.Visible = true;
                     dgvbatches.Refresh();
-                    dgvbatches.Update();
-                    Application.DoEvents();
-
-                    System.Diagnostics.Debug.WriteLine($"Grid Visible: {dgvbatches.Visible}");
-                    System.Diagnostics.Debug.WriteLine($"Grid Location: {dgvbatches.Location}");
-                    System.Diagnostics.Debug.WriteLine($"Grid Size: {dgvbatches.Size}");
-
-                    // Show details panel
-                    paneldetails.Visible = batchSavedToDatabase || sessionData.DetailsPanelVisible || hasBatchItems;
                     SetBatchFormEnabled(!batchSavedToDatabase);
 
-                    this.Text = $"Add Batch Details - Restored ({batchItemsTable.Rows.Count} items in table, {dgvbatches.Rows.Count} in grid)";
+                    this.Text = $"Add Batch Details - Restored ({batchItemsTable.Rows.Count} items)";
 
                     if (hasBatchItems)
                     {
-                        dgvbatches.BringToFront();
                         txtproduct.Focus();
                     }
                     else
@@ -707,32 +555,13 @@ namespace MedicineShop.UI
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"=== ERROR DURING RESTORE ===");
-                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack: {ex.StackTrace}");
-
+                System.Diagnostics.Debug.WriteLine($"ERROR DURING RESTORE: {ex.Message}");
                 MessageBox.Show($"Error restoring session: {ex.Message}\n\nStarting with clean form.",
                     "Session Restore Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 ResetForm();
             }
         }
-        private void DebugGridState()
-        {
-            System.Diagnostics.Debug.WriteLine("=== GRID STATE DEBUG ===");
-            System.Diagnostics.Debug.WriteLine($"Grid DataSource: {dgvbatches.DataSource?.GetType().Name ?? "NULL"}");
-            System.Diagnostics.Debug.WriteLine($"Grid Rows Count: {dgvbatches.Rows.Count}");
-            System.Diagnostics.Debug.WriteLine($"batchItemsTable Rows: {batchItemsTable?.Rows.Count ?? 0}");
 
-            if (batchItemsTable != null)
-            {
-                foreach (DataRow row in batchItemsTable.Rows)
-                {
-                    System.Diagnostics.Debug.WriteLine($"  - {row["MedicineName"]} (Qty: {row["Quantity"]})");
-                }
-            }
-            System.Diagnostics.Debug.WriteLine("========================");
-        }
         private void AddBatchdetailsform_FormClosing(object sender, FormClosingEventArgs e)
         {
             // ✅ Save temp batch on close
@@ -776,9 +605,8 @@ namespace MedicineShop.UI
 
         private void ResetEditingVisuals()
         {
-            iconButton2.BackColor = SystemColors.Control;
-            iconButton2.ForeColor = SystemColors.ControlText;
-            paneldetails.BackColor = SystemColors.Control;
+            iconButton2.BackColor = Color.FromArgb(109, 148, 197);  // ✅ YOUR BLUE
+            iconButton2.ForeColor = Color.White;
         }
 
         // Save Button - Save all data to database at once
@@ -1019,9 +847,9 @@ namespace MedicineShop.UI
             iconButton3.Enabled = enabled;
         }
 
+        // 4. Update ResetForm to work with unified panel
         private void ResetForm()
         {
-            // ✅ Delete temp file when resetting
             try
             {
                 string tempFile = GetTempBatchFilePath();
@@ -1051,33 +879,26 @@ namespace MedicineShop.UI
             isEditing = false;
             batchSavedToDatabase = false;
 
-            // Reset control states
+            // ✅ Enable batch form controls for new entry
             SetBatchFormEnabled(true);
             EnableControls(true);
 
-            // Hide panels
-            paneldetails.Visible = false;
+            // ✅ Panel stays visible
             dgvcompany.Visible = false;
             dgvmedicines.Visible = false;
 
-            // Reload data
             LoadCompanies();
             LoadMedicines();
 
-            // Reset in-memory batch items table
             InitializeBatchItemsTable();
             RefreshBatchItemsGrid();
 
-            // Reset form title
             this.Text = "Add Batch Details";
-
-            // Reset visual elements
             ResetEditingVisuals();
 
-            // Set focus to batch name
+            // ✅ Focus on batch name for new entry
             txtBnames.Focus();
         }
-
         #endregion
 
         #region Event Handlers
@@ -1122,97 +943,6 @@ namespace MedicineShop.UI
                 System.Diagnostics.Debug.WriteLine($"Error setting up tooltips: {ex.Message}");
             }
         }
-        private bool ValidateBatchForm()
-        {
-            try
-            {
-                // Check if batch form is properly filled
-                if (string.IsNullOrWhiteSpace(txtBnames.Text))
-                {
-                    MessageBox.Show("Please enter batch name before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtBnames.Focus();
-                    return false;
-                }
-
-                if (selectedCompanyId == 0)
-                {
-                    MessageBox.Show("Please select a company before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtcompany.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txttotalamont.Text, out decimal totalAmount) || totalAmount <= 0)
-                {
-                    MessageBox.Show("Please enter valid total amount before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txttotalamont.Focus();
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error validating batch form: {ex.Message}");
-                return false;
-            }
-        }
-
-        private bool ValidateBatchItemForm()
-        {
-            try
-            {
-                // Check if batch item form is properly filled
-                if (selectedProductId == 0)
-                {
-                    MessageBox.Show("Please select a product before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtproduct.Focus();
-                    return false;
-                }
-
-                if (!int.TryParse(txtquantity.Text, out int quantity) || quantity <= 0)
-                {
-                    MessageBox.Show("Please enter valid quantity before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtquantity.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtcost.Text, out decimal costPrice) || costPrice <= 0)
-                {
-                    MessageBox.Show("Please enter valid cost price before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtcost.Focus();
-                    return false;
-                }
-
-                if (!decimal.TryParse(txtsaleprice.Text, out decimal salePrice) || salePrice <= 0)
-                {
-                    MessageBox.Show("Please enter valid sale price before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtsaleprice.Focus();
-                    return false;
-                }
-
-                if (dateTimePicker1.Value <= DateTime.Now)
-                {
-                    MessageBox.Show("Please set expiry date in the future before using Ctrl+A.", "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    dateTimePicker1.Focus();
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error validating batch item form: {ex.Message}");
-                return false;
-            }
-        }
 
 
         // Replace the AddBatchdetailsform_KeyDown method to avoid duplicate validation:
@@ -1221,23 +951,18 @@ namespace MedicineShop.UI
         {
             try
             {
-                // Handle keyboard shortcuts
                 if (e.Control)
                 {
                     switch (e.KeyCode)
                     {
                         case Keys.A:
-                            // Ctrl+A: Add Batch or Add Batch Item depending on current state
-                            if (!paneldetails.Visible || !batchSavedToDatabase)
+                            // ✅ Ctrl+A: Add Batch if not saved, otherwise Add Batch Item
+                            if (!batchSavedToDatabase)
                             {
-                                // If batch form is visible and not saved, add batch
-                                // Call the method directly instead of PerformClick to avoid double validation
                                 AddBatch();
                             }
                             else
                             {
-                                // If batch is saved and details panel is visible, add batch item
-                                // Call the method directly instead of PerformClick to avoid double validation
                                 AddBatchItem();
                             }
                             e.Handled = true;
@@ -1245,20 +970,25 @@ namespace MedicineShop.UI
 
                         case Keys.S:
                             // Ctrl+S: Save Batch Items to database
-                            if (paneldetails.Visible && batchSavedToDatabase)
+                            if (batchSavedToDatabase && batchItemsTable.Rows.Count > 0)
                             {
-                                SaveBatchItems(); // Call method directly
+                                SaveBatchItems();
+                            }
+                            else if (!batchSavedToDatabase)
+                            {
+                                MessageBox.Show("Please create the batch first (Ctrl+A).", "Info",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
-                                MessageBox.Show("Please create a batch first before saving items.", "Info",
+                                MessageBox.Show("Please add at least one item before saving.", "Info",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             e.Handled = true;
                             break;
 
                         case Keys.N:
-                            // Ctrl+N: New/Reset Form (bonus shortcut)
+                            // Ctrl+N: New/Reset Form
                             ResetForm();
                             e.Handled = true;
                             break;
@@ -1266,7 +996,6 @@ namespace MedicineShop.UI
                 }
                 else if (e.KeyCode == Keys.Escape)
                 {
-                    // Press Escape to cancel edit mode
                     if (isEditing)
                     {
                         CancelEdit();
@@ -1282,11 +1011,11 @@ namespace MedicineShop.UI
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void AddBatch()
         {
             try
             {
-                // Validation code
                 if (string.IsNullOrWhiteSpace(txtBnames.Text))
                 {
                     MessageBox.Show("Please enter batch name.", "Validation Error",
@@ -1311,8 +1040,7 @@ namespace MedicineShop.UI
                     return;
                 }
 
-                decimal paidAmount = 0; // default
-
+                decimal paidAmount = 0;
                 if (!string.IsNullOrWhiteSpace(txtpaid.Text))
                 {
                     if (!decimal.TryParse(txtpaid.Text, out paidAmount) || paidAmount < 0)
@@ -1324,7 +1052,6 @@ namespace MedicineShop.UI
                     }
                 }
 
-                // Create batch object
                 var batch = new Batches
                 {
                     BatchName = txtBnames.Text.Trim(),
@@ -1335,21 +1062,26 @@ namespace MedicineShop.UI
                     Status = "Active"
                 };
 
-                // Add batch to database
                 bool success = batchesBl.AddBatch(batch);
 
                 if (success)
                 {
                     currentBatchName = batch.BatchName;
                     batchSavedToDatabase = true;
-                    paneldetails.Visible = true;
+
+                    // ✅ No need to show panel - it's already visible
+                    // ✅ Disable batch info fields to prevent editing
                     SetBatchFormEnabled(false);
+
                     InitializeBatchItemsTable();
                     RefreshBatchItemsGrid();
 
-                    // ✅ Auto-save after adding batch
                     SaveTempBatch();
 
+                    MessageBox.Show("Batch created successfully! You can now add products.", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // ✅ Focus on product entry
                     txtproduct.Focus();
                 }
                 else
@@ -1364,7 +1096,6 @@ namespace MedicineShop.UI
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void AddBatchItem()
         {
             try
@@ -1890,7 +1621,6 @@ namespace MedicineShop.UI
                     iconButton2.ForeColor = Color.White;
 
                     // Visual indicator for editing mode
-                    paneldetails.BackColor = Color.LightYellow;
 
                     // Update form title
                     this.Text = "Add Batch Details - Editing Item";
@@ -1898,6 +1628,7 @@ namespace MedicineShop.UI
                     // Set focus to quantity for quick editing
                     txtquantity.Focus();
                     txtquantity.SelectAll();
+
                 }
             }
             catch (Exception ex)
@@ -1951,105 +1682,14 @@ namespace MedicineShop.UI
 
         #region Grid Helper Methods
 
-        private void PositionGridBelowControl(DataGridView grid, Control control)
-        {
-            // Get control location relative to the form
-            Point controlLocation = control.PointToClient(Point.Empty);
-            Point formPoint = control.Parent.PointToScreen(controlLocation);
-            formPoint = this.PointToClient(formPoint);
-
-            // Position below the control
-            grid.Location = new Point(
-                control.Left,
-                control.Bottom + 2
-            );
-
-            // Set reasonable size
-            grid.Width = Math.Max(control.Width, 300);
-            grid.Height = 200;
-
-            grid.BringToFront();
-        }
+    
         #endregion
 
         #endregion
 
         #region Additional Helper Methods
 
-        private void RecalculateTotalAmount()
-        {
-            try
-            {
-                if (batchItemsTable != null && batchItemsTable.Rows.Count > 0)
-                {
-                    decimal totalCost = 0;
-                    foreach (DataRow row in batchItemsTable.Rows)
-                    {
-                        totalCost += Convert.ToDecimal(row["TotalCost"]);
-                    }
-
-                    // Update the total amount field
-                    txttotalamont.Text = totalCost.ToString("F2");
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error calculating total amount: {ex.Message}");
-            }
-        }
-
-        private bool ValidateForm()
-        {
-            // Basic form validation
-            if (string.IsNullOrWhiteSpace(txtBnames.Text))
-            {
-                MessageBox.Show("Please enter batch name.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtBnames.Focus();
-                return false;
-            }
-
-            if (selectedCompanyId == 0)
-            {
-                MessageBox.Show("Please select a company.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtcompany.Focus();
-                return false;
-            }
-
-            if (!decimal.TryParse(txttotalamont.Text, out decimal totalAmount) || totalAmount <= 0)
-            {
-                MessageBox.Show("Please enter valid total amount.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txttotalamont.Focus();
-                return false;
-            }
-
-            if (!decimal.TryParse(txtpaid.Text, out decimal paidAmount) || paidAmount < 0)
-            {
-                MessageBox.Show("Please enter valid paid amount.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtpaid.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
-        private void SetFormTitle(string additionalInfo = "")
-        {
-            if (string.IsNullOrEmpty(additionalInfo))
-            {
-                this.Text = "Add Batch Details";
-            }
-            else
-            {
-                this.Text = $"Add Batch Details - {additionalInfo}";
-            }
-        }
-
-        // Note: Dispose method is handled in Designer.cs file
-        // Session manager disposal is handled in FormClosing event
+      
 
         #endregion
 
