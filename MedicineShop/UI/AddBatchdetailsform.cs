@@ -665,11 +665,11 @@ namespace MedicineShop.UI
 
                 // Format currency columns
                 if (dgvbatches.Columns.Contains("PurchasePrice"))
-                    dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "C2";
+                    dgvbatches.Columns["PurchasePrice"].DefaultCellStyle.Format = "N2";
                 if (dgvbatches.Columns.Contains("SalePrice"))
-                    dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "C2";
+                    dgvbatches.Columns["SalePrice"].DefaultCellStyle.Format = "N2";
                 if (dgvbatches.Columns.Contains("TotalCost"))
-                    dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "C2";
+                    dgvbatches.Columns["TotalCost"].DefaultCellStyle.Format = "N2";
 
                 // Format date column
                 if (dgvbatches.Columns.Contains("ExpiryDate"))
@@ -1705,6 +1705,9 @@ namespace MedicineShop.UI
             f.ShowDialog(this);
         }
 
-       
+        private void dgvbatches_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
