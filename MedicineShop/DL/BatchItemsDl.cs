@@ -1,4 +1,5 @@
-﻿using MedicineShop.BL.Models;
+﻿using MedicineShop.BL;
+using MedicineShop.BL.Models;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -118,23 +119,37 @@ namespace MedicineShop.DL
         }
 
         // ✅ Get batch item by ID
-        public List<BatchItems> GetBatchItemById(int id)
+        public List<BatchItems> GetBatchItemById(int batchId)
         {
             List<BatchItems> list = new List<BatchItems>();
             try
             {
-                string query = @"SELECT bi.batch_item_id, bi.purchase_batch_id, bi.product_id, 
-                                bi.quantity_received, bi.purchase_price, bi.expiry_date, m.name AS MedicineName, m.sale_price
-                                FROM batch_items bi 
-                                JOIN medicines m ON bi.product_id = m.medicine_id
-                                WHERE bi.batch_item_id = @ID";
+                System.Diagnostics.Debug.WriteLine($"[DL] GetBatchItemsByBatchId called with BatchID={batchId}");
+
+                string query = @"
+            SELECT 
+                bi.batch_item_id,
+                bi.purchase_batch_id,
+                bi.product_id,
+                pb.BatchName,
+                m.name AS MedicineName,
+                c.company_name AS CompanyName,
+                bi.quantity_received,
+                bi.purchase_price,
+                m.sale_price,
+                bi.expiry_date
+            FROM batch_items bi 
+            JOIN medicines m ON bi.product_id = m.product_id
+            JOIN purchase_batches pb ON bi.purchase_batch_id = pb.purchase_batch_id
+            JOIN company c ON pb.company_id = c.company_id
+            WHERE bi.purchase_batch_id = @BatchId";
 
                 using (var conn = DatabaseHelper.Instance.GetConnection())
                 {
                     conn.Open();
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@BatchId", batchId);
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -144,21 +159,28 @@ namespace MedicineShop.DL
                                     BatchItemID = reader.GetInt32("batch_item_id"),
                                     BatchID = reader.GetInt32("purchase_batch_id"),
                                     MedicineID = reader.GetInt32("product_id"),
+                                    batchname = reader.GetString("BatchName"),
+                                    MedicineName = reader.GetString("MedicineName"),
+                                    CompanyName = reader.GetString("CompanyName"),
                                     Quantity = reader.GetInt32("quantity_received"),
                                     PurchasePrice = reader.GetDecimal("purchase_price"),
                                     SalePrice = reader.GetDecimal("sale_price"),
-                                    ExpiryDate = reader.GetDateTime("expiry_date"),
-                                    MedicineName = reader.GetString("MedicineName")
+                                    ExpiryDate = reader.GetDateTime("expiry_date")
                                 };
                                 list.Add(item);
+
+                                System.Diagnostics.Debug.WriteLine($"[DL] Found item: {item.MedicineName} x {item.Quantity}");
                             }
                         }
                     }
                 }
+
+                System.Diagnostics.Debug.WriteLine($"[DL] Total items found: {list.Count}");
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Error while getting batch item by ID.", ex);
+                System.Diagnostics.Debug.WriteLine($"[DL] Error: {ex.Message}");
+                throw new ApplicationException("Error while getting batch items by batch ID.", ex);
             }
             return list;
         }

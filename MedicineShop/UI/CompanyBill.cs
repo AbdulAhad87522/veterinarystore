@@ -45,10 +45,13 @@ namespace MedicineShop.UI
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-
+        private void load()
+        {
+            LoadCompanyBills("");
+        }
         private void CompanyBill_Load(object sender, EventArgs e)
         {
-
+            load();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

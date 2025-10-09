@@ -20,17 +20,12 @@ namespace MedicineShop
         private int SelectedId;
         int batchid;
 
-        // Constructor with no parameters
         public Batchform(IBatchesBl bl)
         {
             InitializeComponent();
             this.bl = bl;
             panelbill.Visible = false;
         }
-
-        // Remove duplicate constructor definition
-        // The second constructor `Batchform_Load_1` was likely intended to be an event handler
-        // and not a constructor. It has been renamed to avoid conflict.
 
         private void Batchform_Load(object sender, EventArgs e)
         {
@@ -44,15 +39,16 @@ namespace MedicineShop
             dataGridView2.Columns["CompanyID"].Visible = false;
             dataGridView2.Columns["PurchaseBatchID"].Visible = false;
             UIHelper.StyleGridView(dataGridView2);
-            UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
 
+            // Add both Edit and Add Details buttons
+            UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
+            UIHelper.AddButtonColumn(dataGridView2, "AddDetails", "Add Details", "Add Details");
         }
 
         private void iconButton1_Click(object sender, EventArgs e)
         {
             var f = Program.ServiceProvider.GetRequiredService<AddBatchdetailsform>();
             Dashboard.Instance.LoadFormIntoPanel(f);
-           
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -65,6 +61,8 @@ namespace MedicineShop
 
             UIHelper.StyleGridView(dataGridView2);
             UIHelper.AddButtonColumn(dataGridView2, "Edit", "Edit", "Edit");
+            UIHelper.AddButtonColumn(dataGridView2, "AddDetails", "Add Details", "Add Details");
+
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 load();
@@ -75,9 +73,11 @@ namespace MedicineShop
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0)
                 return;
+
             var row = dataGridView2.Rows[e.RowIndex];
             SelectedId = Convert.ToInt32(row.Cells["PurchaseBatchID"].Value);
             string columnName = dataGridView2.Columns[e.ColumnIndex].Name;
+
             if (columnName == "Edit")
             {
                 txtSupplierName.Text = row.Cells["CompanyName"].Value.ToString();
@@ -88,7 +88,32 @@ namespace MedicineShop
                 panelbill.Visible = true;
                 UIHelper.RoundPanelCorners(panelbill, 20);
             }
+            else if (columnName == "AddDetails")
+            {
+                // Open AddBatchdetailsform with existing batch loaded
+                OpenAddDetailsForm(row);
+            }
+        }
 
+        private void OpenAddDetailsForm(DataGridViewRow row)
+        {
+            try
+            {
+                string batchName = row.Cells["BatchName"].Value.ToString();
+                int batchId = Convert.ToInt32(row.Cells["PurchaseBatchID"].Value);
+
+                var f = Program.ServiceProvider.GetRequiredService<AddBatchdetailsform>();
+
+                // Load existing batch into the form
+                f.LoadExistingBatch(batchId, batchName);
+
+                Dashboard.Instance.LoadFormIntoPanel(f);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening batch details: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void iconButton5_Click(object sender, EventArgs e)
@@ -98,44 +123,55 @@ namespace MedicineShop
             decimal totalPrice = decimal.TryParse(txtTotal.Text.Trim(), out var tp) ? tp : 0;
             decimal paid = decimal.TryParse(txtpayment.Text.Trim(), out var p) ? p : 0;
             DateTime purchaseDate = DateTime.TryParse(txtDate.Text.Trim(), out var pd) ? pd : DateTime.Now;
+
             if (string.IsNullOrWhiteSpace(batchName) || string.IsNullOrWhiteSpace(supplierName))
             {
-                MessageBox.Show("Batch name and Supplier name cannot be empty.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Batch name and Supplier name cannot be empty.",
+                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             if (totalPrice < 0 || paid < 0)
             {
-                MessageBox.Show("Price values cannot be negative.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Price values cannot be negative.",
+                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             var batch = bl.GetBatchById(SelectedId);
             if (batch == null)
             {
-                MessageBox.Show("Batch not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Batch not found.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             batch.BatchName = batchName;
             batch.CompanyName = supplierName;
             batch.TotalPrice = totalPrice;
             batch.Paid = paid;
             batch.PurchaseDate = purchaseDate;
+
             try
             {
                 bool success = bl.UpdateBatch(batch);
                 if (success)
                 {
-                    MessageBox.Show("Batch updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Batch updated successfully.", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                     panelbill.Visible = false;
-                    load(); // Refresh the grid to show updated data
+                    load();
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update batch.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to update batch.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -143,7 +179,5 @@ namespace MedicineShop
         {
             panelbill.Visible = false;
         }
-
-     
     }
 }

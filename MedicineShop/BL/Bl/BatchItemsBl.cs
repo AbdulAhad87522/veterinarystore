@@ -63,6 +63,12 @@ namespace MedicineShop.BL
             //	throw new ArgumentException("Invalid batch item ID");
             return _dl.UpdateBatchItem(b);
         }
+        public bool DeleteBatchItem(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid batch item ID");
+            return _dl.DeleteBatchItem(id);
+        }
         /// <summary>
         /// Validates business rules for BatchItems
         /// </summary>

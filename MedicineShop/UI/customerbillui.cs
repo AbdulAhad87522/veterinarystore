@@ -134,9 +134,18 @@ namespace MedicineShop.UI
 
         private void customerbillui_Load(object sender, EventArgs e)
         {
+            loadbills();
+        }
+        private void loadbills(string text="")
+        {
+            var list=ibl.GetAllCustomerBills(text);
+            dataGridView2.DataSource = list;
+            dataGridView2.Columns["customer_id"].Visible = false;
+            UIHelper.StyleGridView(dataGridView2);
+            UIHelper.AddButtonColumn(dataGridView2, "payment", "payment", "Payment");
+            UIHelper.AddButtonColumn(dataGridView2, "Details", "Details", "Details");
 
         }
-
         private void panelbill_Paint(object sender, PaintEventArgs e)
         {
 

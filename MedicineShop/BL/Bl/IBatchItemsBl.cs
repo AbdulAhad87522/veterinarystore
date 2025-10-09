@@ -10,5 +10,6 @@ namespace MedicineShop.BL
         List<BatchItems> GetBatchItemsByBatchId(int batchId);
         List<BatchItems> SearchBatchItems(string keyword);
         bool UpdateBatchItem(BatchItems b);
+        bool DeleteBatchItem(int batchItemId);
     }
 }
