@@ -63,6 +63,7 @@
             this.txtproduct = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.paneldetails.SuspendLayout();
@@ -136,6 +137,7 @@
             this.paneldetails.Controls.Add(this.txtproduct);
             this.paneldetails.Controls.Add(this.label10);
             this.paneldetails.Controls.Add(this.label11);
+            this.paneldetails.Controls.Add(this.label5);
             this.paneldetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.paneldetails.Location = new System.Drawing.Point(0, 0);
             this.paneldetails.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -297,7 +299,7 @@
             this.dgvcompany.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dgvcompany.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvcompany.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgvcompany.Location = new System.Drawing.Point(332, 134);
+            this.dgvcompany.Location = new System.Drawing.Point(328, 142);
             this.dgvcompany.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvcompany.Name = "dgvcompany";
             this.dgvcompany.ReadOnly = true;
@@ -355,7 +357,7 @@
             this.dgvmedicines.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dgvmedicines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvmedicines.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgvmedicines.Location = new System.Drawing.Point(88, 274);
+            this.dgvmedicines.Location = new System.Drawing.Point(114, 306);
             this.dgvmedicines.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvmedicines.Name = "dgvmedicines";
             this.dgvmedicines.ReadOnly = true;
@@ -541,6 +543,15 @@
             this.label11.Text = " Add Batch Details";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(324, 369);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(280, 20);
+            this.label5.TabIndex = 216;
+            this.label5.Text = "(Make sure you have added the batch)";
+            // 
             // AddBatchdetailsform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -599,5 +610,6 @@
         private System.Windows.Forms.TextBox txtBnames;
         private System.Windows.Forms.Label lblBatch;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
     }
 }
