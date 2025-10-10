@@ -14,8 +14,8 @@ namespace MedicineShop.DL
         public int AddMedicine(Medicine medicine)
         {
             string query = @"INSERT INTO medicines 
-                (name, description, company_id, Category_id, packing_Id, sale_price) 
-                VALUES (@name, @desc, @companyId, @catId, @packing, @price)";
+                (name, description, company_id, Category_id, packing_Id, sale_price,minimum_threshold) 
+                VALUES (@name, @desc, @companyId, @catId, @packing, @price,@threshold)";
 
             MySqlParameter[] parameters =
             {
@@ -24,7 +24,8 @@ namespace MedicineShop.DL
                 new MySqlParameter("@companyId", medicine.CompanyId),
                 new MySqlParameter("@catId", medicine.CategoryId),
                 new MySqlParameter("@packing", medicine.PackingId),
-                new MySqlParameter("@price", medicine.SalePrice)
+                new MySqlParameter("@price", medicine.SalePrice),
+                new MySqlParameter("@threshold", medicine.minimum_threshold)
             };
 
             return DatabaseHelper.Instance.ExecuteNonQuery(query, parameters);
@@ -34,7 +35,7 @@ namespace MedicineShop.DL
         {
 
             string query = @"UPDATE medicines 
-                SET name=@name, description=@desc, company_id=@companyId, category_id=@catId, packing_Id=@packing, sale_price=@price
+                SET name=@name, description=@desc, company_id=@companyId, category_id=@catId, packing_Id=@packing, sale_price=@price,minimum_threshold=@threshold
                 WHERE product_id=@id";
 
             MySqlParameter[] parameters =
@@ -45,7 +46,8 @@ namespace MedicineShop.DL
                 new MySqlParameter("@companyId", medicine.CompanyId),
                 new MySqlParameter("@catId", medicine.CategoryId),
                 new MySqlParameter("@packing", medicine.PackingId),
-                new MySqlParameter("@price", medicine.SalePrice)
+                new MySqlParameter("@price", medicine.SalePrice),
+                new MySqlParameter("@threshold", medicine.minimum_threshold)
             };
 
             return DatabaseHelper.Instance.ExecuteNonQuery(query, parameters);
@@ -96,7 +98,7 @@ namespace MedicineShop.DL
 
         public DataTable GetAllMedicines()
         {
-            string query = @"SELECT m.product_id, m.name, m.description, c.company_name,p.packing_name,cat.category_name, m.packing_id, m.sale_price, m.company_id, m.category_id
+            string query = @"SELECT m.product_id, m.name, m.description, c.company_name,p.packing_name,cat.category_name, m.packing_id, m.sale_price,m.minimum_threshold, m.company_id, m.category_id
                       FROM medicines m
                       JOIN company c ON m.company_id = c.company_id
                       JOIN packing p ON m.packing_id = p.packing_id
@@ -108,7 +110,7 @@ namespace MedicineShop.DL
         public DataTable SearchMedicines(string keyword)
         {
             string query = @"SELECT m.product_id, m.name, m.description, c.company_name, cat.category_name, 
-                            m.packing_id,p.packing_name,m.sale_price, m.company_id, m.Category_id
+                            m.packing_id,p.packing_name,m.sale_price,m.minimum_threshold, m.company_id, m.Category_id
                      FROM medicines m
                      JOIN company c ON m.company_id = c.company_id
                      JOIN packing p ON m.packing_id = p.packing_id
