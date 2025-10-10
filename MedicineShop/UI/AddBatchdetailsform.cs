@@ -304,12 +304,114 @@ namespace MedicineShop.UI
             iconButton2.BackColor = Color.FromArgb(109, 148, 197);
             iconButton2.ForeColor = Color.White;
         }
+        private void ClearFormAndSession()
+        {
+            try
+            {
+                // Delete session file
+                string sessionFile = GetSessionFilePath();
+                if (File.Exists(sessionFile))
+                {
+                    File.Delete(sessionFile);
+                    System.Diagnostics.Debug.WriteLine("✓ Session file deleted");
+                }
+
+                // Clear all text fields
+                txtBnames.Clear();
+                txtcompany.Clear();
+                txttotalamont.Clear();
+                txtpaid.Clear();
+                ClearProductForm();
+
+                // Reset all variables
+                selectedCompanyId = 0;
+                selectedProductId = 0;
+                currentBatchName = "";
+                editingBatchItemId = 0;
+                isEditing = false;
+                batchSavedToDatabase = false;
+
+                // Re-enable batch form
+                SetBatchFormEnabled(true);
+
+                // Hide dropdowns
+                dgvcompany.Visible = false;
+                dgvmedicines.Visible = false;
+
+                // Reload data
+                LoadCompanies();
+                LoadMedicines();
+
+                // Clear batch items table
+                InitializeBatchItemsTable();
+                RefreshBatchItemsGrid();
+
+                // Reset form appearance
+                this.Text = "Add Batch Details";
+                ResetEditingVisuals();
+
+                // Focus on batch name field
+                txtBnames.Focus();
+
+                System.Diagnostics.Debug.WriteLine("✓ Form cleared and ready for new batch");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error clearing form: {ex.Message}");
+                MessageBox.Show($"Error clearing form: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
         // ✅ IconButton3 - No longer needed, but keep for compatibility
         private void iconButton3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("All items are already saved to database!", "Info",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                // Check if there's a batch to save
+                if (string.IsNullOrWhiteSpace(currentBatchName))
+                {
+                    MessageBox.Show("No batch to save!", "Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Check if batch has items
+                if (batchItemsTable.Rows.Count == 0)
+                {
+                    MessageBox.Show("Please add at least one product to the batch before saving.",
+                        "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Confirm save
+                DialogResult result = MessageBox.Show(
+                    $"Save and complete batch '{currentBatchName}'?\n\n" +
+                    $"Total Items: {batchItemsTable.Rows.Count}\n" +
+                    $"This will clear the form for a new batch.",
+                    "Confirm Save",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    // All items are already saved to database, just need to finalize
+                    MessageBox.Show(
+                        $"Batch '{currentBatchName}' saved successfully!\n" +
+                        $"Total Items: {batchItemsTable.Rows.Count}",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    // Clear everything and start fresh
+                    ClearFormAndSession();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving batch: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #region Helper Methods
@@ -575,7 +677,7 @@ namespace MedicineShop.UI
                 ToolTip tooltip = new ToolTip();
                 tooltip.SetToolTip(iconButton1, "Add Batch (Ctrl+A)");
                 tooltip.SetToolTip(iconButton2, "Add Product (Ctrl+A)");
-                tooltip.SetToolTip(iconButton3, "All saved automatically");
+                tooltip.SetToolTip(iconButton3, "Save & New Batch (Ctrl+S)"); // Updated tooltip
             }
             catch (Exception ex)
             {
@@ -596,6 +698,12 @@ namespace MedicineShop.UI
                                 AddBatch();
                             else
                                 AddOrUpdateBatchItemToDatabase();
+                            e.Handled = true;
+                            break;
+
+                        case Keys.S: // NEW: Save shortcut
+                            if (batchSavedToDatabase && batchItemsTable.Rows.Count > 0)
+                                iconButton3.PerformClick();
                             e.Handled = true;
                             break;
 
@@ -621,7 +729,6 @@ namespace MedicineShop.UI
                 MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void AddBatch()
         {
             try
