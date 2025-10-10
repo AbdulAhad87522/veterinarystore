@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.toplbl = new System.Windows.Forms.Label();
-            this.btnUpdate = new FontAwesome.Sharp.IconButton();
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -42,16 +41,14 @@
             this.txtDesc = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txttotalprice = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.btnsave = new FontAwesome.Sharp.IconButton();
             this.btnAdd = new FontAwesome.Sharp.IconButton();
             this.lblBatch = new System.Windows.Forms.Label();
             this.lblProducts = new System.Windows.Forms.Label();
             this.lblQuantity = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.threshold = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -68,31 +65,6 @@
             this.toplbl.TabIndex = 6;
             this.toplbl.Text = " Add Details";
             this.toplbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnUpdate
-            // 
-            this.btnUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.Indigo;
-            this.btnUpdate.FlatAppearance.BorderSize = 2;
-            this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DodgerBlue;
-            this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(51)))), ((int)(((byte)(69)))));
-            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdate.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnUpdate.IconChar = FontAwesome.Sharp.IconChar.PlusSquare;
-            this.btnUpdate.IconColor = System.Drawing.Color.Gainsboro;
-            this.btnUpdate.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnUpdate.IconSize = 35;
-            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdate.Location = new System.Drawing.Point(196, 646);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(140, 53);
-            this.btnUpdate.TabIndex = 212;
-            this.btnUpdate.Text = "Edit";
-            this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnUpdate.UseVisualStyleBackColor = false;
-            //this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click_1);
             // 
             // txtName
             // 
@@ -115,6 +87,8 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Linen;
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.threshold);
             this.panel2.Controls.Add(this.pckcmb);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label5);
@@ -122,15 +96,10 @@
             this.panel2.Controls.Add(this.cmbCompany);
             this.panel2.Controls.Add(this.cmbCategory);
             this.panel2.Controls.Add(this.txtDesc);
-            this.panel2.Controls.Add(this.btnUpdate);
             this.panel2.Controls.Add(this.txtName);
             this.panel2.Controls.Add(this.txtPrice);
             this.panel2.Controls.Add(this.textBox3);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.textBox2);
-            this.panel2.Controls.Add(this.label3);
-            this.panel2.Controls.Add(this.txttotalprice);
-            this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.btnsave);
             this.panel2.Controls.Add(this.btnAdd);
             this.panel2.Controls.Add(this.lblBatch);
@@ -139,7 +108,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 84);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(566, 711);
+            this.panel2.Size = new System.Drawing.Size(566, 904);
             this.panel2.TabIndex = 207;
             // 
             // pckcmb
@@ -176,7 +145,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(133, 512);
+            this.label1.Location = new System.Drawing.Point(133, 635);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 25);
             this.label1.TabIndex = 218;
@@ -205,7 +174,7 @@
             // txtDesc
             // 
             this.txtDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDesc.Location = new System.Drawing.Point(138, 540);
+            this.txtDesc.Location = new System.Drawing.Point(138, 673);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.Size = new System.Drawing.Size(286, 87);
@@ -227,40 +196,6 @@
             this.label4.Size = new System.Drawing.Size(110, 25);
             this.label4.TabIndex = 208;
             this.label4.Text = "Reamining:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(547, 777);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(250, 22);
-            this.textBox2.TabIndex = 207;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(484, 774);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(57, 25);
-            this.label3.TabIndex = 206;
-            this.label3.Text = "Paid:";
-            // 
-            // txttotalprice
-            // 
-            this.txttotalprice.Location = new System.Drawing.Point(178, 778);
-            this.txttotalprice.Name = "txttotalprice";
-            this.txttotalprice.Size = new System.Drawing.Size(250, 22);
-            this.txttotalprice.TabIndex = 205;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(61, 774);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(111, 25);
-            this.label2.TabIndex = 204;
-            this.label2.Text = "Total Price:";
             // 
             // btnsave
             // 
@@ -301,7 +236,7 @@
             this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnAdd.IconSize = 35;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(196, 646);
+            this.btnAdd.Location = new System.Drawing.Point(196, 780);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(140, 53);
             this.btnAdd.TabIndex = 199;
@@ -351,11 +286,30 @@
             this.panel1.Size = new System.Drawing.Size(566, 84);
             this.panel1.TabIndex = 206;
             // 
+            // threshold
+            // 
+            this.threshold.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.threshold.Location = new System.Drawing.Point(138, 558);
+            this.threshold.Multiline = true;
+            this.threshold.Name = "threshold";
+            this.threshold.Size = new System.Drawing.Size(286, 46);
+            this.threshold.TabIndex = 222;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(141, 530);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(184, 25);
+            this.label2.TabIndex = 223;
+            this.label2.Text = "Minimum Threshold";
+            // 
             // AddMedicine
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 795);
+            this.ClientSize = new System.Drawing.Size(566, 988);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "AddMedicine";
@@ -372,16 +326,11 @@
         #endregion
 
         private System.Windows.Forms.Label toplbl;
-        private FontAwesome.Sharp.IconButton btnUpdate;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txttotalprice;
-        private System.Windows.Forms.Label label2;
         private FontAwesome.Sharp.IconButton btnsave;
         private FontAwesome.Sharp.IconButton btnAdd;
         private System.Windows.Forms.Label lblBatch;
@@ -395,5 +344,7 @@
         private System.Windows.Forms.ComboBox cmbCompany;
         private System.Windows.Forms.ComboBox cmbCategory;
         private System.Windows.Forms.ComboBox pckcmb;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox threshold;
     }
 }

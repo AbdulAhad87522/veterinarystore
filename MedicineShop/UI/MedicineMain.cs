@@ -17,7 +17,7 @@ namespace MedicineShop
             InitializeComponent();
             LoadMedicines();
             CustomizeGrid();
-            panelbill.Visible = false;
+            panelEdit.Visible = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -40,9 +40,9 @@ namespace MedicineShop
                     btnDelete.PerformClick();
                     return true;
                 }
-                else if (keyData == Keys.Escape && panelbill.Visible)
+                else if (keyData == Keys.Escape && panelEdit.Visible)
                 {
-                    panelbill.Visible = false;
+                    panelEdit.Visible = false;
                     return true;
                 }
 
@@ -189,11 +189,12 @@ namespace MedicineShop
                 txtName.Text = row.Cells["name"].Value.ToString();
                 cmbCompany.Text = row.Cells["company_name"].Value.ToString();
                 txtPrice.Text = row.Cells["sale_price"].Value.ToString();
+                threshold.Text = row.Cells["minimum_threshold"].Value.ToString();
                 cmbCategory.Text = row.Cells["category_name"].Value.ToString();
                 pckcmb.Text = row.Cells["packing_name"].Value.ToString();
                 txtDesc.Text= row.Cells["description"].Value.ToString();
-                panelbill.Visible = true;
-                UIHelper.RoundPanelCorners(panelbill, 20);
+                panelEdit.Visible = true;
+                UIHelper.RoundPanelCorners(panelEdit, 20);
             }
         }
 
@@ -205,7 +206,8 @@ namespace MedicineShop
             string description = txtDesc.Text.Trim();
             string name = txtName.Text.Trim();
             decimal sale_price = decimal.TryParse(txtPrice.Text.Trim(), out var sp) ? sp : 0;
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(company_name) || string.IsNullOrWhiteSpace(category_name) || string.IsNullOrWhiteSpace(packing_name) || sale_price <= 0)
+            int min_threshold = int.TryParse(threshold.Text.Trim(), out var mt) ? mt : 0;
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(company_name) || string.IsNullOrWhiteSpace(category_name) || string.IsNullOrWhiteSpace(packing_name) || sale_price <= 0 || min_threshold <= 0)
             {
                 MessageBox.Show("Please fill all required fields with valid data.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -218,7 +220,8 @@ namespace MedicineShop
                     Name = name,
                     Description = description,
                     SalePrice = sale_price,
-                    CompanyId=DatabaseHelper.Instance.getcompany_id(company_name),
+                    minimum_threshold = min_threshold,
+                    CompanyId =DatabaseHelper.Instance.getcompany_id(company_name),
                     CategoryId=DatabaseHelper.Instance.getcategory_id(category_name),
                     PackingId=DatabaseHelper.Instance.getpacking_id(packing_name)
 
@@ -229,7 +232,7 @@ namespace MedicineShop
                 {
                     MessageBox.Show("Medicine updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadMedicines();
-                    panelbill.Visible = false;
+                    panelEdit.Visible = false;
                 }
                 else
                 {
@@ -293,7 +296,8 @@ namespace MedicineShop
         }
         private void iconButton4_Click(object sender, EventArgs e)
         {
-            panelbill.Visible = false;
+            
+            panelEdit.Visible = false;
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)

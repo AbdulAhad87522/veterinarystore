@@ -30,7 +30,7 @@ namespace MedicineShop.UI
                 _medicine = med;
                 _isEdit = true;
                 btnAdd.Visible = false;
-                btnUpdate.Visible = true;
+                
                 FillForm();
             }
             else
@@ -38,7 +38,7 @@ namespace MedicineShop.UI
                 _medicine = new Medicine();
                 _isEdit = false;
                 btnAdd.Visible = true;
-                btnUpdate.Visible = false;
+               
             }
         }
 
@@ -51,7 +51,8 @@ namespace MedicineShop.UI
                 if (pckcmb.Focused) { txtPrice.Focus(); return true; }
                 if (txtPrice.Focused) { cmbCategory.Focus(); return true; }
                 if (cmbCategory.Focused) { cmbCompany.Focus(); return true; }
-                if (cmbCompany.Focused) { txtDesc.Focus(); return true; }
+                if (cmbCompany.Focused) { threshold.Focus(); return true; }
+                if (threshold.Focused) { txtDesc.Focus(); return true; }
                 if (txtDesc.Focused) { btnAdd.Focus(); return true; }
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -89,6 +90,7 @@ namespace MedicineShop.UI
             txtName.Text = _medicine.Name;
             txtDesc.Text = _medicine.Description;
             txtPrice.Text = _medicine.SalePrice.ToString();
+            threshold.Text = _medicine.minimum_threshold.ToString();
 
             cmbCompany.SelectedValue = _medicine.CompanyId;
             cmbCategory.SelectedValue = _medicine.CategoryId;
@@ -100,6 +102,7 @@ namespace MedicineShop.UI
             _medicine.Name = txtName.Text.Trim();
             _medicine.Description = txtDesc.Text.Trim();
             _medicine.SalePrice = decimal.TryParse(txtPrice.Text, out decimal price) ? price : 0;
+            _medicine.minimum_threshold = int.TryParse(threshold.Text, out int thre) ? thre : 0;
 
             // Simplified parsing for combo values
             _medicine.CompanyId = GetComboValue(cmbCompany);
@@ -147,8 +150,12 @@ namespace MedicineShop.UI
             if (string.IsNullOrWhiteSpace(txtName.Text))
                 errors.Add("Medicine name is required");
 
+
             if (string.IsNullOrWhiteSpace(txtPrice.Text) || !decimal.TryParse(txtPrice.Text, out _))
                 errors.Add("Valid price is required");
+
+            if (string.IsNullOrWhiteSpace(threshold.Text) || !int.TryParse(threshold.Text, out _))
+                errors.Add("Valid Threshold is required");
 
             if (GetComboValue(cmbCompany) == 0)
                 errors.Add("Please select a valid company");
