@@ -96,7 +96,7 @@ namespace TechStore.DataAccess
             {
                 var stockTable = _dbHelper.ExecuteDataTable(@"
                     SELECT product_id, name, sale_price, company_name, 
-                           current_stock, stock_status
+                           current_stock, stock_status, minimum_threshold
                     FROM v_low_stock 
                     ORDER BY 
                         CASE stock_status 
