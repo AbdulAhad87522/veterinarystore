@@ -135,11 +135,11 @@ namespace MedicineShop.UI
         {
             summaryPanel = new Panel
             {
-                Height = 180,
+                Height = 200,
                 Dock = DockStyle.Top,
                 BackColor = Color.Transparent,
-                Padding = new Padding(25, 15, 25, 25),
-                Margin = new Padding(0, 0, 0, 20)
+                Padding = new Padding(25, 15, 25, 30),
+                Margin = new Padding(0, 0, 0, 30)
             };
 
             RefreshSummaryCardLayout();
@@ -159,10 +159,10 @@ namespace MedicineShop.UI
             if (cardsPerRow == 2)
                 summaryPanel.Height = 320;
             else
-                summaryPanel.Height = 180;
+                summaryPanel.Height = 300;
 
             var cardWidth = (containerWidth - (spacing * (cardsPerRow - 1))) / cardsPerRow;
-            var cardHeight = 75;
+            var cardHeight = 140;
 
             if (cardWidth < 180)
             {
@@ -192,7 +192,7 @@ namespace MedicineShop.UI
                 int col = i % cardsPerRow;
 
                 int x = col * (cardWidth + spacing);
-                int y = row * (cardHeight + 15);
+                int y = row * (cardHeight + 50);
 
                 var card = cardData[i];
                 var label = labels[i] ?? new Label();
@@ -783,6 +783,11 @@ namespace MedicineShop.UI
             {
                 Console.WriteLine($"Error loading expiring items data: {ex.Message}");
             }
+        }
+
+        private void HomeContentform_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void UpdateExpiringItemsGrid(List<ExpiringItem> items)
