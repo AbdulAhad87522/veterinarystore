@@ -825,9 +825,12 @@ namespace fertilizesop.UI
         {
             try
             {
-                if (string.IsNullOrEmpty(txtfinaldiscount.Text))
+                if (string.IsNullOrEmpty(txtfinaldiscount.Text) || (int.Parse(txtfinaldiscount.Text) != 0))
                 {
-                    txtfinalprice.Text = (int.Parse(totalwithoutdisc.Text)).ToString();
+                    decimal withoutdisc = (decimal.Parse(totalwithoutdisc.Text));
+                    decimal finaldiscount = (decimal.Parse(txtfinaldiscount.Text));
+                    decimal final = withoutdisc - finaldiscount;
+                    txtfinalprice.Text = final.ToString();
                 }
                 else
                 {
