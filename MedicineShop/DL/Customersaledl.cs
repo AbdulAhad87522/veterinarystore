@@ -79,7 +79,7 @@ namespace MedicineShop.DL
                                 SUM(b.quantity_remaining) as quantity_remaining,
                                 p.packing_name, 
                                 ca.category_name, 
-                                MIN(b.expiry_date) as nearest_expiry_date
+                                MIN(b.expiry_date) as expiry_date
                             FROM batch_items b
                             JOIN medicines m ON m.product_id = b.product_id
                             JOIN company c ON c.company_id = m.company_id
@@ -91,7 +91,7 @@ namespace MedicineShop.DL
                             GROUP BY m.product_id, m.name, m.description, c.company_name, 
                                      m.sale_price, p.packing_name, ca.category_name
                             HAVING SUM(b.quantity_remaining) > 0
-                            ORDER BY m.name, nearest_expiry_date;";
+                            ORDER BY m.name, expiry_date;";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
@@ -764,6 +764,188 @@ namespace MedicineShop.DL
             return dt;
         }
 
+        //public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
+        //{
+        //    using (var con = DatabaseHelper.Instance.GetConnection())
+        //    {
+        //        con.Open();
+        //        using (var tran = con.BeginTransaction())
+        //        {
+        //            try
+        //            {
+        //                // Validate input data first
+        //                if (d.Rows.Count == 0 || (d.Rows.Count == 1 && d.Rows[0].IsNewRow))
+        //                {
+        //                    throw new Exception("No products selected for sale");
+        //                }
+
+        //                string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
+        //                    VALUES (@id, @total_amount, @paid_amount, @date);
+        //                    SELECT LAST_INSERT_ID();";
+        //                int billid;
+        //                using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
+        //                {
+        //                    cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
+        //                    cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
+        //                    cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
+        //                    cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+
+        //                    object result = cmd.ExecuteScalar();
+        //                    if (result == null)
+        //                    {
+        //                        throw new Exception("Failed to get sale ID");
+        //                    }
+        //                    billid = Convert.ToInt32(result);
+        //                }
+
+        //                // Insert into customer price record
+        //                string query2 = "INSERT INTO customerpricerecord (customer_id, sale_id, date, payment) VALUES (@c_id, @s_id, @date, @payment)";
+        //                using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
+        //                {
+        //                    cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
+        //                    cmd2.Parameters.AddWithValue("@s_id", billid);
+        //                    cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+        //                    cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
+        //                    cmd2.ExecuteNonQuery();
+        //                }
+
+        //                foreach (DataGridViewRow row in d.Rows)
+        //                {
+        //                    if (row.IsNewRow) continue;
+
+        //                    int productid;
+        //                    string name = row.Cells["name"]?.Value?.ToString()?.Trim();
+
+        //                    if (string.IsNullOrEmpty(name))
+        //                    {
+        //                        throw new Exception("Product name is missing");
+        //                    }
+
+        //                    // Get product ID and sale price
+        //                    string productidquery = "SELECT product_id, sale_price FROM medicines WHERE name = @name";
+        //                    using (MySqlCommand command2 = new MySqlCommand(productidquery, con, tran))
+        //                    {
+        //                        command2.Parameters.AddWithValue("@name", name);
+        //                        using (var reader = command2.ExecuteReader())
+        //                        {
+        //                            if (reader.Read())
+        //                            {
+        //                                productid = reader.GetInt32("product_id");
+        //                                decimal salePrice = reader.GetDecimal("sale_price");
+        //                                reader.Close();
+
+        //                                // Parse and validate quantity
+        //                                if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal qty) || qty <= 0)
+        //                                {
+        //                                    throw new Exception($"Invalid quantity for product: {name}");
+        //                                }
+
+        //                                // Parse discount
+        //                                decimal discount = 0;
+        //                                if (row.Cells["discount"]?.Value != null)
+        //                                {
+        //                                    if (!decimal.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
+        //                                    {
+        //                                        throw new Exception($"Invalid discount for product: {name}");
+        //                                    }
+        //                                }
+
+        //                                // Get expiry date
+        //                                DateTime expiry;
+        //                                if (row.Cells["expiry_date"]?.Value == null ||
+        //                                    !DateTime.TryParse(row.Cells["expiry_date"].Value.ToString(), out expiry))
+        //                                {
+        //                                    throw new Exception($"Invalid expiry date for product: {name}");
+        //                                }
+        //                                expiry = expiry.Date;
+
+        //                                // Get batch_item_id for the product with matching expiry date and available stock
+        //                                string batchItemQuery = @"SELECT batch_item_id 
+        //                                                 FROM batch_items 
+        //                                                 WHERE product_id = @product_id 
+        //                                                 AND expiry_date = @expiry_date 
+        //                                                 AND quantity_remaining >= @quantity 
+        //                                                 ORDER BY expiry_date, batch_item_id 
+        //                                                 LIMIT 1";
+
+        //                                int batchItemId = -1;
+        //                                using (MySqlCommand batchItemCmd = new MySqlCommand(batchItemQuery, con, tran))
+        //                                {
+        //                                    batchItemCmd.Parameters.AddWithValue("@product_id", productid);
+        //                                    batchItemCmd.Parameters.AddWithValue("@expiry_date", expiry);
+        //                                    batchItemCmd.Parameters.AddWithValue("@quantity", qty);
+
+        //                                    object batchResult = batchItemCmd.ExecuteScalar();
+        //                                    if (batchResult == null)
+        //                                    {
+        //                                        throw new Exception($"No available batch found for product: {name} with expiry: {expiry:yyyy-MM-dd}");
+        //                                    }
+        //                                    batchItemId = Convert.ToInt32(batchResult);
+        //                                }
+
+        //                                // Insert into sale_items with batch_item_id
+        //                                string detailquery = @"INSERT INTO sale_items (sale_id, batch_item_id, quantity, price, Discount) 
+        //                          VALUES (@bill_iid, @batch_item_id, @quantity, @price, @discount)";
+        //                                using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
+        //                                {
+        //                                    command.Parameters.AddWithValue("@bill_iid", billid);
+        //                                    command.Parameters.AddWithValue("@batch_item_id", batchItemId);
+        //                                    command.Parameters.AddWithValue("@price", salePrice);
+        //                                    command.Parameters.AddWithValue("@quantity", qty);
+        //                                    command.Parameters.AddWithValue("@discount", discount);
+        //                                    command.ExecuteNonQuery();
+        //                                }
+
+        //                                // Update batch stock
+        //                                string queryupdatequantity = @"UPDATE batch_items 
+        //                                      SET quantity_remaining = quantity_remaining - @quantitysold 
+        //                                      WHERE batch_item_id = @batch_item_id";
+
+        //                                using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
+        //                                {
+        //                                    comma.Parameters.AddWithValue("@batch_item_id", batchItemId);
+        //                                    comma.Parameters.AddWithValue("@quantitysold", qty);
+
+        //                                    int rowsAffected = comma.ExecuteNonQuery();
+        //                                    if (rowsAffected == 0)
+        //                                    {
+        //                                        throw new Exception($"Failed to update stock for product: {name}");
+        //                                    }
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                throw new Exception($"Product not found: {name}");
+        //                            }
+        //                        }
+        //                    }
+        //                }
+
+        //                tran.Commit();
+        //                return true;
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                try
+        //                {
+        //                    tran.Rollback();
+        //                }
+        //                catch (Exception rollbackEx)
+        //                {
+        //                    // Log rollback error if needed
+        //                    System.Diagnostics.Debug.WriteLine("Rollback failed: " + rollbackEx.Message);
+        //                }
+
+        //                // Log the error for debugging
+        //                System.Diagnostics.Debug.WriteLine("Sale save error: " + e.ToString());
+
+        //                // Re-throw with meaningful message
+        //                throw new Exception("Failed to save sale: " + e.Message, e);
+        //            }
+        //        }
+        //    }
+        //}
+
         public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
         {
             using (var con = DatabaseHelper.Instance.GetConnection())
@@ -780,8 +962,8 @@ namespace MedicineShop.DL
                         }
 
                         string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
-                        VALUES (@id, @total_amount, @paid_amount, @date);
-                        SELECT LAST_INSERT_ID();";
+                VALUES (@id, @total_amount, @paid_amount, @date);
+                SELECT LAST_INSERT_ID();";
                         int billid;
                         using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
                         {
@@ -835,7 +1017,7 @@ namespace MedicineShop.DL
                                         reader.Close();
 
                                         // Parse and validate quantity
-                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal qty) || qty <= 0)
+                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal remainingQty) || remainingQty <= 0)
                                         {
                                             throw new Exception($"Invalid quantity for product: {name}");
                                         }
@@ -850,67 +1032,82 @@ namespace MedicineShop.DL
                                             }
                                         }
 
-                                        // Get expiry date
-                                        DateTime expiry;
-                                        if (row.Cells["expiry_date"]?.Value == null ||
-                                            !DateTime.TryParse(row.Cells["expiry_date"].Value.ToString(), out expiry))
+                                        // Get available batches ordered by expiry date (nearest first)
+                                        string getBatchesQuery = @"SELECT batch_item_id, quantity_remaining 
+                                                  FROM batch_items 
+                                                  WHERE product_id = @product_id 
+                                                  AND quantity_remaining > 0 
+                                                  AND expiry_date > CURDATE()
+                                                  ORDER BY expiry_date ASC, batch_item_id ASC";
+
+                                        List<(int batchItemId, decimal availableQty)> batches = new List<(int, decimal)>();
+                                        using (MySqlCommand batchesCmd = new MySqlCommand(getBatchesQuery, con, tran))
                                         {
-                                            throw new Exception($"Invalid expiry date for product: {name}");
-                                        }
-                                        expiry = expiry.Date;
-
-                                        // Get batch_item_id for the product with matching expiry date and available stock
-                                        string batchItemQuery = @"SELECT batch_item_id 
-                                                     FROM batch_items 
-                                                     WHERE product_id = @product_id 
-                                                     AND expiry_date = @expiry_date 
-                                                     AND quantity_remaining >= @quantity 
-                                                     ORDER BY expiry_date, batch_item_id 
-                                                     LIMIT 1";
-
-                                        int batchItemId = -1;
-                                        using (MySqlCommand batchItemCmd = new MySqlCommand(batchItemQuery, con, tran))
-                                        {
-                                            batchItemCmd.Parameters.AddWithValue("@product_id", productid);
-                                            batchItemCmd.Parameters.AddWithValue("@expiry_date", expiry);
-                                            batchItemCmd.Parameters.AddWithValue("@quantity", qty);
-
-                                            object batchResult = batchItemCmd.ExecuteScalar();
-                                            if (batchResult == null)
+                                            batchesCmd.Parameters.AddWithValue("@product_id", productid);
+                                            using (var batchesReader = batchesCmd.ExecuteReader())
                                             {
-                                                throw new Exception($"No available batch found for product: {name} with expiry: {expiry:yyyy-MM-dd}");
+                                                while (batchesReader.Read())
+                                                {
+                                                    int batchItemId = batchesReader.GetInt32("batch_item_id");
+                                                    decimal availableQty = batchesReader.GetDecimal("quantity_remaining");
+                                                    batches.Add((batchItemId, availableQty));
+                                                }
                                             }
-                                            batchItemId = Convert.ToInt32(batchResult);
                                         }
 
-                                        // Insert into sale_items with batch_item_id
+                                        // Check if total available quantity is sufficient
+                                        decimal totalAvailable = batches.Sum(b => b.availableQty);
+                                        if (totalAvailable < remainingQty)
+                                        {
+                                            throw new Exception($"Insufficient stock for product: {name}. Available: {totalAvailable}, Requested: {remainingQty}");
+                                        }
+
+                                        // Insert into sale_items with product_id instead of batch_item_id
                                         string detailquery = @"INSERT INTO sale_items (sale_id, batch_item_id, quantity, price, Discount) 
                               VALUES (@bill_iid, @batch_item_id, @quantity, @price, @discount)";
-                                        using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
+
+                                        // Distribute quantity across batches (FIFO - nearest expiry first)
+                                        foreach (var batch in batches)
                                         {
-                                            command.Parameters.AddWithValue("@bill_iid", billid);
-                                            command.Parameters.AddWithValue("@batch_item_id", batchItemId);
-                                            command.Parameters.AddWithValue("@price", salePrice);
-                                            command.Parameters.AddWithValue("@quantity", qty);
-                                            command.Parameters.AddWithValue("@discount", discount);
-                                            command.ExecuteNonQuery();
+                                            if (remainingQty <= 0) break;
+
+                                            decimal quantityToDeduct = Math.Min(remainingQty, batch.availableQty);
+
+                                            // Insert sale item record
+                                            using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
+                                            {
+                                                command.Parameters.AddWithValue("@bill_iid", billid);
+                                                command.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
+                                                command.Parameters.AddWithValue("@price", salePrice);
+                                                command.Parameters.AddWithValue("@quantity", quantityToDeduct);
+                                                command.Parameters.AddWithValue("@discount", discount);
+                                                command.ExecuteNonQuery();
+                                            }
+
+                                            // Update batch stock
+                                            string queryupdatequantity = @"UPDATE batch_items 
+                                              SET quantity_remaining = quantity_remaining - @quantitysold 
+                                              WHERE batch_item_id = @batch_item_id";
+
+                                            using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
+                                            {
+                                                comma.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
+                                                comma.Parameters.AddWithValue("@quantitysold", quantityToDeduct);
+
+                                                int rowsAffected = comma.ExecuteNonQuery();
+                                                if (rowsAffected == 0)
+                                                {
+                                                    throw new Exception($"Failed to update stock for product: {name} in batch {batch.batchItemId}");
+                                                }
+                                            }
+
+                                            remainingQty -= quantityToDeduct;
                                         }
 
-                                        // Update batch stock
-                                        string queryupdatequantity = @"UPDATE batch_items 
-                                          SET quantity_remaining = quantity_remaining - @quantitysold 
-                                          WHERE batch_item_id = @batch_item_id";
-
-                                        using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
+                                        // Verify all quantity was allocated
+                                        if (remainingQty > 0)
                                         {
-                                            comma.Parameters.AddWithValue("@batch_item_id", batchItemId);
-                                            comma.Parameters.AddWithValue("@quantitysold", qty);
-
-                                            int rowsAffected = comma.ExecuteNonQuery();
-                                            if (rowsAffected == 0)
-                                            {
-                                                throw new Exception($"Failed to update stock for product: {name}");
-                                            }
+                                            throw new Exception($"Failed to allocate all quantity for product: {name}. Remaining: {remainingQty}");
                                         }
                                     }
                                     else

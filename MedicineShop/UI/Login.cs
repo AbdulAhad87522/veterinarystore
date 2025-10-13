@@ -66,7 +66,7 @@ namespace TechStore.UI
         private void btnlogin_Click(object sender, EventArgs e)
         {
             string username = txtname.Text.Trim();
-            string password = txtpassword.Text;
+            string password = txtpassword.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
