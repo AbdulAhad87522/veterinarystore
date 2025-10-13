@@ -20,6 +20,44 @@ namespace MedicineShop.DL
 {
     internal class Customersaledl
     {
+        //public DataTable GetProductThings(string text)
+        //{
+        //    DataTable dt = new DataTable();
+        //    using (var con = DatabaseHelper.Instance.GetConnection())
+        //    {
+        //        con.Open();
+        //        string query = @"SELECT 
+        //                                m.name, 
+        //                                m.description,
+        //                                c.company_name, 
+        //                                b.purchase_price,
+        //                                m.sale_price,
+        //                                b.quantity_remaining,
+        //                                p.packing_name, 
+        //                                ca.category_name, 
+        //                                b.expiry_date
+        //                            FROM batch_items b
+        //                            JOIN medicines m ON m.product_id = b.product_id
+        //                            JOIN company c ON c.company_id = m.company_id
+        //                            JOIN packing p ON m.packing_id = p.packing_id
+        //                            JOIN categories ca ON ca.category_id = m.category_id
+        //                            WHERE m.name LIKE @text and b.quantity_remaining != 0 AND b.expiry_date > NOW()
+        //                            ORDER BY m.name, b.expiry_date;
+        //                            ";
+
+        //        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        //        {
+        //            cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+
+        //            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+        //            {
+        //                adapter.Fill(dt);
+        //            }
+        //        }
+        //    }
+        //    return dt;
+        //}
+
         public DataTable GetProductThings(string text)
         {
             DataTable dt = new DataTable();
@@ -27,23 +65,33 @@ namespace MedicineShop.DL
             {
                 con.Open();
                 string query = @"SELECT 
-                                        m.name, 
-                                        m.description,
-                                        c.company_name, 
-                                        b.purchase_price,
-                                        m.sale_price,
-                                        b.quantity_remaining,
-                                        p.packing_name, 
-                                        ca.category_name, 
-                                        b.expiry_date
-                                    FROM batch_items b
-                                    JOIN medicines m ON m.product_id = b.product_id
-                                    JOIN company c ON c.company_id = m.company_id
-                                    JOIN packing p ON m.packing_id = p.packing_id
-                                    JOIN categories ca ON ca.category_id = m.category_id
-                                    WHERE m.name LIKE @text and b.quantity_remaining != 0 AND b.expiry_date > NOW()
-                                    ORDER BY m.name, b.expiry_date;
-                                    ";
+                                m.name, 
+                                m.description,
+                                c.company_name, 
+                                (SELECT bi.purchase_price 
+                                 FROM batch_items bi 
+                                 WHERE bi.product_id = m.product_id 
+                                   AND bi.quantity_remaining > 0 
+                                   AND bi.expiry_date > CURDATE()
+                                 ORDER BY bi.created_at DESC 
+                                 LIMIT 1) as purchase_price,
+                                m.sale_price,
+                                SUM(b.quantity_remaining) as quantity_remaining,
+                                p.packing_name, 
+                                ca.category_name, 
+                                MIN(b.expiry_date) as nearest_expiry_date
+                            FROM batch_items b
+                            JOIN medicines m ON m.product_id = b.product_id
+                            JOIN company c ON c.company_id = m.company_id
+                            JOIN packing p ON m.packing_id = p.packing_id
+                            JOIN categories ca ON ca.category_id = m.category_id
+                            WHERE m.name LIKE @text 
+                                AND b.quantity_remaining > 0 
+                                AND b.expiry_date > CURDATE()
+                            GROUP BY m.product_id, m.name, m.description, c.company_name, 
+                                     m.sale_price, p.packing_name, ca.category_name
+                            HAVING SUM(b.quantity_remaining) > 0
+                            ORDER BY m.name, nearest_expiry_date;";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
