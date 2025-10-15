@@ -20,44 +20,7 @@ namespace MedicineShop.DL
 {
     internal class Customersaledl
     {
-        //public DataTable GetProductThings(string text)
-        //{
-        //    DataTable dt = new DataTable();
-        //    using (var con = DatabaseHelper.Instance.GetConnection())
-        //    {
-        //        con.Open();
-        //        string query = @"SELECT 
-        //                                m.name, 
-        //                                m.description,
-        //                                c.company_name, 
-        //                                b.purchase_price,
-        //                                m.sale_price,
-        //                                b.quantity_remaining,
-        //                                p.packing_name, 
-        //                                ca.category_name, 
-        //                                b.expiry_date
-        //                            FROM batch_items b
-        //                            JOIN medicines m ON m.product_id = b.product_id
-        //                            JOIN company c ON c.company_id = m.company_id
-        //                            JOIN packing p ON m.packing_id = p.packing_id
-        //                            JOIN categories ca ON ca.category_id = m.category_id
-        //                            WHERE m.name LIKE @text and b.quantity_remaining != 0 AND b.expiry_date > NOW()
-        //                            ORDER BY m.name, b.expiry_date;
-        //                            ";
-
-        //        using (MySqlCommand cmd = new MySqlCommand(query, con))
-        //        {
-        //            cmd.Parameters.AddWithValue("@text", "%" + text + "%");
-
-        //            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-        //            {
-        //                adapter.Fill(dt);
-        //            }
-        //        }
-        //    }
-        //    return dt;
-        //}
-
+        // Updated GetProductThings - Shows aggregated product info (no batch_item_id)
         public DataTable GetProductThings(string text)
         {
             DataTable dt = new DataTable();
@@ -65,6 +28,7 @@ namespace MedicineShop.DL
             {
                 con.Open();
                 string query = @"SELECT 
+                                m.product_id,
                                 m.name, 
                                 m.description,
                                 c.company_name, 
@@ -73,7 +37,7 @@ namespace MedicineShop.DL
                                  WHERE bi.product_id = m.product_id 
                                    AND bi.quantity_remaining > 0 
                                    AND bi.expiry_date > CURDATE()
-                                 ORDER BY bi.created_at DESC 
+                                 ORDER BY bi.expiry_date ASC 
                                  LIMIT 1) as purchase_price,
                                 m.sale_price,
                                 SUM(b.quantity_remaining) as quantity_remaining,
@@ -128,104 +92,221 @@ namespace MedicineShop.DL
             }
         }
 
-        //public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid , decimal totaldiscount)
-        //{
-        //    QuestPDF.Settings.License = LicenseType.Community;
+        public DataTable getallcustomer(string text)
+        {
+            DataTable dt = new DataTable();
+            using (var con = DatabaseHelper.Instance.GetConnection())
+            {
+                con.Open();
+                string query = "SELECT  full_name, address, phone FROM customers WHERE full_name LIKE @text";
 
-        //    Document.Create(container =>
-        //    {
-        //        container.Page(page =>
-        //        {
-        //            page.Size(226, PageSizes.A4.Height, Unit.Point); // 80mm width
-        //            page.Margin(5);
-        //            page.DefaultTextStyle(x => x.FontFamily("Consolas").FontSize(9));
+                using (MySqlCommand cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                }
+            }
+            return dt;
+        }
 
-        //            page.Content().Column(column =>
-        //            {
-        //                // --- Logo + Header ---
-        //                //column.Item().AlignCenter().Image(GetLogoImageStream(), ImageScaling.FitWidth);
-        //                column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(16);
-        //                //column.Item().AlignCenter().Text("MNS Computers").Bold().FontSize(12);
-        //                column.Item().AlignCenter().Text("main jalsai bazar, Tehsil Lahor district Swabi");
-        //                column.Item().AlignCenter().Text("Phone: 0300-6634245");
-        //                column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+        // Updated SaveDataToDatabase - Uses product_id and implements FIFO deduction
+        public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
+        {
+            using (var con = DatabaseHelper.Instance.GetConnection())
+            {
+                con.Open();
+                using (var tran = con.BeginTransaction())
+                {
+                    try
+                    {
+                        // Validate input data first
+                        if (d.Rows.Count == 0 || (d.Rows.Count == 1 && d.Rows[0].IsNewRow))
+                        {
+                            throw new Exception("No products selected for sale");
+                        }
 
-        //                // --- Invoice Info ---
-        //                column.Item().Row(row =>
-        //                {
-        //                    row.RelativeItem().Text($"Customer: {customerName}");
-        //                    row.RelativeItem().AlignRight().Text($"{DateTime.Now:dd-MMM-yyyy hh:mm tt}");
-        //                });
+                        string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
+                VALUES (@id, @total_amount, @paid_amount, @date);
+                SELECT LAST_INSERT_ID();";
+                        int billid;
+                        using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
 
-        //                column.Item().PaddingBottom(5).LineHorizontal(0.5f);
+                            object result = cmd.ExecuteScalar();
+                            if (result == null)
+                            {
+                                throw new Exception("Failed to get sale ID");
+                            }
+                            billid = Convert.ToInt32(result);
+                        }
 
-        //                // --- Table Header ---
-        //                column.Item().Text("----------------------------------------");
-        //                column.Item().Text("MEDIC         QTY PRICE DISC TOTAL");
-        //                column.Item().Text("----------------------------------------");
+                        // Insert into customer price record
+                        string query2 = "INSERT INTO customerpricerecord (customer_id, sale_id, date, payment) VALUES (@c_id, @s_id, @date, @payment)";
+                        using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
+                        {
+                            cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
+                            cmd2.Parameters.AddWithValue("@s_id", billid);
+                            cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+                            cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
+                            cmd2.ExecuteNonQuery();
+                        }
 
-        //                // --- Cart Items ---
-        //                decimal totalDiscount = 0;
-        //                decimal subTotal = 0;
+                        foreach (DataGridViewRow row in d.Rows)
+                        {
+                            if (row.IsNewRow) continue;
 
-        //                foreach (DataGridViewRow row in cart.Rows)
-        //                {
-        //                    if (row.IsNewRow) continue;
+                            int productid;
+                            string name = row.Cells["name"]?.Value?.ToString()?.Trim();
 
-        //                    string name = row.Cells["name"].Value?.ToString() ?? "";
-        //                    string qty = row.Cells["quantity"].Value?.ToString()?.PadLeft(2);
-        //                    //string war = Truncate(row.Cells["Warranty"]?.Value?.ToString(), 3).PadRight(3);
-        //                    string price = row.Cells["sale_price"].Value?.ToString()?.PadLeft(5);
-        //                    string discount = row.Cells["discount"].Value?.ToString()?.PadLeft(3);
-        //                    string totalPrice = row.Cells["final"].Value?.ToString()?.PadLeft(6);
+                            if (string.IsNullOrEmpty(name))
+                            {
+                                throw new Exception("Product name is missing");
+                            }
 
-        //                    if (decimal.TryParse(row.Cells["discount"].Value?.ToString(), out decimal discVal))
-        //                        totalDiscount += discVal * Convert.ToInt32(row.Cells["quantity"].Value);
-        //                    if (decimal.TryParse(row.Cells["final"].Value?.ToString(), out decimal itemTotal))
-        //                        subTotal += itemTotal;
+                            // Get product ID and sale price
+                            string productidquery = "SELECT product_id, sale_price FROM medicines WHERE name = @name";
+                            using (MySqlCommand command2 = new MySqlCommand(productidquery, con, tran))
+                            {
+                                command2.Parameters.AddWithValue("@name", name);
+                                using (var reader = command2.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        productid = reader.GetInt32("product_id");
+                                        decimal salePrice = reader.GetDecimal("sale_price");
+                                        reader.Close();
 
-        //                    // Split name across lines
-        //                    string[] nameParts = name.Split(' ', (char)StringSplitOptions.RemoveEmptyEntries);
-        //                    string firstWord = nameParts.Length > 0 ? nameParts[0] : name;
-        //                    string[] remainingWords = nameParts.Skip(1).ToArray();
+                                        // Parse and validate quantity
+                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal remainingQty) || remainingQty <= 0)
+                                        {
+                                            throw new Exception($"Invalid quantity for product: {name}");
+                                        }
 
-        //                    // First line with first word and all data
-        //                    string firstLine = $"{firstWord,-12}{qty} {price} {discount} {totalPrice}";
-        //                    column.Item().Text(firstLine);
+                                        // Parse discount
+                                        decimal discount = 0;
+                                        if (row.Cells["discount"]?.Value != null)
+                                        {
+                                            if (!decimal.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
+                                            {
+                                                throw new Exception($"Invalid discount for product: {name}");
+                                            }
+                                        }
 
-        //                    // Remaining words as new lines
-        //                    foreach (var word in remainingWords)
-        //                    {
-        //                        column.Item().PaddingLeft(10).Text(word);
-        //                    }
-        //                }
+                                        // Get available batches ordered by expiry date (FIFO - nearest first)
+                                        string getBatchesQuery = @"SELECT batch_item_id, quantity_remaining 
+                                                  FROM batch_items 
+                                                  WHERE product_id = @product_id 
+                                                  AND quantity_remaining > 0 
+                                                  AND expiry_date > CURDATE()
+                                                  ORDER BY expiry_date ASC, batch_item_id ASC";
 
-        //                // --- Summary ---
-        //                column.Item().Text("----------------------------------------");
-        //                column.Item().Text($"SUBTOTAL:    Rs. {subTotal + totalDiscount:N0}");
-        //                column.Item().Text($"DISCOUNT:    Rs. {totaldiscount:N0}");
-        //                column.Item().Text($"TOTAL:       Rs. {total:N0}");
-        //                column.Item().Text($"PAID:        Rs. {paid:N0}");
-        //                column.Item().Text($"BALANCE:     Rs. {(total - paid):N0}");
-        //                column.Item().Text("----------------------------------------");
+                                        List<(int batchItemId, decimal availableQty)> batches = new List<(int, decimal)>();
+                                        using (MySqlCommand batchesCmd = new MySqlCommand(getBatchesQuery, con, tran))
+                                        {
+                                            batchesCmd.Parameters.AddWithValue("@product_id", productid);
+                                            using (var batchesReader = batchesCmd.ExecuteReader())
+                                            {
+                                                while (batchesReader.Read())
+                                                {
+                                                    int batchItemId = batchesReader.GetInt32("batch_item_id");
+                                                    decimal availableQty = batchesReader.GetDecimal("quantity_remaining");
+                                                    batches.Add((batchItemId, availableQty));
+                                                }
+                                            }
+                                        }
 
-        //                // --- Footer ---
-        //                column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold();
-        //                column.Item().PaddingTop(5).LineHorizontal(0.5f);
-        //                column.Item().AlignCenter().Text("** SPECIAL OFFERS **").Bold();
-        //                column.Item().AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
-        //                column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
-        //                column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
-        //                column.Item().AlignCenter().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
-        //                column.Item().PaddingTop(5).AlignCenter().Text("Developed By:");
-        //                column.Item().PaddingTop(5).AlignCenter().Text("abdulahad18022@gmail.com");
-        //                column.Item().PaddingTop(5).AlignCenter().Text("03477048001");
+                                        // Check if total available quantity is sufficient
+                                        decimal totalAvailable = batches.Sum(b => b.availableQty);
+                                        if (totalAvailable < remainingQty)
+                                        {
+                                            throw new Exception($"Insufficient stock for product: {name}. Available: {totalAvailable}, Requested: {remainingQty}");
+                                        }
 
-        //            });
-        //        });
-        //    }).GeneratePdf(filePath);
-        //}
+                                        // Insert single sale_items record with product_id
+                                        string detailquery = @"INSERT INTO sale_items (sale_id, product_id, quantity, price, Discount) 
+                              VALUES (@bill_iid, @product_id, @quantity, @price, @discount)";
 
+                                        using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
+                                        {
+                                            command.Parameters.AddWithValue("@bill_iid", billid);
+                                            command.Parameters.AddWithValue("@product_id", productid);
+                                            command.Parameters.AddWithValue("@price", salePrice);
+                                            command.Parameters.AddWithValue("@quantity", remainingQty);
+                                            command.Parameters.AddWithValue("@discount", discount);
+                                            command.ExecuteNonQuery();
+                                        }
+
+                                        // Distribute quantity deduction across batches (FIFO - nearest expiry first)
+                                        decimal qtyToDeduct = remainingQty;
+                                        foreach (var batch in batches)
+                                        {
+                                            if (qtyToDeduct <= 0) break;
+
+                                            decimal quantityToDeduct = Math.Min(qtyToDeduct, batch.availableQty);
+
+                                            // Update batch stock
+                                            string queryupdatequantity = @"UPDATE batch_items 
+                                              SET quantity_remaining = quantity_remaining - @quantitysold 
+                                              WHERE batch_item_id = @batch_item_id";
+
+                                            using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
+                                            {
+                                                comma.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
+                                                comma.Parameters.AddWithValue("@quantitysold", quantityToDeduct);
+
+                                                int rowsAffected = comma.ExecuteNonQuery();
+                                                if (rowsAffected == 0)
+                                                {
+                                                    throw new Exception($"Failed to update stock for product: {name} in batch {batch.batchItemId}");
+                                                }
+                                            }
+
+                                            qtyToDeduct -= quantityToDeduct;
+                                        }
+
+                                        // Verify all quantity was deducted
+                                        if (qtyToDeduct > 0)
+                                        {
+                                            throw new Exception($"Failed to deduct all quantity for product: {name}. Remaining: {qtyToDeduct}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Product not found: {name}");
+                                    }
+                                }
+                            }
+                        }
+
+                        tran.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            tran.Rollback();
+                        }
+                        catch (Exception rollbackEx)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Rollback failed: " + rollbackEx.Message);
+                        }
+
+                        System.Diagnostics.Debug.WriteLine("Sale save error: " + e.ToString());
+                        throw new Exception("Failed to save sale: " + e.Message, e);
+                    }
+                }
+            }
+        }
+
+        // PDF Generation methods remain the same...
         public static void CreateA4ReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -240,13 +321,11 @@ namespace MedicineShop.DL
 
                     page.Content().Column(column =>
                     {
-                        // --- Header Section ---
                         column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
                         column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
                         column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
                         column.Item().PaddingVertical(10).LineHorizontal(1);
 
-                        // --- Invoice Info Section ---
                         column.Item().PaddingBottom(10).Row(row =>
                         {
                             row.RelativeItem().Column(infoCol =>
@@ -263,16 +342,15 @@ namespace MedicineShop.DL
 
                         column.Item().PaddingBottom(15).LineHorizontal(0.5f);
 
-                        // --- Table Header ---
                         column.Item().PaddingBottom(5).Table(table =>
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.RelativeColumn(3); // Medicine Name
-                                columns.ConstantColumn(60); // Qty
-                                columns.ConstantColumn(70); // Price
-                                columns.ConstantColumn(60); // Discount
-                                columns.ConstantColumn(80); // Total
+                                columns.RelativeColumn(3);
+                                columns.ConstantColumn(60);
+                                columns.ConstantColumn(70);
+                                columns.ConstantColumn(60);
+                                columns.ConstantColumn(80);
                             });
 
                             table.Header(header =>
@@ -285,7 +363,6 @@ namespace MedicineShop.DL
                             });
                         });
 
-                        // --- Cart Items ---
                         decimal totalDiscount = 0;
                         decimal subTotal = 0;
                         int itemCount = 0;
@@ -308,11 +385,11 @@ namespace MedicineShop.DL
                             {
                                 table.ColumnsDefinition(columns =>
                                 {
-                                    columns.RelativeColumn(3); // Medicine Name
-                                    columns.ConstantColumn(60); // Qty
-                                    columns.ConstantColumn(70); // Price
-                                    columns.ConstantColumn(60); // Discount
-                                    columns.ConstantColumn(80); // Total
+                                    columns.RelativeColumn(3);
+                                    columns.ConstantColumn(60);
+                                    columns.ConstantColumn(70);
+                                    columns.ConstantColumn(60);
+                                    columns.ConstantColumn(80);
                                 });
 
                                 table.Cell().Padding(5).Text(name);
@@ -322,14 +399,12 @@ namespace MedicineShop.DL
                                 table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N2}").Bold();
                             });
 
-                            // Add subtle separator between items
                             if (itemCount < cart.Rows.Count - 1)
                             {
                                 column.Item().PaddingHorizontal(10).LineHorizontal(0.2f);
                             }
                         }
 
-                        // --- Summary Section ---
                         column.Item().PaddingTop(20).Table(summaryTable =>
                         {
                             summaryTable.ColumnsDefinition(columns =>
@@ -356,11 +431,7 @@ namespace MedicineShop.DL
 
                         column.Item().PaddingVertical(15).LineHorizontal(1);
 
-                        // --- Footer Section ---
                         column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold().FontSize(14);
-
-                        //column.Item().PaddingVertical(10).AlignCenter().Text("** SPECIAL OFFERS **").Bold().FontSize(12);
-
                         column.Item().PaddingVertical(5).AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
                         column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
                         column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
@@ -387,170 +458,15 @@ namespace MedicineShop.DL
             return defaultValue;
         }
 
-
         public static void PrintA4ReceiptDirectly(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             try
             {
                 QuestPDF.Settings.License = LicenseType.Community;
-
-                // Create a temporary file path for printing
                 string tempFilePath = Path.Combine(Path.GetTempPath(), $"Receipt_{DateTime.Now:yyyyMMddHHmmss}.pdf");
 
-                // Generate the PDF
-                Document.Create(container =>
-                {
-                    container.Page(page =>
-                    {
-                        page.Size(PageSizes.A4);
-                        page.Margin(40);
-                        page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(11));
-
-                        page.Content().Column(column =>
-                        {
-                            // --- Header Section ---
-                            column.Item().AlignCenter().Text("Ali Veterinary Store").Bold().FontSize(24);
-                            column.Item().AlignCenter().Text("Main Jalsai Bazar, Tehsil Lahor District Swabi").FontSize(12);
-                            column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
-                            column.Item().PaddingVertical(10).LineHorizontal(1);
-
-                            // --- Invoice Info Section ---
-                            column.Item().PaddingBottom(10).Row(row =>
-                            {
-                                row.RelativeItem().Column(infoCol =>
-                                {
-                                    infoCol.Item().Text($"Customer: {customerName}").Bold();
-                                    infoCol.Item().Text($"Invoice #: INV-{DateTime.Now:yyMMddHHmm}");
-                                });
-                                row.RelativeItem().AlignRight().Column(dateCol =>
-                                {
-                                    dateCol.Item().Text($"Date: {DateTime.Now:dd-MMM-yyyy}");
-                                    dateCol.Item().Text($"Time: {DateTime.Now:hh:mm tt}");
-                                });
-                            });
-
-                            column.Item().PaddingBottom(15).LineHorizontal(0.5f);
-
-                            // --- Table Header ---
-                            column.Item().PaddingBottom(5).Table(table =>
-                            {
-                                table.ColumnsDefinition(columns =>
-                                {
-                                    columns.RelativeColumn(3); // Medicine Name
-                                    columns.ConstantColumn(60); // Qty
-                                    columns.ConstantColumn(70); // Price
-                                    columns.ConstantColumn(60); // Discount
-                                    columns.ConstantColumn(80); // Total
-                                });
-
-                                table.Header(header =>
-                                {
-                                    header.Cell().Padding(5).Background("#f0f0f0").Text("Medicine").Bold();
-                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Qty").Bold();
-                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Price").Bold();
-                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Discount").Bold();
-                                    header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Total").Bold();
-                                });
-                            });
-
-                            // --- Cart Items ---
-                            decimal totalDiscount = 0;
-                            decimal subTotal = 0;
-                            int itemCount = 0;
-
-                            foreach (DataGridViewRow row in cart.Rows)
-                            {
-                                if (row.IsNewRow) continue;
-
-                                string name = row.Cells["name"].Value?.ToString() ?? "";
-                                string qty = row.Cells["quantity"].Value?.ToString() ?? "0";
-                                decimal price = ConvertToDecimalSafe(row.Cells["sale_price"].Value);
-                                decimal discount = ConvertToDecimalSafe(row.Cells["discount"].Value);
-                                decimal itemTotal = ConvertToDecimalSafe(row.Cells["final"].Value);
-
-                                totalDiscount += discount * Convert.ToInt32(qty);
-                                subTotal += itemTotal;
-                                itemCount++;
-
-                                column.Item().Table(table =>
-                                {
-                                    table.ColumnsDefinition(columns =>
-                                    {
-                                        columns.RelativeColumn(3); // Medicine Name
-                                        columns.ConstantColumn(60); // Qty
-                                        columns.ConstantColumn(70); // Price
-                                        columns.ConstantColumn(60); // Discount
-                                        columns.ConstantColumn(80); // Total
-                                    });
-
-                                    table.Cell().Padding(5).Text(name);
-                                    table.Cell().Padding(5).AlignRight().Text(qty);
-                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N0}");
-                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N0}");
-                                    table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N0}").Bold();
-                                });
-
-                                // Add subtle separator between items
-                                if (itemCount < cart.Rows.Count - 1)
-                                {
-                                    column.Item().PaddingHorizontal(10).LineHorizontal(0.2f);
-                                }
-                            }
-
-                            // --- Summary Section ---
-                            column.Item().PaddingTop(20).Table(summaryTable =>
-                            {
-                                summaryTable.ColumnsDefinition(columns =>
-                                {
-                                    columns.RelativeColumn();
-                                    columns.ConstantColumn(150);
-                                });
-
-                                summaryTable.Cell().Padding(3).AlignRight().Text("Subtotal:");
-                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N0}");
-
-                                summaryTable.Cell().Padding(3).AlignRight().Text("Total Discount:");
-                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N0}");
-
-                                summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text("TOTAL:").Bold();
-                                summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N0}").Bold().FontSize(12);
-
-                                summaryTable.Cell().Padding(3).AlignRight().Text("Amount Paid:");
-                                summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N0}");
-
-                                summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text("BALANCE:").Bold();
-                                summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N0}").Bold();
-                            });
-
-                            column.Item().PaddingVertical(15).LineHorizontal(1);
-
-                            // --- Footer Section ---
-                            column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold().FontSize(14);
-
-                            //column.Item().PaddingVertical(10).AlignCenter().Text("** SPECIAL OFFERS **").Bold().FontSize(12);
-
-                            column.Item().PaddingVertical(5).AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
-                            column.Item().AlignCenter().Text("دوائیں استعمال ہونے کے بعد واپس نہیں ہوں گی");
-                            column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
-
-                            column.Item().PaddingVertical(15).AlignCenter().Text("Terms & Conditions:").SemiBold();
-                            column.Item().AlignCenter().Text("• Goods once sold cannot be returned or exchanged");
-                            column.Item().AlignCenter().Text("• Medicines cannot be returned after use");
-                            column.Item().AlignCenter().Text("• Please check items at the time of purchase");
-
-                            column.Item().PaddingVertical(20).LineHorizontal(0.5f);
-
-                            column.Item().AlignCenter().Text("Developed By: abdulahad18022@gmail.com | 03477048001").FontSize(9);
-                            column.Item().AlignCenter().Text($"Printed on: {DateTime.Now:dd-MMM-yyyy hh:mm tt}").FontSize(9);
-                        });
-                    });
-                }).GeneratePdf(tempFilePath);
-
-                // Print the PDF directly
+                CreateA4ReceiptPdf(cart, tempFilePath, customerName, total, paid, totaldiscount);
                 PrintPdfToPrinter(tempFilePath);
-
-                // Clean up - delete temporary file after printing
-                // File.Delete(tempFilePath);
 
                 MessageBox.Show("Receipt sent to printer successfully!", "Print Success",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -569,14 +485,13 @@ namespace MedicineShop.DL
                 printDialog.AllowSomePages = false;
                 printDialog.AllowSelection = false;
 
-                // Show printer selection dialog
                 if (printDialog.ShowDialog() == DialogResult.OK)
                 {
                     using (Process process = new Process())
                     {
                         ProcessStartInfo startInfo = new ProcessStartInfo
                         {
-                            Verb = "printto", // "printto" lets us specify the printer
+                            Verb = "printto",
                             FileName = filePath,
                             Arguments = $"\"{printDialog.PrinterSettings.PrinterName}\"",
                             WindowStyle = ProcessWindowStyle.Hidden,
@@ -586,12 +501,9 @@ namespace MedicineShop.DL
 
                         process.StartInfo = startInfo;
                         process.Start();
-
-                        // Wait for the print job to be sent to the printer
                         process.WaitForInputIdle();
-                        Thread.Sleep(3000); // Give time for spooler
+                        Thread.Sleep(3000);
 
-                        // Close the process if still running
                         if (!process.HasExited)
                         {
                             process.CloseMainWindow();
@@ -599,16 +511,14 @@ namespace MedicineShop.DL
                         }
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Printing cancelled.", "Print Cancelled",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
             }
         }
 
+    
 
-        public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
+
+
+public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             PrintDocument printDocument = new PrintDocument();
 
@@ -744,25 +654,25 @@ namespace MedicineShop.DL
         }
 
 
-        public DataTable getallcustomer(string text)
-        {
-            DataTable dt = new DataTable();
-            using (var con = DatabaseHelper.Instance.GetConnection())
-            {
-                con.Open();
-                string query = "SELECT  full_name, address, phone FROM customers WHERE full_name LIKE @text";
+        //public DataTable getallcustomer(string text)
+        //{
+        //    DataTable dt = new DataTable();
+        //    using (var con = DatabaseHelper.Instance.GetConnection())
+        //    {
+        //        con.Open();
+        //        string query = "SELECT  full_name, address, phone FROM customers WHERE full_name LIKE @text";
 
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@text", "%" + text + "%");
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                    {
-                        adapter.Fill(dt);
-                    }
-                }
-            }
-            return dt;
-        }
+        //        using (MySqlCommand cmd = new MySqlCommand(query, con))
+        //        {
+        //            cmd.Parameters.AddWithValue("@text", "%" + text + "%");
+        //            using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+        //            {
+        //                adapter.Fill(dt);
+        //            }
+        //        }
+        //    }
+        //    return dt;
+        //}
 
         //public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
         //{
@@ -946,222 +856,7 @@ namespace MedicineShop.DL
         //    }
         //}
 
-        public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
-        {
-            using (var con = DatabaseHelper.Instance.GetConnection())
-            {
-                con.Open();
-                using (var tran = con.BeginTransaction())
-                {
-                    try
-                    {
-                        // Validate input data first
-                        if (d.Rows.Count == 0 || (d.Rows.Count == 1 && d.Rows[0].IsNewRow))
-                        {
-                            throw new Exception("No products selected for sale");
-                        }
-
-                        string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
-                VALUES (@id, @total_amount, @paid_amount, @date);
-                SELECT LAST_INSERT_ID();";
-                        int billid;
-                        using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
-                        {
-                            cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
-
-                            object result = cmd.ExecuteScalar();
-                            if (result == null)
-                            {
-                                throw new Exception("Failed to get sale ID");
-                            }
-                            billid = Convert.ToInt32(result);
-                        }
-
-                        // Insert into customer price record
-                        string query2 = "INSERT INTO customerpricerecord (customer_id, sale_id, date, payment) VALUES (@c_id, @s_id, @date, @payment)";
-                        using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
-                        {
-                            cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
-                            cmd2.Parameters.AddWithValue("@s_id", billid);
-                            cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
-                            cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
-                            cmd2.ExecuteNonQuery();
-                        }
-
-                        foreach (DataGridViewRow row in d.Rows)
-                        {
-                            if (row.IsNewRow) continue;
-
-                            int productid;
-                            string name = row.Cells["name"]?.Value?.ToString()?.Trim();
-
-                            if (string.IsNullOrEmpty(name))
-                            {
-                                throw new Exception("Product name is missing");
-                            }
-
-                            // Get product ID and sale price
-                            string productidquery = "SELECT product_id, sale_price FROM medicines WHERE name = @name";
-                            using (MySqlCommand command2 = new MySqlCommand(productidquery, con, tran))
-                            {
-                                command2.Parameters.AddWithValue("@name", name);
-                                using (var reader = command2.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        productid = reader.GetInt32("product_id");
-                                        decimal salePrice = reader.GetDecimal("sale_price");
-                                        reader.Close();
-
-                                        // Parse and validate quantity
-                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal remainingQty) || remainingQty <= 0)
-                                        {
-                                            throw new Exception($"Invalid quantity for product: {name}");
-                                        }
-
-                                        // Parse discount
-                                        decimal discount = 0;
-                                        if (row.Cells["discount"]?.Value != null)
-                                        {
-                                            if (!decimal.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
-                                            {
-                                                throw new Exception($"Invalid discount for product: {name}");
-                                            }
-                                        }
-
-                                        // Get available batches ordered by expiry date (nearest first)
-                                        string getBatchesQuery = @"SELECT batch_item_id, quantity_remaining 
-                                                  FROM batch_items 
-                                                  WHERE product_id = @product_id 
-                                                  AND quantity_remaining > 0 
-                                                  AND expiry_date > CURDATE()
-                                                  ORDER BY expiry_date ASC, batch_item_id ASC";
-
-                                        List<(int batchItemId, decimal availableQty)> batches = new List<(int, decimal)>();
-                                        using (MySqlCommand batchesCmd = new MySqlCommand(getBatchesQuery, con, tran))
-                                        {
-                                            batchesCmd.Parameters.AddWithValue("@product_id", productid);
-                                            using (var batchesReader = batchesCmd.ExecuteReader())
-                                            {
-                                                while (batchesReader.Read())
-                                                {
-                                                    int batchItemId = batchesReader.GetInt32("batch_item_id");
-                                                    decimal availableQty = batchesReader.GetDecimal("quantity_remaining");
-                                                    batches.Add((batchItemId, availableQty));
-                                                }
-                                            }
-                                        }
-
-                                        // Check if total available quantity is sufficient
-                                        decimal totalAvailable = batches.Sum(b => b.availableQty);
-                                        if (totalAvailable < remainingQty)
-                                        {
-                                            throw new Exception($"Insufficient stock for product: {name}. Available: {totalAvailable}, Requested: {remainingQty}");
-                                        }
-
-                                        // Insert into sale_items with product_id instead of batch_item_id
-                                        string detailquery = @"INSERT INTO sale_items (sale_id, batch_item_id, quantity, price, Discount) 
-                              VALUES (@bill_iid, @batch_item_id, @quantity, @price, @discount)";
-
-                                        // Distribute quantity across batches (FIFO - nearest expiry first)
-                                        foreach (var batch in batches)
-                                        {
-                                            if (remainingQty <= 0) break;
-
-                                            decimal quantityToDeduct = Math.Min(remainingQty, batch.availableQty);
-
-                                            // Insert sale item record
-                                            using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
-                                            {
-                                                command.Parameters.AddWithValue("@bill_iid", billid);
-                                                command.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
-                                                command.Parameters.AddWithValue("@price", salePrice);
-                                                command.Parameters.AddWithValue("@quantity", quantityToDeduct);
-                                                command.Parameters.AddWithValue("@discount", discount);
-                                                command.ExecuteNonQuery();
-                                            }
-
-                                            // Update batch stock
-                                            string queryupdatequantity = @"UPDATE batch_items 
-                                              SET quantity_remaining = quantity_remaining - @quantitysold 
-                                              WHERE batch_item_id = @batch_item_id";
-
-                                            using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
-                                            {
-                                                comma.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
-                                                comma.Parameters.AddWithValue("@quantitysold", quantityToDeduct);
-
-                                                int rowsAffected = comma.ExecuteNonQuery();
-                                                if (rowsAffected == 0)
-                                                {
-                                                    throw new Exception($"Failed to update stock for product: {name} in batch {batch.batchItemId}");
-                                                }
-                                            }
-
-                                            remainingQty -= quantityToDeduct;
-                                        }
-
-                                        // Verify all quantity was allocated
-                                        if (remainingQty > 0)
-                                        {
-                                            throw new Exception($"Failed to allocate all quantity for product: {name}. Remaining: {remainingQty}");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Product not found: {name}");
-                                    }
-                                }
-                            }
-                        }
-
-                        tran.Commit();
-                        return true;
-                    }
-                    catch (Exception e)
-                    {
-                        try
-                        {
-                            tran.Rollback();
-                        }
-                        catch (Exception rollbackEx)
-                        {
-                            // Log rollback error if needed
-                            System.Diagnostics.Debug.WriteLine("Rollback failed: " + rollbackEx.Message);
-                        }
-
-                        // Log the error for debugging
-                        System.Diagnostics.Debug.WriteLine("Sale save error: " + e.ToString());
-
-                        // Re-throw with meaningful message
-                        throw new Exception("Failed to save sale: " + e.Message, e);
-                    }
-                }
-            }
-        }
-
-        public static Stream GetLogoImageStream()
-        {
-            var bytes = Properties.Resources.logo; // still byte[]
-
-            using (var img = System.Drawing.Image.FromStream(new MemoryStream(bytes)))
-            {
-                var ms = new MemoryStream();
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                ms.Position = 0;
-                return ms;
-            }
-        }
-
-        private static string Truncate(string value, int maxLength)
-        {
-            if (string.IsNullOrEmpty(value)) return "";
-            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
-        }
-
+      
         //public static void CreateThermalReceiptPdf(DataGridView cart, string filePath, decimal total, decimal paid)
         //{
         //    QuestPDF.Settings.License = LicenseType.Community;

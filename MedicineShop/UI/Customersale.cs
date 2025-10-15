@@ -277,27 +277,22 @@ namespace fertilizesop.UI
                 dgvcustomersearch.Visible = false;
             }
         }
-
         private void dgvproductsearch_CellCliick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                // Access selected row
                 DataGridViewRow selectedRow = dgvproductsearch.Rows[e.RowIndex];
 
-                // Get values from the row
                 string name = selectedRow.Cells["name"].Value.ToString();
-                //string description = selectedRow.Cells["description"].Value.ToString();
                 decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
-                DateTime expiryDate = DateTime.Parse(selectedRow.Cells["expiry_date"].Value.ToString());
-                expiryDate = expiryDate.Date;
-                dataGridView1.Rows.Add(name, saleprice, expiryDate);
+                // No need to get expiry_date anymore since we're showing aggregated data
+
+                dataGridView1.Rows.Add(name, saleprice, 1, 0, saleprice, saleprice); // Added default values for all columns
                 dgvproductsearch.Visible = false;
                 button2.Visible = false;
                 clearfields();
             }
         }
-
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (dataGridView1.Focused)
