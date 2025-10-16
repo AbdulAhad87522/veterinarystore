@@ -30,7 +30,7 @@ namespace MedicineShop
             ServiceProvider = services.BuildServiceProvider();
 
             // Show login first (Modal)
-            var login = ServiceProvider.GetRequiredService<Dashboard>();
+            var login = ServiceProvider.GetRequiredService<Login>();
             var result = login.ShowDialog();
 
             if (result == DialogResult.OK)
