@@ -650,7 +650,7 @@ namespace fertilizesop.UI
 
                 if (result)
                 {
-                    MessageBox.Show("Data saved successfully");
+                    MessageBox.Show("Data secured successfully");
                     SavehthermalPdfInvoice();
                     //Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
                     Customersaledl.PrintA4ReceiptDirectly(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));

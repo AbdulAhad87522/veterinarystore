@@ -36,18 +36,20 @@
             this.panel10.BackColor = System.Drawing.Color.Linen;
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(0, 0);
+            this.panel10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1312, 1010);
+            this.panel10.Size = new System.Drawing.Size(1476, 1170);
             this.panel10.TabIndex = 15;
             // 
             // Batchform
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1312, 1010);
+            this.ClientSize = new System.Drawing.Size(1476, 1170);
             this.Controls.Add(this.panel10);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Batchform";
-            this.Text = "Form1";
+            this.Text = "Dashboard";
             this.Load += new System.EventHandler(this.Batchform_Load);
             this.ResumeLayout(false);
 

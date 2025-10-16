@@ -145,25 +145,25 @@ namespace MedicineShop.UI
                     conn.Open();
                     string query = @"
                         SELECT 
-                            si.sale_item_id,
-                            si.quantity,
-                            si.price ,
-                            si.discount,
-                            m.name,
+    
+                            s.product_id,
+	                        m.name,
                             c.company_name,
                             cat.category_name,
-                            p.packing_name
-                        FROM sale_items si
-                        INNER JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
-                        INNER JOIN medicines m ON bi.product_id = m.product_id
+                            s.quantity,
+                            s.price ,
+                            s.discount,    
+                            p.packing_name  
+                        FROM sale_items s
+                        JOIN medicines m ON s.product_id = m.product_id
                         INNER JOIN company c ON m.company_id = c.company_id
                         INNER JOIN categories cat ON m.category_id = cat.category_id
                         INNER JOIN packing p ON m.packing_id = p.packing_id
-                        WHERE si.sale_id = @SaleId";
+                        WHERE s.sale_id = @saleId";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@SaleId", saleId);
+                        cmd.Parameters.AddWithValue("@saleId", saleId);
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -172,7 +172,7 @@ namespace MedicineShop.UI
 
                                 items.Add(new SaleItemInfo
                                 {
-                                    SaleItemId = reader.GetInt32("sale_item_id"),
+                                    //SaleItemId = reader.GetInt32("sale_item_id"),
                                     ProductName = productName,
                                     Quantity = reader.GetInt32("quantity"),
                                     Price = reader.GetDecimal("price"),
@@ -386,6 +386,11 @@ namespace MedicineShop.UI
             public decimal TotalAmount { get; set; }
             public decimal PaidAmount { get; set; }
             public string CustomerName { get; set; }
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
