@@ -19,6 +19,9 @@ namespace TechStore.Models
         public decimal TodayRevenue { get; set; }
         public decimal TodayProfit { get; set; } // NEW
         public decimal TodayCost { get; set; }   // NEW
+        public decimal MonthRevenue { get; set; }
+        public decimal MonthCost { get; set; }
+        public decimal MonthProfit { get; set; }
     }
 
     // Stock Information Model

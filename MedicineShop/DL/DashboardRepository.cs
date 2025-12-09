@@ -61,35 +61,32 @@ namespace TechStore.DataAccess
                     summary.PendingPayments = Convert.ToDecimal(row["pending_amount"]);
                 }
 
-                // Get today's sales data
+                // Get today's sales count
                 var todaySalesTable = _dbHelper.ExecuteDataTable(@"
-                    SELECT 
-                        COUNT(*) as count, 
-                        COALESCE(SUM(total_amount), 0) as revenue
+                    SELECT COUNT(*) as count
                     FROM sales 
                     WHERE DATE(sale_date) = CURDATE()");
 
                 if (todaySalesTable.Rows.Count > 0)
                 {
-                    var row = todaySalesTable.Rows[0];
-                    summary.TodaySales = Convert.ToInt32(row["count"]);
-                    summary.TodayRevenue = Convert.ToDecimal(row["revenue"]);
+                    summary.TodaySales = Convert.ToInt32(todaySalesTable.Rows[0]["count"]);
                 }
 
+                // Get today's profit data
                 var todayProfitTable = _dbHelper.ExecuteDataTable(@"
-    SELECT 
-        COALESCE(SUM(s.total_amount), 0) as total_revenue,
-        COALESCE(SUM(
-            si.quantity * (
-                SELECT AVG(bi.purchase_price) 
-                FROM batch_items bi 
-                WHERE bi.product_id = si.product_id 
-                AND bi.quantity_remaining >= 0
-            )
-        ), 0) as total_cost
-    FROM sales s
-    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
-    WHERE DATE(s.sale_date) = CURDATE()");
+                    SELECT 
+                        COALESCE(SUM(s.total_amount), 0) as total_revenue,
+                        COALESCE(SUM(
+                            si.quantity * (
+                                SELECT AVG(bi.purchase_price) 
+                                FROM batch_items bi 
+                                WHERE bi.product_id = si.product_id 
+                                AND bi.quantity_remaining >= 0
+                            )
+                        ), 0) as total_cost
+                    FROM sales s
+                    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
+                    WHERE DATE(s.sale_date) = CURDATE()");
 
                 if (todayProfitTable.Rows.Count > 0)
                 {
@@ -99,6 +96,33 @@ namespace TechStore.DataAccess
                     summary.TodayRevenue = revenue;
                     summary.TodayCost = cost;
                     summary.TodayProfit = revenue - cost;
+                }
+
+                // Get current month's profit data
+                var monthProfitTable = _dbHelper.ExecuteDataTable(@"
+                    SELECT 
+                        COALESCE(SUM(s.total_amount), 0) as total_revenue,
+                        COALESCE(SUM(
+                            si.quantity * (
+                                SELECT AVG(bi.purchase_price) 
+                                FROM batch_items bi 
+                                WHERE bi.product_id = si.product_id 
+                                AND bi.quantity_remaining >= 0
+                            )
+                        ), 0) as total_cost
+                    FROM sales s
+                    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
+                    WHERE YEAR(s.sale_date) = YEAR(CURDATE()) 
+                    AND MONTH(s.sale_date) = MONTH(CURDATE())");
+
+                if (monthProfitTable.Rows.Count > 0)
+                {
+                    var row = monthProfitTable.Rows[0];
+                    decimal revenue = Convert.ToDecimal(row["total_revenue"]);
+                    decimal cost = Convert.ToDecimal(row["total_cost"]);
+                    summary.MonthRevenue = revenue;
+                    summary.MonthCost = cost;
+                    summary.MonthProfit = revenue - cost;
                 }
             }
             catch (Exception ex)
@@ -269,8 +293,7 @@ namespace TechStore.DataAccess
                            SUM(si.quantity) as total_quantity,
                            SUM(si.quantity * si.price) as total_revenue
                     FROM sale_items si
-                    JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
-                    JOIN medicines m ON bi.product_id = m.product_id
+                    JOIN medicines m ON si.product_id = m.product_id
                     JOIN company c ON m.company_id = c.company_id
                     WHERE si.sale_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
                     GROUP BY m.product_id, m.name, c.company_name
@@ -304,23 +327,23 @@ namespace TechStore.DataAccess
             try
             {
                 var statsTable = _dbHelper.ExecuteDataTable(@"
-    SELECT 
-        DATE_FORMAT(s.sale_date, '%Y-%m') as month,
-        COALESCE(SUM(s.total_amount), 0) as total_sales,
-        COALESCE(SUM(
-            si.quantity * (
-                SELECT AVG(bi.purchase_price) 
-                FROM batch_items bi 
-                WHERE bi.product_id = si.product_id
-            )
-        ), 0) as total_purchases,
-        COUNT(DISTINCT s.sale_id) as products_sold
-    FROM sales s
-    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
-    WHERE s.sale_date >= DATE_SUB(CURDATE(), INTERVAL @months MONTH)
-    GROUP BY DATE_FORMAT(s.sale_date, '%Y-%m')
-    ORDER BY month DESC",
-      new MySqlParameter[] { new MySqlParameter("@months", months) });
+                    SELECT 
+                        DATE_FORMAT(s.sale_date, '%Y-%m') as month,
+                        COALESCE(SUM(s.total_amount), 0) as total_sales,
+                        COALESCE(SUM(
+                            si.quantity * (
+                                SELECT AVG(bi.purchase_price) 
+                                FROM batch_items bi 
+                                WHERE bi.product_id = si.product_id
+                            )
+                        ), 0) as total_purchases,
+                        COUNT(DISTINCT s.sale_id) as products_sold
+                    FROM sales s
+                    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
+                    WHERE s.sale_date >= DATE_SUB(CURDATE(), INTERVAL @months MONTH)
+                    GROUP BY DATE_FORMAT(s.sale_date, '%Y-%m')
+                    ORDER BY month DESC",
+                    new MySqlParameter[] { new MySqlParameter("@months", months) });
 
                 foreach (DataRow row in statsTable.Rows)
                 {
