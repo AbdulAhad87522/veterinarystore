@@ -22,16 +22,16 @@ namespace MedicineShop.UI
         private Panel summaryPanel;
         private Label lblTotalProducts, lblTotalCompanies, lblLowStock, lblExpiringItems;
         private Label lblTodaySales, lblTodayRevenue, lblPendingPayments, lblInventoryValue;
+        private Label lblTodayProfit; // ADD THIS
+        private Label lblMonthProfit;
 
         // Data Grid Controls
         private DataGridView dgvLowStock, dgvExpiringItems, dgvPendingPurchases;
         private Panel lowStockPanel, expiringPanel, purchasesPanel;
 
-        // Additional UI Components
         private Panel mainContentPanel;
         private Label lblWelcome;
 
-        // Performance tracking
         private DateTime lastDataRefresh;
         private bool isRefreshing;
 
@@ -154,12 +154,13 @@ namespace MedicineShop.UI
 
             var containerWidth = summaryPanel.ClientSize.Width - 50;
             var spacing = 10;
-            int cardsPerRow = containerWidth < 1000 ? 2 : 4;
+            int cardsPerRow = containerWidth < 1200 ? 3 : 5; // Changed to support 9 cards
 
-            if (cardsPerRow == 2)
-                summaryPanel.Height = 320;
+            // Adjust panel height based on rows needed
+            if (cardsPerRow == 3)
+                summaryPanel.Height = 480; // 3 rows of 3 cards
             else
-                summaryPanel.Height = 300;
+                summaryPanel.Height = 320; // 2 rows of 5 and 4 cards
 
             var cardWidth = (containerWidth - (spacing * (cardsPerRow - 1))) / cardsPerRow;
             var cardHeight = 140;
@@ -168,23 +169,26 @@ namespace MedicineShop.UI
             {
                 cardWidth = Math.Max(180, (containerWidth - spacing) / 2);
                 cardsPerRow = 2;
-                summaryPanel.Height = 320;
+                summaryPanel.Height = 640; // More rows needed
             }
 
             var cardData = new[]
             {
-                new { Title = "Total Products", Value = "0", Color = Color.FromArgb(52, 152, 219), IsClickable = true },
-                new { Title = "Companies", Value = "0", Color = Color.FromArgb(46, 204, 113), IsClickable = true },
-                new { Title = "Low Stock Items", Value = "0", Color = Color.FromArgb(231, 76, 60), IsClickable = true },
-                new { Title = "Expiring Soon", Value = "0", Color = Color.FromArgb(243, 156, 18), IsClickable = true },
-                new { Title = "Today's Sales", Value = "0", Color = Color.FromArgb(155, 89, 182), IsClickable = true },
-                new { Title = "Today's Revenue", Value = "Rs 0", Color = Color.FromArgb(52, 73, 94), IsClickable = true },
-                new { Title = "Pending Payments", Value = "Rs 0", Color = Color.FromArgb(230, 126, 34), IsClickable = true },
-                new { Title = "Inventory Value", Value = "Rs 0", Color = Color.FromArgb(22, 160, 133), IsClickable = true }
-            };
+        new { Title = "Total Products", Value = "0", Color = Color.FromArgb(52, 152, 219), IsClickable = true },
+        new { Title = "Companies", Value = "0", Color = Color.FromArgb(46, 204, 113), IsClickable = true },
+        new { Title = "Low Stock Items", Value = "0", Color = Color.FromArgb(231, 76, 60), IsClickable = true },
+        new { Title = "Expiring Soon", Value = "0", Color = Color.FromArgb(243, 156, 18), IsClickable = true },
+        new { Title = "Today's Sales", Value = "0", Color = Color.FromArgb(155, 89, 182), IsClickable = true },
+        new { Title = "Today's Revenue", Value = "Rs 0", Color = Color.FromArgb(52, 73, 94), IsClickable = true },
+        new { Title = "Today's Profit", Value = "Rs 0", Color = Color.FromArgb(39, 174, 96), IsClickable = true },
+        new { Title = "Month's Profit", Value = "Rs 0", Color = Color.FromArgb(22, 160, 133), IsClickable = true },
+        new { Title = "Inventory Value", Value = "Rs 0", Color = Color.FromArgb(41, 128, 185), IsClickable = true }
+    };
 
-            var labels = new[] { lblTotalProducts, lblTotalCompanies, lblLowStock, lblExpiringItems,
-                        lblTodaySales, lblTodayRevenue, lblPendingPayments, lblInventoryValue };
+            var labels = new[] {
+        lblTotalProducts, lblTotalCompanies, lblLowStock, lblExpiringItems,
+        lblTodaySales, lblTodayRevenue, lblTodayProfit, lblMonthProfit, lblInventoryValue
+    };
 
             for (int i = 0; i < cardData.Length; i++)
             {
@@ -192,7 +196,7 @@ namespace MedicineShop.UI
                 int col = i % cardsPerRow;
 
                 int x = col * (cardWidth + spacing);
-                int y = row * (cardHeight + 50);
+                int y = row * (cardHeight + 15);
 
                 var card = cardData[i];
                 var label = labels[i] ?? new Label();
@@ -205,8 +209,9 @@ namespace MedicineShop.UI
                     case 3: lblExpiringItems = label; break;
                     case 4: lblTodaySales = label; break;
                     case 5: lblTodayRevenue = label; break;
-                    case 6: lblPendingPayments = label; break;
-                    case 7: lblInventoryValue = label; break;
+                    case 6: lblTodayProfit = label; break;
+                    case 7: lblMonthProfit = label; break;
+                    case 8: lblInventoryValue = label; break;
                 }
 
                 CreateSummaryCard(card.Title, card.Value, card.Color, x, y, cardWidth, cardHeight, label, card.IsClickable, i);
@@ -725,7 +730,24 @@ namespace MedicineShop.UI
             if (lblExpiringItems != null) lblExpiringItems.Text = summary.ExpiringItems.ToString("N0");
             if (lblTodaySales != null) lblTodaySales.Text = summary.TodaySales.ToString("N0");
             if (lblTodayRevenue != null) lblTodayRevenue.Text = $"Rs {summary.TodayRevenue:N0}";
-            if (lblPendingPayments != null) lblPendingPayments.Text = $"Rs {summary.PendingPayments:N0}";
+            if (lblTodayProfit != null)
+            {
+                lblTodayProfit.Text = $"Rs {summary.TodayProfit:N0}";
+                // Optional: Change color based on profit/loss
+                if (summary.TodayProfit < 0)
+                    lblTodayProfit.ForeColor = Color.FromArgb(231, 76, 60);
+                else
+                    lblTodayProfit.ForeColor = Color.White;
+            }
+            if (lblMonthProfit != null)
+            {
+                lblMonthProfit.Text = $"Rs {summary.MonthProfit:N0}";
+                // Optional: Change color based on profit/loss
+                if (summary.MonthProfit < 0)
+                    lblMonthProfit.ForeColor = Color.FromArgb(231, 76, 60);
+                else
+                    lblMonthProfit.ForeColor = Color.White;
+            }
             if (lblInventoryValue != null) lblInventoryValue.Text = $"Rs {summary.TotalInventoryValue:N0}";
         }
 
@@ -917,20 +939,46 @@ namespace MedicineShop.UI
         #endregion
 
         #region Export Functionality
-
         private void ExportDashboardData()
         {
             try
             {
                 var summary = _dashboardService.GetDashboardSummary();
+                var monthlyStats = _dashboardService.GetMonthlyStats(1);
                 var sb = new StringBuilder();
 
-                sb.AppendLine("PHARMACY MANAGEMENT DASHBOARD SUMMARY");
-                sb.AppendLine($"Generated on: {DateTime.Now}");
-                sb.AppendLine(new string('=', 60));
+                sb.AppendLine("ALI VETERINARY CLINIC - DASHBOARD REPORT");
+                sb.AppendLine($"Generated on: {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                sb.AppendLine(new string('=', 70));
                 sb.AppendLine();
 
-                sb.AppendLine("SUMMARY STATISTICS:");
+                sb.AppendLine("TODAY'S PERFORMANCE:");
+                sb.AppendLine(new string('-', 70));
+                sb.AppendLine($"• Sales Count: {summary.TodaySales:N0}");
+                sb.AppendLine($"• Revenue: Rs {summary.TodayRevenue:N2}");
+                sb.AppendLine($"• Cost of Goods Sold: Rs {summary.TodayCost:N2}");
+                sb.AppendLine($"• Profit: Rs {summary.TodayProfit:N2}");
+                if (summary.TodayRevenue > 0)
+                {
+                    decimal margin = (summary.TodayProfit / summary.TodayRevenue) * 100;
+                    sb.AppendLine($"• Profit Margin: {margin:N2}%");
+                }
+                sb.AppendLine();
+
+                sb.AppendLine($"CURRENT MONTH PERFORMANCE ({DateTime.Now:MMMM yyyy}):");
+                sb.AppendLine(new string('-', 70));
+                sb.AppendLine($"• Total Revenue: Rs {summary.MonthRevenue:N2}");
+                sb.AppendLine($"• Total Cost: Rs {summary.MonthCost:N2}");
+                sb.AppendLine($"• Total Profit: Rs {summary.MonthProfit:N2}");
+                if (summary.MonthRevenue > 0)
+                {
+                    decimal margin = (summary.MonthProfit / summary.MonthRevenue) * 100;
+                    sb.AppendLine($"• Profit Margin: {margin:N2}%");
+                }
+                sb.AppendLine();
+
+                sb.AppendLine("INVENTORY SUMMARY:");
+                sb.AppendLine(new string('-', 70));
                 sb.AppendLine($"• Total Products: {summary.TotalProducts:N0}");
                 sb.AppendLine($"• Total Companies: {summary.TotalCompanies:N0}");
                 sb.AppendLine($"• Low Stock Items: {summary.LowStockItems:N0}");
@@ -938,21 +986,38 @@ namespace MedicineShop.UI
                 sb.AppendLine($"• Items Expiring Soon: {summary.ExpiringItems:N0}");
                 sb.AppendLine();
 
-                sb.AppendLine("TODAY'S PERFORMANCE:");
-                sb.AppendLine($"• Sales Count: {summary.TodaySales:N0}");
-                sb.AppendLine($"• Revenue: Rs {summary.TodayRevenue:N2}");
-                sb.AppendLine();
-
                 sb.AppendLine("FINANCIAL OVERVIEW:");
+                sb.AppendLine(new string('-', 70));
                 sb.AppendLine($"• Pending Payments: Rs {summary.PendingPayments:N2}");
                 sb.AppendLine($"• Total Inventory Value: Rs {summary.TotalInventoryValue:N2}");
                 sb.AppendLine();
+
+                // Previous months statistics
+                if (monthlyStats.Count > 0)
+                {
+                    sb.AppendLine("MONTHLY STATISTICS (Last 6 Months):");
+                    sb.AppendLine(new string('-', 70));
+                    foreach (var stat in monthlyStats)
+                    {
+                        sb.AppendLine($"• {stat.Month}:");
+                        sb.AppendLine($"  - Total Sales: Rs {stat.TotalSales:N2}");
+                        sb.AppendLine($"  - Total Cost: Rs {stat.TotalPurchases:N2}");
+                        sb.AppendLine($"  - Profit: Rs {stat.Profit:N2}");
+                        sb.AppendLine($"  - Products Sold: {stat.ProductsSold:N0}");
+                        if (stat.TotalSales > 0)
+                        {
+                            decimal margin = (stat.Profit / stat.TotalSales) * 100;
+                            sb.AppendLine($"  - Profit Margin: {margin:N2}%");
+                        }
+                        sb.AppendLine();
+                    }
+                }
 
                 var lowStockItems = _dashboardService.GetLowStockItems();
                 if (lowStockItems.Any())
                 {
                     sb.AppendLine("LOW STOCK ITEMS:");
-                    sb.AppendLine(new string('-', 40));
+                    sb.AppendLine(new string('-', 70));
                     foreach (var item in lowStockItems.Take(20))
                     {
                         sb.AppendLine($"• {item.Name} ({item.CompanyName}) - Stock: {item.CurrentStock} - Status: {item.StockStatus}");
@@ -964,7 +1029,7 @@ namespace MedicineShop.UI
                 if (expiringItems.Any())
                 {
                     sb.AppendLine("ITEMS EXPIRING SOON:");
-                    sb.AppendLine(new string('-', 40));
+                    sb.AppendLine(new string('-', 70));
                     foreach (var item in expiringItems.Take(20))
                     {
                         sb.AppendLine($"• {item.Name} ({item.CompanyName}) - Expires: {item.ExpiryDate:dd/MM/yyyy} ({item.DaysToExpiry} days)");
@@ -976,7 +1041,7 @@ namespace MedicineShop.UI
                 if (pendingPurchases.Any())
                 {
                     sb.AppendLine("PENDING PURCHASES:");
-                    sb.AppendLine(new string('-', 40));
+                    sb.AppendLine(new string('-', 70));
                     foreach (var purchase in pendingPurchases.Take(20))
                     {
                         sb.AppendLine($"• {purchase.BatchName} ({purchase.CompanyName}) - Remaining: Rs {purchase.RemainingAmount:N2}");
@@ -986,7 +1051,7 @@ namespace MedicineShop.UI
                 using (var sfd = new SaveFileDialog())
                 {
                     sfd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-                    sfd.FileName = $"Pharmacy_Dashboard_Report_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+                    sfd.FileName = $"Veterinary_Dashboard_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
                     sfd.Title = "Export Dashboard Report";
 
                     if (sfd.ShowDialog() == DialogResult.OK)

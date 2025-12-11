@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TechStore.Models
 {
-    // Dashboard Summary Model
+    // Dashboard Summary Model - UPDATED
     public class DashboardSummary
     {
         public int TotalProducts { get; set; }
@@ -17,6 +17,11 @@ namespace TechStore.Models
         public decimal PendingPayments { get; set; }
         public int TodaySales { get; set; }
         public decimal TodayRevenue { get; set; }
+        public decimal TodayProfit { get; set; } // NEW
+        public decimal TodayCost { get; set; }   // NEW
+        public decimal MonthRevenue { get; set; }
+        public decimal MonthCost { get; set; }
+        public decimal MonthProfit { get; set; }
     }
 
     // Stock Information Model
@@ -76,7 +81,7 @@ namespace TechStore.Models
         public decimal TotalRevenue { get; set; }
     }
 
-    // Monthly Stats Model
+    // Monthly Stats Model - UPDATED
     public class MonthlyStats
     {
         public string Month { get; set; }
