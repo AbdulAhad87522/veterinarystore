@@ -478,47 +478,125 @@ namespace MedicineShop.DL
             }
         }
 
+        //private static void PrintPdfToPrinter(string filePath)
+        //{
+        //    using (PrintDialog printDialog = new PrintDialog())
+        //    {
+        //        printDialog.AllowSomePages = false;
+        //        printDialog.AllowSelection = false;
+
+        //        if (printDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            using (Process process = new Process())
+        //            {
+        //                ProcessStartInfo startInfo = new ProcessStartInfo
+        //                {
+        //                    Verb = "printto",
+        //                    FileName = filePath,
+        //                    Arguments = $"\"{printDialog.PrinterSettings.PrinterName}\"",
+        //                    WindowStyle = ProcessWindowStyle.Hidden,
+        //                    CreateNoWindow = true,
+        //                    UseShellExecute = true
+        //                };
+
+        //                process.StartInfo = startInfo;
+        //                process.Start();
+        //                process.WaitForInputIdle();
+        //                Thread.Sleep(3000);
+
+        //                if (!process.HasExited)
+        //                {
+        //                    process.CloseMainWindow();
+        //                    process.Close();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
         private static void PrintPdfToPrinter(string filePath)
         {
-            using (PrintDialog printDialog = new PrintDialog())
+            try
             {
-                printDialog.AllowSomePages = false;
-                printDialog.AllowSelection = false;
-
-                if (printDialog.ShowDialog() == DialogResult.OK)
+                // First, let the user select a printer
+                using (PrintDialog printDialog = new PrintDialog())
                 {
-                    using (Process process = new Process())
+                    printDialog.AllowSomePages = false;
+                    printDialog.AllowSelection = false;
+
+                    if (printDialog.ShowDialog() == DialogResult.OK)
                     {
-                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        // Method 1: Try using Adobe Reader if installed
+                        string acrobatPath = GetAcrobatReaderPath();
+                        if (!string.IsNullOrEmpty(acrobatPath))
                         {
-                            Verb = "printto",
-                            FileName = filePath,
-                            Arguments = $"\"{printDialog.PrinterSettings.PrinterName}\"",
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            CreateNoWindow = true,
-                            UseShellExecute = true
-                        };
-
-                        process.StartInfo = startInfo;
-                        process.Start();
-                        process.WaitForInputIdle();
-                        Thread.Sleep(3000);
-
-                        if (!process.HasExited)
+                            PrintWithAcrobat(filePath, printDialog.PrinterSettings.PrinterName, acrobatPath);
+                        }
+                        else
                         {
-                            process.CloseMainWindow();
-                            process.Close();
+                            // Method 2: Fallback to system print dialog
+                            ProcessStartInfo psi = new ProcessStartInfo
+                            {
+                                FileName = filePath,
+                                Verb = "Print",
+                                CreateNoWindow = true,
+                                WindowStyle = ProcessWindowStyle.Hidden
+                            };
+
+                            Process.Start(psi);
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                // If all else fails, open the PDF and let user print manually
+                Process.Start(filePath);
+                throw new Exception($"Could not print automatically. PDF opened for manual printing. Error: {ex.Message}");
+            }
         }
 
-    
+        private static void PrintWithAcrobat(string filePath, string printerName, string acrobatPath)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = acrobatPath,
+                Arguments = $"/t \"{filePath}\" \"{printerName}\"",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+
+            using (Process process = Process.Start(startInfo))
+            {
+                process.WaitForExit(10000); // Wait up to 10 seconds
+            }
+        }
+
+        private static string GetAcrobatReaderPath()
+        {
+            // Common paths for Adobe Reader/Acrobat
+            string[] possiblePaths =
+            {
+        @"C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe",
+        @"C:\Program Files\Adobe\Acrobat DC\Acrobat\Acrobat.exe",
+        @"C:\Program Files (x86)\Adobe\Acrobat Reader\Reader\AcroRd32.exe",
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                    "Adobe", "Acrobat Reader DC", "Reader", "AcroRd32.exe")
+    };
+
+            foreach (string path in possiblePaths)
+            {
+                if (File.Exists(path))
+                    return path;
+            }
+
+            return null;
+        }
 
 
 
-public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
+        public static void PrintThermalReceipt(DataGridView cart, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {
             PrintDocument printDocument = new PrintDocument();
 

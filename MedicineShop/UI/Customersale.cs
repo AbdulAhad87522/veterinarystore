@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -285,9 +286,9 @@ namespace fertilizesop.UI
 
                 string name = selectedRow.Cells["name"].Value.ToString();
                 decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
-                // No need to get expiry_date anymore since we're showing aggregated data
-
-                dataGridView1.Rows.Add(name, saleprice, 1, 0, saleprice, saleprice); // Added default values for all columns
+                DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
+                expiry = expiry.Date;
+                dataGridView1.Rows.Add(name, saleprice, expiry, 1, 0, saleprice, saleprice); // Added default values for all columns
                 dgvproductsearch.Visible = false;
                 button2.Visible = false;
                 clearfields();
@@ -648,12 +649,87 @@ namespace fertilizesop.UI
                     dataGridView1
                 );
 
+                //if (result)
+                //{
+                //    MessageBox.Show("Data secured successfully");
+                //    SavehthermalPdfInvoice();
+                //    //Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+                //    Customersaledl.PrintA4ReceiptDirectly(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+
+                //    clearallfields();
+
+                //    string tempFile = GetTempSaleFilePath();
+                //    if (File.Exists(tempFile))
+                //        File.Delete(tempFile);
+                //}
                 if (result)
                 {
                     MessageBox.Show("Data secured successfully");
-                    SavehthermalPdfInvoice();
-                    //Customersaledl.PrintThermalReceipt(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
-                    Customersaledl.PrintA4ReceiptDirectly(dataGridView1, txtcustsearch.Text.Trim(), Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text), Convert.ToDecimal(txtfinaldiscount.Text));
+
+                    // Ask user where to save PDF
+                    using (SaveFileDialog saveDialog = new SaveFileDialog())
+                    {
+                        saveDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                        saveDialog.Title = "Save PDF Invoice";
+                        saveDialog.FileName = $"Invoice_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+
+                        DialogResult saveResult = saveDialog.ShowDialog();
+
+                        if (saveResult == DialogResult.OK)
+                        {
+                            // User selected a location - save there
+                            try
+                            {
+                                string customerName = string.IsNullOrEmpty(txtcustsearch.Text) ? "Walk-in Customer" : txtcustsearch.Text.Trim();
+                                Customersaledl.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, customerName,
+                                    Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text),
+                                    Convert.ToDecimal(txtfinaldiscount.Text));
+
+                                MessageBox.Show("PDF saved successfully!\n\n" + saveDialog.FileName, "PDF Saved",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // Open the saved PDF for printing
+                                Process.Start(new ProcessStartInfo
+                                {
+                                    FileName = saveDialog.FileName,
+                                    UseShellExecute = true
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error saving PDF:\n" + ex.Message, "PDF Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            // User clicked Cancel - generate temp PDF and open it
+                            try
+                            {
+                                string tempFilePath = Path.Combine(Path.GetTempPath(), $"Temp_Receipt_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+                                string customerName = string.IsNullOrEmpty(txtcustsearch.Text) ? "Walk-in Customer" : txtcustsearch.Text.Trim();
+
+                                Customersaledl.CreateA4ReceiptPdf(dataGridView1, tempFilePath, customerName,
+                                    Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text),
+                                    Convert.ToDecimal(txtfinaldiscount.Text));
+
+                                // Open PDF automatically for preview
+                                Process.Start(new ProcessStartInfo
+                                {
+                                    FileName = tempFilePath,
+                                    UseShellExecute = true
+                                });
+
+                                MessageBox.Show("Receipt opened for printing!\n\nPress Ctrl+P to print.", "Receipt Ready",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error generating receipt:\n" + ex.Message, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
 
                     clearallfields();
 
