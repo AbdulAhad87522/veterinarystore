@@ -1229,7 +1229,7 @@ namespace MedicineShop.UI
                 selectedProductId = Convert.ToInt32(row.Cells["product_id"].Value);
                 txtsaleprice.Text = row.Cells["sale_price"].Value.ToString();
 
-                string companyName = row.Cells["company_name"].ToString();
+                string companyName = row.Cells["company_name"].Value.ToString();
                 string categoryName = row.Cells["category_name"].Value.ToString();
                 string packingName = row.Cells["packing_name"].Value.ToString();
                 string productName = row.Cells["name"].Value.ToString();

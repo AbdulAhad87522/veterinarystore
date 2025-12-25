@@ -30,15 +30,15 @@ namespace MedicineShop
             ServiceProvider = services.BuildServiceProvider();
 
             // Show login first (Modal)
-            //var login = ServiceProvider.GetRequiredService<Login>();
-            //var result = login.ShowDialog();
+            var login = ServiceProvider.GetRequiredService<Login>();
+            var result = login.ShowDialog();
 
-            //if (result == DialogResult.OK)
-            //{
+            if (result == DialogResult.OK)
+            {
                 // Run dashboard only after login passes
                 var mainForm = ServiceProvider.GetRequiredService<Dashboard>();
                 Application.Run(mainForm);
-            //}
+            }
         }
 
         private static void configureServices(ServiceCollection services)

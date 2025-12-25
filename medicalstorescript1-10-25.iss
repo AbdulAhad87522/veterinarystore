@@ -1,5 +1,5 @@
 #define MyAppName "Medical Store"
-#define MyAppVersion "132.0.9"
+#define MyAppVersion "132.0.10"
 #define MyAppPublisher "AAI, Inc."
 #define MyAppExeName "MedicineShop.exe"
 #define MyAppAssocName "medical store File"

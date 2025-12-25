@@ -82,6 +82,8 @@ namespace TechStore.UI
 
             // Just set DialogResult and close - Dashboard will be shown by Program.cs
             this.DialogResult = DialogResult.OK;
+            //var dashboard = Program.ServiceProvider.GetRequiredService<Dashboard>();
+            //dashboard.Show();
             this.Close();
         }
 
