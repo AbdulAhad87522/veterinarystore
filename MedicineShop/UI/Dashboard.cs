@@ -276,5 +276,10 @@ namespace MedicineShop
             var f=Program.ServiceProvider.GetRequiredService<expired_products>();   
             LoadFormIntoPanel(f);
         }
+
+        private void panel10_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

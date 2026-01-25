@@ -74,19 +74,19 @@ namespace TechStore.DataAccess
 
                 // Get today's profit data
                 var todayProfitTable = _dbHelper.ExecuteDataTable(@"
-                    SELECT 
-                        COALESCE(SUM(s.total_amount), 0) as total_revenue,
-                        COALESCE(SUM(
-                            si.quantity * (
-                                SELECT AVG(bi.purchase_price) 
-                                FROM batch_items bi 
-                                WHERE bi.product_id = si.product_id 
-                                AND bi.quantity_remaining >= 0
-                            )
-                        ), 0) as total_cost
-                    FROM sales s
-                    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
-                    WHERE DATE(s.sale_date) = CURDATE()");
+                       SELECT 
+                            COALESCE(SUM(si.quantity * si.price), 0) AS total_revenue,
+                            COALESCE(SUM(si.quantity * bi.purchase_price), 0) AS total_cost,
+                            COALESCE(
+                                SUM(si.quantity * si.price) - 
+                                SUM(si.quantity * bi.purchase_price),
+                                0
+                            ) AS total_profit
+                        FROM sales s
+                        JOIN sale_items si ON s.sale_id = si.sale_id
+                        JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
+                        WHERE DATE(s.sale_date) = CURDATE();
+                        ");
 
                 if (todayProfitTable.Rows.Count > 0)
                 {
@@ -101,19 +101,19 @@ namespace TechStore.DataAccess
                 // Get current month's profit data
                 var monthProfitTable = _dbHelper.ExecuteDataTable(@"
                     SELECT 
-                        COALESCE(SUM(s.total_amount), 0) as total_revenue,
-                        COALESCE(SUM(
-                            si.quantity * (
-                                SELECT AVG(bi.purchase_price) 
-                                FROM batch_items bi 
-                                WHERE bi.product_id = si.product_id 
-                                AND bi.quantity_remaining >= 0
-                            )
-                        ), 0) as total_cost
+                        COALESCE(SUM(si.quantity * si.price), 0) AS total_revenue,
+                        COALESCE(SUM(si.quantity * bi.purchase_price), 0) AS total_cost,
+                        COALESCE(
+                            SUM(si.quantity * si.price) - 
+                            SUM(si.quantity * bi.purchase_price),
+                            0
+                        ) AS total_profit
                     FROM sales s
-                    LEFT JOIN sale_items si ON s.sale_id = si.sale_id
-                    WHERE YEAR(s.sale_date) = YEAR(CURDATE()) 
-                    AND MONTH(s.sale_date) = MONTH(CURDATE())");
+                    JOIN sale_items si ON s.sale_id = si.sale_id
+                    JOIN batch_items bi ON si.batch_item_id = bi.batch_item_id
+                    WHERE YEAR(s.sale_date) = YEAR(CURDATE())
+                    AND MONTH(s.sale_date) = MONTH(CURDATE());
+                    ");
 
                 if (monthProfitTable.Rows.Count > 0)
                 {

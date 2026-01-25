@@ -130,7 +130,7 @@ namespace MedicineShop.DL
 
                         string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
                 VALUES (@id, @total_amount, @paid_amount, @date);
-                SELECT LAST_INSERT_ID();";
+                SELECT LAST_INSERT_ID();";      
                         int billid;
                         using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
                         {
@@ -229,14 +229,16 @@ namespace MedicineShop.DL
                                             throw new Exception($"Insufficient stock for product: {name}. Available: {totalAvailable}, Requested: {remainingQty}");
                                         }
 
+                                        int batchitemidd = batches[0].batchItemId;
                                         // Insert single sale_items record with product_id
-                                        string detailquery = @"INSERT INTO sale_items (sale_id, product_id, quantity, price, Discount) 
-                              VALUES (@bill_iid, @product_id, @quantity, @price, @discount)";
+                                        string detailquery = @"INSERT INTO sale_items (sale_id, product_id, batch_item_id, quantity, price, Discount) 
+                              VALUES (@bill_iid, @product_id, @batch_item_id, @quantity, @price, @discount)";
 
                                         using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
                                         {
                                             command.Parameters.AddWithValue("@bill_iid", billid);
                                             command.Parameters.AddWithValue("@product_id", productid);
+                                            command.Parameters.AddWithValue("@batch_item_id", batchitemidd);
                                             command.Parameters.AddWithValue("@price", salePrice);
                                             command.Parameters.AddWithValue("@quantity", remainingQty);
                                             command.Parameters.AddWithValue("@discount", discount);

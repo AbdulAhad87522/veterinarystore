@@ -44,8 +44,9 @@
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1312, 936);
+            this.panel2.Size = new System.Drawing.Size(1476, 1170);
             this.panel2.TabIndex = 1;
             // 
             // panel4
@@ -55,28 +56,31 @@
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel4.Name = "panel4";
-            this.panel4.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.panel4.Size = new System.Drawing.Size(1291, 2200);
+            this.panel4.Padding = new System.Windows.Forms.Padding(11, 0, 11, 0);
+            this.panel4.Size = new System.Drawing.Size(1450, 2750);
             this.panel4.TabIndex = 4;
+            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
             // panel15
             // 
             this.panel15.Controls.Add(this.panel2);
             this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel15.Location = new System.Drawing.Point(0, 0);
-            this.panel15.Margin = new System.Windows.Forms.Padding(3, 10, 10, 3);
+            this.panel15.Margin = new System.Windows.Forms.Padding(3, 12, 11, 4);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(1312, 936);
+            this.panel15.Size = new System.Drawing.Size(1476, 1170);
             this.panel15.TabIndex = 11;
             // 
             // HomeContentform
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1312, 936);
+            this.ClientSize = new System.Drawing.Size(1476, 1170);
             this.Controls.Add(this.panel15);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "HomeContentform";
             this.Text = "HomeContentform";
             this.Load += new System.EventHandler(this.HomeContentform_Load);

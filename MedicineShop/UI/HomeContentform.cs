@@ -812,6 +812,11 @@ namespace MedicineShop.UI
 
         }
 
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
         private void UpdateExpiringItemsGrid(List<ExpiringItem> items)
         {
             dgvExpiringItems.Rows.Clear();
