@@ -406,7 +406,7 @@ namespace MedicineShop.UI
                 GridColor = Color.FromArgb(240, 244, 247),
                 ColumnHeadersHeight = 40,
                 RowTemplate = { Height = 32 },
-                //EnableHeadersVisualStyles = false, // Fixed: Disable visual styles to show custom header colors
+                EnableHeadersVisualStyles = false, // Fixed: Disable visual styles to show custom header colors
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = Color.White,
